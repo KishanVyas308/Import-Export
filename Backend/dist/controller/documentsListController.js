@@ -8,24 +8,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addInvoice = addInvoice;
 exports.addEWayBill = addEWayBill;
 exports.addEpcgLicense = addEpcgLicense;
 exports.addEbrc = addEbrc;
+exports.addAdvanceLicense = addAdvanceLicense;
+exports.addEInvoice = addEInvoice;
 const __1 = require("..");
 function addInvoice(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const responce = yield __1.prisma.invoice.create({
-                data: req.body,
+            const _a = req.body, { productDetails } = _a, InvoiceData = __rest(_a, ["productDetails"]);
+            const response = yield __1.prisma.invoice.create({
+                data: Object.assign(Object.assign({}, InvoiceData), { productDetails: {
+                        create: productDetails,
+                    } }),
             });
+            return res.json({ message: "Added successfully", response });
         }
         catch (e) {
             console.log(e);
             return res.json({ message: e });
         }
-        return res.json({ message: "Added successfully" });
     });
 }
 function addEWayBill(req, res) {
@@ -49,6 +65,7 @@ function addEpcgLicense(req, res) {
             });
         }
         catch (e) {
+            console.log(e);
             return res.json({ message: e });
         }
         return res.json({ message: "Added successfully" });
@@ -66,5 +83,36 @@ function addEbrc(req, res) {
             return res.json({ message: e });
         }
         return res.json({ message: "Added successfully" });
+    });
+}
+function addAdvanceLicense(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const responce = yield __1.prisma.advanceLicense.create({
+                data: req.body,
+            });
+        }
+        catch (e) {
+            console.log(e);
+            return res.json({ message: e });
+        }
+        return res.json({ message: "Added successfully" });
+    });
+}
+function addEInvoice(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const _a = req.body, { productDetails } = _a, eInvoiceData = __rest(_a, ["productDetails"]);
+            const eInvoice = yield __1.prisma.eInvoice.create({
+                data: Object.assign(Object.assign({}, eInvoiceData), { productDetails: {
+                        create: productDetails,
+                    } }),
+            });
+            return res.json({ message: "Added successfully", eInvoice });
+        }
+        catch (e) {
+            console.log(e);
+            return res.json({ message: e });
+        }
     });
 }

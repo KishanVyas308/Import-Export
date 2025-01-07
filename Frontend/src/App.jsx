@@ -27,6 +27,8 @@ import UnderDevelopment from "./pages/UnderConstruction";
 import EPCGLicensePage from "./pages/Home/DataManagement/newdata/DocumentList/EPCGLicense/EPCGLicensePage";
 import NewDataPage from "./pages/Home/DataManagement/newdata/NewDataPage";
 import EBRCPage from "./pages/Home/DataManagement/newdata/DocumentList/EBRC/EBRCpage";
+import AdvanceLicensePage from "./pages/Home/DataManagement/newdata/DocumentList/AdvanceLicense/AdvanceLicensePage";
+import EInvoicePage from "./pages/Home/DataManagement/newdata/DocumentList/EInvoice/EInvoicePage";
 
 
 function App() {
@@ -73,6 +75,10 @@ function App() {
           element={<ProtectedRoute element={<IndirectExport />} />}
         />
         <Route
+          path="/datamanagement/advance-license"
+          element={<ProtectedRoute element={<AdvanceLicensePage />} />}
+        />
+        <Route
           path="/datamanagement/existingdata"
           element={<ProtectedRoute element={<FileUpload />} />}
         />
@@ -80,6 +86,10 @@ function App() {
         <Route
           path="/datamanagement/invoice"
           element={<ProtectedRoute element={<Invoice />} />}
+        />
+        <Route
+          path="/datamanagement/e-invoice"
+          element={<ProtectedRoute element={<EInvoicePage />} />}
         />
         <Route
           path="/datamanagement/e-way-bill"

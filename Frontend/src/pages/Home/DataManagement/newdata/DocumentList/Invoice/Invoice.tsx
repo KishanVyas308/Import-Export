@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import InputField from '../../../../../components/InputField';
 import NewDataButtons from '../../NewDataButtons';
-import ExistingDataHeader from '../../../existingdata/ExistingDataHeader';
 import axios from 'axios';
 import { BACKEND_URL } from '../../../../../../Globle';
 import { useCookies } from 'react-cookie';
@@ -33,14 +32,18 @@ const Invoice = () => {
     invoiceNumber: '',
     invoiceDate: '',
     quickResponseCode: '',
-    productDetailSrNo: '',
-    productDetailDescription: '',
-    productDetailHSN: '',
-    productDetailTypeOfProductsUQC: '',
-    productDetailQty: '',
-    productDetailRateOfProduct: '',
-    productDetailAmount: '',
-    productDetailTaxPayableOnRcm: '',
+    productDetails: [
+      {
+        productDetailSrNo: '',
+        productDetailDescription: '',
+        productDetailHSN: '',
+        productDetailTypeOfProductsUQC: '',
+        productDetailQty: '',
+        productDetailRateOfProduct: '',
+        productDetailAmount: '',
+        productDetailTaxPayableOnRcm: '',
+      },
+    ],
     subTotal: '',
     amountInWords: '',
     notes: '',
@@ -61,11 +64,51 @@ const Invoice = () => {
     }));
   };
 
+  const handleProductChange = (index, field, value) => {
+    const updatedProducts = invoice.productDetails.map((product, i) =>
+      i === index ? { ...product, [field]: value } : product
+    );
+    setInvoice((prevInvoice) => ({
+      ...prevInvoice,
+      productDetails: updatedProducts,
+    }));
+  };
+
+  const addProduct = () => {
+    setInvoice((prevInvoice) => ({
+      ...prevInvoice,
+      productDetails: [
+        ...prevInvoice.productDetails,
+        {
+          productDetailSrNo: '',
+          productDetailDescription: '',
+          productDetailHSN: '',
+          productDetailTypeOfProductsUQC: '',
+          productDetailQty: '',
+          productDetailRateOfProduct: '',
+          productDetailAmount: '',
+          productDetailTaxPayableOnRcm: '',
+        },
+      ],
+    }));
+  };
+
+  const removeProduct = (index) => {
+    const updatedProducts = invoice.productDetails.filter((_, i) => i !== index);
+    setInvoice((prevInvoice) => ({
+      ...prevInvoice,
+      productDetails: updatedProducts,
+    }));
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
 
     const jsonData = {
       ...invoice,
+      productDetails: invoice.productDetails.map((product) =>
+        Object.fromEntries(Object.entries(product).map(([key, value]) => [key, String(value)]))
+      ),
       addedByUserId: user.id,
     };
 
@@ -221,55 +264,24 @@ const Invoice = () => {
                 Product Details
               </div>
 
-              <InputField label="Sr No" value={invoice.productDetailSrNo} onChange={(e) => {
-                setInvoice((prevInvoice) => ({
-                  ...prevInvoice,
-                  productDetailSrNo: e.target.value,
-                }));
-              }} />
-              <InputField label="Description" value={invoice.productDetailDescription} onChange={(e) => {
-                setInvoice((prevInvoice) => ({
-                  ...prevInvoice,
-                  productDetailDescription: e.target.value,
-                }));
-              }} />
-              <InputField label="HSN" value={invoice.productDetailHSN} onChange={(e) => {
-                setInvoice((prevInvoice) => ({
-                  ...prevInvoice,
-                  productDetailHSN: e.target.value,
-                }));
-              }} />
-              <InputField label="Type Of Products UQC" value={invoice.productDetailTypeOfProductsUQC} onChange={(e) => {
-                setInvoice((prevInvoice) => ({
-                  ...prevInvoice,
-                  productDetailTypeOfProducts: e.target.value,
-                }));
-              }} />
-
-              <InputField label="Qty" value={invoice.productDetailQty} onChange={(e) => {
-                setInvoice((prevInvoice) => ({
-                  ...prevInvoice,
-                  productDetailQty: e.target.value,
-                }));
-              }} />
-              <InputField label="Rate Of Product" value={invoice.productDetailRateOfProduct} onChange={(e) => {
-                setInvoice((prevInvoice) => ({
-                  ...prevInvoice,
-                  productDetailRateOfProduct: e.target.value,
-                }));
-              }} />
-              <InputField label="Amount" value={invoice.productDetailAmount} onChange={(e) => {
-                setInvoice((prevInvoice) => ({
-                  ...prevInvoice,
-                  productDetailAmount: e.target.value,
-                }));
-              }} />
-              <InputField label="Tax Payable On RCM" value={invoice.productDetailTaxPayableOnRcm} onChange={(e) => {
-                setInvoice((prevInvoice) => ({
-                  ...prevInvoice,
-                  productDetailTaxPayableOnRcm: e.target.value,
-                }));
-              }} />
+              {invoice.productDetails.map((product, index) => (
+                <div key={index} className="mb-4">
+                  <InputField label="Sr No" value={product.productDetailSrNo} onChange={(e) => handleProductChange(index, 'productDetailSrNo', e.target.value)} />
+                  <InputField label="Description" value={product.productDetailDescription} onChange={(e) => handleProductChange(index, 'productDetailDescription', e.target.value)} />
+                  <InputField label="HSN" value={product.productDetailHSN} onChange={(e) => handleProductChange(index, 'productDetailHSN', e.target.value)} />
+                  <InputField label="Type Of Products UQC" value={product.productDetailTypeOfProductsUQC} onChange={(e) => handleProductChange(index, 'productDetailTypeOfProductsUQC', e.target.value)} />
+                  <InputField label="Qty" value={product.productDetailQty} onChange={(e) => handleProductChange(index, 'productDetailQty', e.target.value)} />
+                  <InputField label="Rate Of Product" value={product.productDetailRateOfProduct} onChange={(e) => handleProductChange(index, 'productDetailRateOfProduct', e.target.value)} />
+                  <InputField label="Amount" value={product.productDetailAmount} onChange={(e) => handleProductChange(index, 'productDetailAmount', e.target.value)} />
+                  <InputField label="Tax Payable On RCM" value={product.productDetailTaxPayableOnRcm} onChange={(e) => handleProductChange(index, 'productDetailTaxPayableOnRcm', e.target.value)} />
+                  <button onClick={() => removeProduct(index)} className="bg-red-500 text-white p-2 rounded-md mt-2">
+                    Remove Product
+                  </button>
+                </div>
+              ))}
+              <button onClick={addProduct} className="bg-green-500 text-white p-2 rounded-md">
+                Add Product
+              </button>
               <InputField label="Sub Total" value={invoice.subTotal} onChange={(e) => {
                 setInvoice((prevInvoice) => ({
                   ...prevInvoice,

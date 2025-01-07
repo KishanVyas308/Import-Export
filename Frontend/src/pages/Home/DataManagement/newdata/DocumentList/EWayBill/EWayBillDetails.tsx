@@ -108,7 +108,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, ewaybillNo: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                             <InputField
                                 label="Generated Date"
@@ -140,7 +140,8 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, ewaybillModeOfTransportation: e.target.value })
                                 }
-                                type="text"
+                                options={["Ship", "Air", "Road", "Rail" ]}
+                                type="slect"
                             />
                             <InputField
                                 label="Approx Distance"
@@ -154,7 +155,7 @@ const EWayBillDetails = () => {
                         </div>
                         <div className="bg-white p-4 rounded-md">
                             <div className="container text-center text-green-700 font-sans font-semibold text-lg">
-                                E-Way Bill Details - Basic Details
+                            E-Way Bill Details - Documents Details 
                             </div>
                             <InputField
                                 label="Document Type"
@@ -162,7 +163,8 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, ewaybillDocumentType: e.target.value })
                                 }
-                                type="text"
+                                options={["Tax Invoice", "Delivery Challan" ]}
+                                type="select"
                             />
                             <InputField
                                 label="Document Number"
@@ -186,7 +188,8 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, ewaybillSupplyType: e.target.value })
                                 }
-                                type="text"
+                                options={["Outward", "Inward" ]}
+                                type="select"
                             />
                             <InputField
                                 label="Sub Type"
@@ -194,7 +197,8 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, ewaybillSubType: e.target.value })
                                 }
-                                type="text"
+                                options={["Supply", "Export", "Job Work", "For Own Use"]}
+                                type="select"
                             />
                             <InputField
                                 label="Transaction Type"
@@ -202,7 +206,8 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, ewaybillTransactionType: e.target.value })
                                 }
-                                type="text"
+                                options={["Regular", "Bill To Ship To", "Bill From Dispatch From", "Combination" ]}
+                                type="select"
                             />
                         </div>
                         <div className="bg-white p-4 rounded-md">
@@ -234,7 +239,8 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, supplierState: e.target.value })
                                 }
-                                type="text"
+                                options={["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal" ]}
+                                type="select"
                             />
                             <InputField
                                 label="Dispatch From Address"
@@ -269,7 +275,8 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, recipientState: e.target.value })
                                 }
-                                type="text"
+                                options={["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal" ]}
+                                type="select"
                             />
                             <InputField
                                 label="Ship To Address"
@@ -290,7 +297,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, goodDetailsHsnCode: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                             <InputField
                                 label="Product Name and Description"
@@ -314,7 +321,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, goodDetailsUnit: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                             <InputField
                                 label="Tax Rate"
@@ -322,7 +329,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, goodDetailsTaxRate: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                             <InputField
                                 label="Total Taxable Amount"
@@ -330,7 +337,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, goodDetailsTotalTaxableAmount: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                             <InputField
                                 label="CGST Amount"
@@ -338,7 +345,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, goodDetailsCgstAmount: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                             <InputField
                                 label="SGST Amount"
@@ -346,7 +353,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, goodDetailsSgstAmount: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                             <InputField
                                 label="IGST Amount"
@@ -354,7 +361,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, goodDetailsIgstAmount: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                             <InputField
                                 label="Cess Amount"
@@ -362,7 +369,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, goodDetailsCessAmount: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                             <InputField
                                 label="Other Amount"
@@ -370,7 +377,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, goodDetailsOtherAmount: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                             <InputField
                                 label="Total Invoice Amount"
@@ -378,7 +385,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, goodDetailsTotalInvoiceAmount: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                         </div>
                         <div className="bg-white p-4 rounded-md">
@@ -399,7 +406,7 @@ const EWayBillDetails = () => {
                                 onChange={(e) =>
                                     setEwayBillDetails({ ...ewayBillDetails, lrNoAndDate: e.target.value })
                                 }
-                                type="text"
+                                type="number"
                             />
                             <div className="container text-center text-green-700 font-sans font-semibold text-lg">
                                 Vehicle Details
