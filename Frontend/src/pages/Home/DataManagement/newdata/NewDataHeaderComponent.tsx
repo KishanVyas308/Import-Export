@@ -20,6 +20,15 @@ const NewDataHeaderComponent = ({ backLink, nextLink }) => {
           Dashboard
         </Link>
         <div className="relative group">
+        <button className="text-white flex gap-2 hover:text-gray-100 items-center">
+            Master
+          </button>
+          <div className="absolute hidden group-hover:block text-base z-50 bg-white text-black  rounded shadow-lg">
+            <Link to={"/master/client-master"} className="block px-4 py-2 hover:bg-gray-200">Client Master</Link>
+         </div>
+
+        </div>
+        <div className="relative group">
           <button className="text-white flex gap-2 hover:text-gray-100 items-center">
             Documents List
           </button>
@@ -28,6 +37,7 @@ const NewDataHeaderComponent = ({ backLink, nextLink }) => {
             <Link to={"/datamanagement/advance-license"} className="block px-4 py-2 hover:bg-gray-200">Advance License</Link>
             <Link to={"/datamanagement/newdata/part1"} className="block px-4 py-2 hover:bg-gray-200">Shipping Bill</Link>
             <Link to={"/datamanagement/invoice"} className="block px-4 py-2 hover:bg-gray-200">Invoice</Link>
+            <Link to={"/datamanagement/e-invoice"} className="block px-4 py-2 hover:bg-gray-200">E - Invoice</Link>
             <Link to={"/datamanagement/ebrc"} className="block px-4 py-2 hover:bg-gray-200">E - BRC</Link>
             <Link to={"/datamanagement/e-way-bill"} className="block px-4 py-2 hover:bg-gray-200">E - Way Bill</Link>
             <Link to={"/datamanagement/subsidy"} className="block px-4 py-2 hover:bg-gray-200">Subsidy</Link>

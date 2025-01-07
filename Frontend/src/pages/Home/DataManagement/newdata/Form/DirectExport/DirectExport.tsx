@@ -8,29 +8,15 @@ import axios from "axios";
 import { BACKEND_URL } from "../../../../../../Globle";
 import { useRecoilValue } from "recoil";
 import { authAtom } from "../../../../../../atoms/authAtom";
+import { fetchCustomers } from "../../../../../utility/dataFetch";
+import { CustomerDetail } from "../../../../../utility/types/customerDetail";
 
 const ShippingBillPage = () => {
   const [usdPrice, setUsdPrice] = useState("USD Price: -cant able to fetch-");
   const { user } = useRecoilValue(authAtom);
-  interface ExporterDetail {
-    addedByUserId: string,
-    customerName : string,
-    firmPan : string,
-    gstNo : string,
-    id : string,
-    iecNo : string,
-    iemUdyam : string,
-    industryCategory : string,
-    mailId1 : string,
-    mailId2 : string,
-    mailId3 : string,
-    mobileNumber1 : string,
-    mobileNumber2 : string,
-    mobileNumber3 : string,
-    subIndustryCategory : string
-  }
+ 
 
-  const [exporterDetail, setExporterDetail] = useState<ExporterDetail[]>([]);
+  const [exporterDetail, setExporterDetail] = useState<CustomerDetail[]>([]);
   const [currentExporterIndex, setCurrentExporterIndex] = useState<number | null>(null)
 
   const [basicSheet, setBasicSheet] = useState({
@@ -102,25 +88,12 @@ const ShippingBillPage = () => {
 
   //? Fetch all Exporter Detail
   useEffect(() => {
-    const fetchExporterDetail = async () => {
-      setLoading(true);
-      const res = await axios.get(`${BACKEND_URL}/getdata/allexpoters`, {
-        headers: {
-          Authorization: cookies.token,
-        },
-      });
-      if (res.status !== 200) {
-        alert("Error in fetching data");
-        setLoading(false);
-        return;
-      }
-     
-      console.log(res.data);
-
-      setExporterDetail(res.data);
+    setLoading(true);
+    fetchCustomers(cookies.token).then((data) => {
+      setExporterDetail(data);
       setLoading(false);
-    };
-    fetchExporterDetail();
+    });
+    setLoading(false);
   }, []);
 
 
@@ -220,30 +193,30 @@ const ShippingBillPage = () => {
 
   // UseMemo to update both basicSheet and annexure1 values based on basicSheet inputs
   useMemo(() => {
-    // const updatedBasicSheet = {
-    //   cifValue2: (
-    //     Number(basicSheet.cifValue) *
-    //     Number(basicSheet.exchangeRateOrProprtionRatio)
-    //   ).toString(),
-    //   freight2: (
-    //     Number(basicSheet.freight) *
-    //     Number(basicSheet.exchangeRateOrProprtionRatio)
-    //   ).toString(),
-    //   insurance2: (
-    //     Number(basicSheet.insurance) *
-    //     Number(basicSheet.exchangeRateOrProprtionRatio)
-    //   ).toString(),
-    //   brc2: (
-    //     Number(basicSheet.brc) * Number(basicSheet.exchangeRateOrProprtionRatio)
-    //   ).toString(),
-    // };
+    const updatedBasicSheet = {
+      cifValue2: (
+        Number(basicSheet.cifValue) *
+        Number(basicSheet.exchangeRateOrProprtionRatio)
+      ).toString(),
+      freight2: (
+        Number(basicSheet.freight) *
+        Number(basicSheet.exchangeRateOrProprtionRatio)
+      ).toString(),
+      insurance2: (
+        Number(basicSheet.insurance) *
+        Number(basicSheet.exchangeRateOrProprtionRatio)
+      ).toString(),
+      brc2: (
+        Number(basicSheet.brc) * Number(basicSheet.exchangeRateOrProprtionRatio)
+      ).toString(),
+    };
 
     const cifValue2 =
       Number(basicSheet.cifValue) *
       Number(basicSheet.exchangeRateOrProprtionRatio);
-    const brcValue =
+    const brc2 =
       Number(basicSheet.brc) * Number(basicSheet.exchangeRateOrProprtionRatio);
-    const lowerOfSbAndBrc = Math.min(cifValue2, brcValue).toString();
+    const lowerOfSbAndBrc = Math.min(cifValue2, brc2).toString();
     const shippingBillFreight =
       Number(basicSheet.freight) *
       Number(basicSheet.exchangeRateOrProprtionRatio);
@@ -263,7 +236,7 @@ const ShippingBillPage = () => {
       shippingBillNo: basicSheet.shippingBillNo,
       shippingBillDate: basicSheet.shippingBillDate,
       shippingBillCifValueInDoller: cifValue2.toString(),
-      brcValue: brcValue.toString(),
+      brcValue: brc2.toString(),
       lowerOfSbAndBrc: lowerOfSbAndBrc,
       shippingBillFreight: shippingBillFreight.toString(),
       shippingBillInsurance: shippingBillInsurance.toString(),
@@ -279,16 +252,16 @@ const ShippingBillPage = () => {
       shippingBillDate: basicSheet.shippingBillDate,
       directExportsInRupees: fobValueInRupees,
       directExportsInDollars: fobValueInDoller,
-      deemedExports: "0",
-      thirdPartyExportsInRupees: "0",
-      thirdPartyExportsInDollars: "0",
-      byGroupCompany: "0",
-      otherRWseries: "0",
-      totalInRupees: fobValueInRupees,
-      totalInDollars: fobValueInDoller,
+      totalInRupees: fobValueInRupees + annexureA.thirdPartyExportsInRupees,
+      totalInDollars: fobValueInDoller + annexureA.thirdPartyExportsInDollars,
     };
 
 
+
+    setBasicSheet((prevBasicSheet) => ({
+      ...prevBasicSheet,
+      ...updatedBasicSheet
+    }));
 
     setAnnexure1((prevAnnexure) => ({
       ...prevAnnexure,
@@ -314,7 +287,9 @@ const ShippingBillPage = () => {
     basicSheet.hsCodeAndDescription,
     basicSheet.epcgLicNo,
     basicSheet.product,
-    basicSheet.srNo
+    basicSheet.srNo,
+    annexureA.thirdPartyExportsInRupees,
+    annexureA.thirdPartyExportsInDollars
   ]);
 
   //? On chang of current exporter index 
@@ -421,7 +396,7 @@ const ShippingBillPage = () => {
             />
 
 
-            <SelectInputField
+            <InputField
               label="HS Code & Description"
               value={basicSheet.hsCodeAndDescription}
               onChange={(e) =>
@@ -430,16 +405,18 @@ const ShippingBillPage = () => {
                   hsCodeAndDescription: e.target.value,
                 })
               }
-              options={["Y", "N"]}
+              type="select"
+              options={["N", "Y"]}
             />  
 
-            <SelectInputField
+            <InputField
               label="EPCG Lic. No."
               value={basicSheet.epcgLicNo}
               onChange={(e) =>
                 setBasicSheet({ ...basicSheet, epcgLicNo: e.target.value })
               }
-              options={["Y", "N"]}
+              type="select"
+              options={["N", "Y"]}
             />
             <InputField
               label="CIF Value"
@@ -560,6 +537,17 @@ const ShippingBillPage = () => {
                 setAnnexure1({ ...annexure1, shippingBillNo: e.target.value })
               }
               type="number"
+            />
+             <InputField
+              label="Shipping Bill Date"
+              value={annexure1.shippingBillDate}
+              onChange={(e) =>
+                setAnnexure1({
+                  ...annexure1,
+                  shippingBillDate: e.target.value,
+                })
+              }
+              type="date"
             />
             <InputField
               label="Shipping Bill CIF Value (in Dollar)"
@@ -790,78 +778,7 @@ const ShippingBillPage = () => {
             />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 mt-2 gap-4">
-          <div className="bg-white p-4 rounded-md">
-            <div className="container text-center text-green-700 font-sans font-semibold text-xl">
-              Summary
-            </div>
-
-            <InputField
-              label="EO Imposed"
-              value={blockwiseSummary.EOImposed}
-              onChange={(e) =>
-                setBlockwiseSummary({ ...blockwiseSummary, EOImposed: e.target.value })
-              }
-
-              type="number"
-            />
-
-            <InputField
-              label="Direct Export"
-              value={blockwiseSummary.DirectExport}
-              onChange={(e) =>
-                setBlockwiseSummary({ ...blockwiseSummary, DirectExport: e.target.value })
-              }
-              type="number"
-            />
-            <InputField
-              label="Indirect Export"
-              value={blockwiseSummary.IndirectExport}
-              onChange={(e) =>
-                setBlockwiseSummary({ ...blockwiseSummary, IndirectExport: e.target.value })
-              }
-              type="number"
-            />
-            <InputField
-              label="Total"
-              value={blockwiseSummary.Total}
-              onChange={(e) =>
-                setBlockwiseSummary({ ...blockwiseSummary, Total: e.target.value })
-              }
-              type="number"
-            />
-            <InputField
-              label="Excess"
-              value={blockwiseSummary.Excess}
-              onChange={(e) =>
-                setBlockwiseSummary({ ...blockwiseSummary, Excess: e.target.value })
-              }
-              type="number"
-            />
-            <InputField
-              label="EO Fulfilled"
-              value={blockwiseSummary.EOFulfilled}
-              onChange={(e) =>
-                setBlockwiseSummary({ ...blockwiseSummary, EOFulfilled: e.target.value })
-              }
-              type="number"
-            />
-            <InputField
-              label="Excess EO"
-              value={blockwiseSummary.ExcessEo}
-              onChange={(e) =>
-                setBlockwiseSummary({ ...blockwiseSummary, ExcessEo: e.target.value })
-              }
-              type="number"
-            />
-            <button
-              onClick={getSummary}
-              className="bg-green-500 text-white p-2 rounded-md"
-            >
-              Get Summary
-            </button>
-          </div>
-        </div>
+     
       </div>
     </div>
   );

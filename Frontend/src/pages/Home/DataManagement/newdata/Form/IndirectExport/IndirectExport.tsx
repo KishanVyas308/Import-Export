@@ -91,7 +91,6 @@ const IndirectExport = () => {
     return saved ? JSON.parse(saved) : {
       srNo: "",
       sameProductOrService: "",
-     
       shippingBillNo: "",
       shippingBillDate: "",
       fobValueRealizationProceedsRs: "",
@@ -369,35 +368,40 @@ const IndirectExport = () => {
       (shippingBillFreight + shippingBillInsurance)
     ).toString();
     const fobValueInRupees = (
-      Number(fobValueInDoller) * Number(basicSheet.exchangeRate)
+      Number(fobValueInDoller) * Number(basicSheet.exchangeRate2)
     ).toString();
 
     console.log("Fob Value in Rupees", fobValueInRupees);
     console.log("Fob Value in Dollar", fobValueInDoller);
     
     
+    const updatedBasicSheet = {
+      cifValue2: cifValue2.toString(),
+      freight2: Number(basicSheet.freight) *  Number(basicSheet.exchangeRate),
+      insurance2: Number(basicSheet.insurance) *  Number(basicSheet.exchangeRate),
+      brc2: brcValue.toString(),
+    }
+
 
     const updatedAnnexure1 = {
       srNo: basicSheet.srNo,
       shippingBillNo: basicSheet.shippingBillNo,
       shippingBillDate: basicSheet.shippingBillDate,
-      shippingBillCifValue: basicSheet.cifValue,
-      brcValue: basicSheet.brc,
+      shippingBillCifValue: basicSheet.cifValue2,
+      brcValue: basicSheet.brc2,
       lowerOfSbAndBrc: lowerOfSbAndBrc,
-      shippingBillFreight: basicSheet.freight,
-      shippingBillInsurance: basicSheet.insurance,
+      shippingBillFreight: basicSheet.freight2,
+      shippingBillInsurance: basicSheet.insurance2,
       fobValueInDollars: fobValueInDoller,
-      exchangeRatePerShippingBill: basicSheet.exchangeRate,
+      exchangeRatePerShippingBill: basicSheet.exchangeRate2,
       fobValueInRupees: fobValueInRupees,
-
-
     };
 
 
 
-    const taxInvoiceTax = Number(basicSheet.invoiceValue) - Number(basicSheet.basicAmount);
-    const lowerOfInvoiceAndBankStatement = (Math.min( Number(basicSheet.invoiceValue), Number(basicSheet.amountRealised))).toString();
-    const proportionateAmountOf6ForInRs = ((Number(lowerOfInvoiceAndBankStatement) * Number(basicSheet.basicAmount)) / Number(basicSheet.invoiceValue)).toString();
+    const taxInvoiceTax = Number(basicSheet.invoiceValue2) - Number(basicSheet.basicAmount);
+    const lowerOfInvoiceAndBankStatement = (Math.min( Number(basicSheet.invoiceValue2), Number(basicSheet.amountRealised))).toString();
+    const proportionateAmountOf6ForInRs = ((Number(lowerOfInvoiceAndBankStatement) * Number(basicSheet.basicAmount)) / Number(basicSheet.invoiceValue2)).toString();
 
     const updatedAnnexure2 = {
       srNo: basicSheet.srNo,
@@ -407,20 +411,21 @@ const IndirectExport = () => {
       taxInvoiceDate: basicSheet.invoiceDate,
       taxInvoiceBasicAmount: basicSheet.basicAmount,
       taxInvoiceTax: taxInvoiceTax,
-      taxInvoiceInvoiceValue: basicSheet.invoiceValue,
+      taxInvoiceInvoiceValue: basicSheet.invoiceValue2,
       paymentDetailsDate: basicSheet.bankPaymentReceivedDate,
       paymentDetailsAmountReceived: basicSheet.amountReceived,
       paymentDetailsAmountRealised: basicSheet.amountRealised,
       lowerOfInvoiceAndBankStatement: lowerOfInvoiceAndBankStatement,
       proportionateAmountOf6ForInRs: proportionateAmountOf6ForInRs,
-      exchangeRatePerShippingBill: annexure1.exchangeRatePerShippingBill,
-      forInUsd: (Number(proportionateAmountOf6ForInRs) / Number(basicSheet.exchangeRate)).toString(),
+      exchangeRatePerShippingBill: basicSheet.exchangeRate2,
+      forInUsd: (Number(proportionateAmountOf6ForInRs) / Number(basicSheet.exchangeRate2)).toString(),
     }
 
 
 
     const updatedCalculationSheet = {
       srNo: basicSheet.srNo,
+      sameProductOrService: basicSheet.product,
       shippingBillNo: basicSheet.shippingBillNo,
       shippingBillDate: basicSheet.shippingBillDate,
       fobValueRealizationProceedsRs: newDeptSheet.amountLessOfCol6And7Rs,
@@ -428,12 +433,12 @@ const IndirectExport = () => {
       fobValueAnnexure1Rs: fobValueInRupees,
       fobValueAnnexure1Us: fobValueInDoller,
       fobValueAnnexure2Rs: proportionateAmountOf6ForInRs,
-      fobValueAnnexure2Us: (Number(proportionateAmountOf6ForInRs) / Number(basicSheet.exchangeRate)).toString(),
+      fobValueAnnexure2Us: (Number(proportionateAmountOf6ForInRs) / Number(basicSheet.exchangeRate2)).toString(),
       fobValueLowerOf5_6_7Rs: Math.min(Number(newDeptSheet.amountLessOfCol6And7Rs), Number(fobValueInRupees), Number(proportionateAmountOf6ForInRs)),
       fobValueLowerOf5_6_7Us: Math.min(Number(newDeptSheet.convertedIntoUsd), Number(fobValueInDoller), (Number(proportionateAmountOf6ForInRs) / Number(basicSheet.exchangeRate))),
     }
 
-    const amountLessOfCol6And7Rs = Math.min((Number(basicSheet.brc) * Number(basicSheet.exchangeRate)), Number(basicSheet.amountRealised));
+    const amountLessOfCol6And7Rs = Math.min((Number(basicSheet.brc2) * Number(basicSheet.exchangeRate2)), Number(basicSheet.amountRealised));
 
     const updatedNewDeptSheet = {
       srNo: basicSheet.srNo,
@@ -441,12 +446,12 @@ const IndirectExport = () => {
       shippingBillDate: basicSheet.shippingBillDate,
       invoiceNo: basicSheet.invoiceNo,
       invoiceDate: basicSheet.invoiceDate,
-      amountRealisedAsPerBrcUs: basicSheet.brc,
-      amountRealisedAsPerBrcExchRate: (Number(basicSheet.exchangeRate)).toString(),
-      amountRealisedAsPerBrcRs: (Number(basicSheet.brc) * Number(basicSheet.exchangeRate)).toString(),
+      amountRealisedAsPerBrcUs: basicSheet.brc2,
+      amountRealisedAsPerBrcExchRate: (Number(basicSheet.exchangeRate2)).toString(),
+      amountRealisedAsPerBrcRs: (Number(basicSheet.brc2) * Number(basicSheet.exchangeRate2)).toString(),
       amountRealisedInBankRs: basicSheet.amountRealised,
       amountLessOfCol6And7Rs: (amountLessOfCol6And7Rs).toString(),
-      convertedIntoUsd: (amountLessOfCol6And7Rs / Number(basicSheet.exchangeRate)).toString(),
+      convertedIntoUsd: (amountLessOfCol6And7Rs / Number(basicSheet.exchangeRate2)).toString(),
     }
 
     const updatedAnnexureA = {
@@ -465,10 +470,10 @@ const IndirectExport = () => {
 
 
 
-    // setBasicSheet((prevSheet) => ({
-    //   ...prevSheet,
-    //   ...updatedBasicSheet,
-    // }));
+    setBasicSheet((prevSheet) => ({
+      ...prevSheet,
+      ...updatedBasicSheet,
+    }));
 
     setAnnexure1((prevAnnexure) => ({
       ...prevAnnexure,
@@ -517,6 +522,7 @@ const IndirectExport = () => {
     basicSheet.srNo,
     basicSheet.shippingBillDate,
     basicSheet.shippingBillNo,
+    basicSheet.exchangeRate2,
     newDeptSheet.amountLessOfCol6And7Rs,
     newDeptSheet.convertedIntoUsd,
     newDeptSheet.amountRealisedInBankRs,
@@ -638,7 +644,7 @@ const IndirectExport = () => {
                 })
               }
             />
-            <SelectInputField
+            <InputField
               label="HS Code & Description"
               value={basicSheet.hsCodeAndDescription}
               onChange={(e) =>
@@ -647,15 +653,17 @@ const IndirectExport = () => {
                   hsCodeAndDescription: e.target.value,
                 })
               }
-              options={["Y", "N"]}
+              type="select"
+              options={["N", "Y"]}
             />
-            <SelectInputField
+            <InputField
               label="EPCG Lic. No."
               value={basicSheet.epcgLicNo}
               onChange={(e) =>
                 setBasicSheet({ ...basicSheet, epcgLicNo: e.target.value })
               }
-              options={["Y", "N"]}
+              type="select"
+              options={["N", "Y"]}
             />
             <InputField
               label="CIF Value"
@@ -796,7 +804,7 @@ const IndirectExport = () => {
               }
               type="number"
             />
-            <SelectInputField
+            <InputField
               label="Qty as per Invoice and SB Match"
               value={basicSheet.qtyAsPerInvoiceAndSbMatch}
               onChange={(e) =>
@@ -805,10 +813,10 @@ const IndirectExport = () => {
                   qtyAsPerInvoiceAndSbMatch: e.target.value,
                 })
               }
-              
-              options={["Y", "N"]}
+              type="select"
+              options={["N", "Y"]}
             />
-            <SelectInputField
+            <InputField
               label="EPCG Lic No in Tax Invoice"
               value={basicSheet.epcgLicNoInTaxInvoice}
               onChange={(e) =>
@@ -817,10 +825,10 @@ const IndirectExport = () => {
                   epcgLicNoInTaxInvoice: e.target.value,
                 })
               }
-              type="text"
-              options={["Y", "N"]}
+              type="select"
+              options={["N", "Y"]}
             />
-            <SelectInputField
+            <InputField
               label="Lorry Receipt or Eway Bill"
               value={basicSheet.lorryReceiptOrEwayBill}
               onChange={(e) =>
@@ -829,17 +837,17 @@ const IndirectExport = () => {
                   lorryReceiptOrEwayBill: e.target.value,
                 })
               }
-              type="text"
-              options={["Y", "N"]}
+              type="select"
+              options={["N", "Y"]}
             />
-            <SelectInputField
+            <InputField
               label="Bank Statement"
               value={basicSheet.bankStatement}
               onChange={(e) =>
                 setBasicSheet({ ...basicSheet, bankStatement: e.target.value })
               }
-              type="text"
-              options={["Y", "N"]}
+              type="select"
+              options={["N", "Y"]}
             />
             <InputField
               label="Product"
@@ -952,7 +960,7 @@ const IndirectExport = () => {
               type="number"
             />
             <InputField
-              label="Exchange Rate 2"
+              label="Exchange Rate per Shipping Bill"
               value={annexure1.exchangeRatePerShippingBill}
               onChange={(e) =>
                 setAnnexure1({
