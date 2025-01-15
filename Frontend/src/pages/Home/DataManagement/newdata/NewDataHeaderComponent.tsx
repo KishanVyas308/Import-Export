@@ -21,12 +21,23 @@ const NewDataHeaderComponent = ({ backLink, nextLink }) => {
         </Link>
         <div className="relative group">
         <button className="text-white flex gap-2 hover:text-gray-100 items-center">
-            Master
+            Data
           </button>
           <div className="absolute hidden group-hover:block text-base z-50 bg-white text-black  rounded shadow-lg">
             <Link to={"/master/client-master"} className="block px-4 py-2 hover:bg-gray-200">Client Master</Link>
+            <Link to={"/master/other-detail"} className="block px-4 py-2 hover:bg-gray-200">Other Details</Link>
          </div>
 
+        </div>
+        
+        <div className="relative group">
+          <button className="text-white flex gap-2 hover:text-gray-100 items-center">
+            Form
+          </button>
+          <div className="absolute text-base hidden group-hover:block bg-white text-black z-50 rounded ">
+            <Link to={"/datamanagement/directexport"} className="block px-4 py-2 hover:bg-gray-200">Direct Export</Link>
+            <Link to={"/datamanagement/indirectexport"} className="block px-4 py-2 hover:bg-gray-200">Indirect Export</Link>
+          </div>
         </div>
         <div className="relative group">
           <button className="text-white flex gap-2 hover:text-gray-100 items-center">
@@ -41,15 +52,6 @@ const NewDataHeaderComponent = ({ backLink, nextLink }) => {
             <Link to={"/datamanagement/ebrc"} className="block px-4 py-2 hover:bg-gray-200">E - BRC</Link>
             <Link to={"/datamanagement/e-way-bill"} className="block px-4 py-2 hover:bg-gray-200">E - Way Bill</Link>
             <Link to={"/datamanagement/subsidy"} className="block px-4 py-2 hover:bg-gray-200">Subsidy</Link>
-          </div>
-        </div>
-        <div className="relative group">
-          <button className="text-white flex gap-2 hover:text-gray-100 items-center">
-            Form
-          </button>
-          <div className="absolute text-base hidden group-hover:block bg-white text-black z-50 rounded ">
-            <Link to={"/datamanagement/directexport"} className="block px-4 py-2 hover:bg-gray-200">Direct Export</Link>
-            <Link to={"/datamanagement/indirectexport"} className="block px-4 py-2 hover:bg-gray-200">Indirect Export</Link>
           </div>
         </div>
       </div>
