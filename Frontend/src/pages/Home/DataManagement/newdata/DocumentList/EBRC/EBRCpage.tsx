@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import InputField from '../../../../../components/InputField';
 import NewDataButtons from '../../NewDataButtons';
 import Loading from '../../../../../components/Loading';
-import NewDataHeaderComponent from '../../NewDataHeaderComponent';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { useRecoilValue } from 'recoil';
@@ -60,10 +59,7 @@ const EBRCPage = () => {
         <div className="bg-[#e6e7e9] w-full h-full min-h-screen">
             <div className="container mx-auto px-4 py-8">
                 {loading && <Loading />}
-                <NewDataHeaderComponent
-                    backLink={"/datamanagement"}
-                    nextLink={"/datamanagement/newdata/part2"}
-                />
+               
                 <div className="container mx-auto px-4 py-8">
                     <div className="container text-center text-green-700 font-sans font-semibold text-[24px]">
                         EBRC Details

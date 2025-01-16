@@ -4,10 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../../../../components/Loading";
 import { BACKEND_URL } from "../../../../../../Globle";
 import { useCookies } from "react-cookie";
-import NewDataHeaderComponent from "../../NewDataHeaderComponent";
 import InputField from "../../../../../components/InputField";
 import NewDataButtons from "../../NewDataButtons";
-import ShippingBillHeader from "./ShippingBillHeader";
 import { useRecoilValue } from "recoil";
 import { authAtom } from "../../../../../../atoms/authAtom";
 
@@ -265,11 +263,6 @@ const Part2 = () => {
       <div className="container mx-auto px-4 py-8 ">
         {loading && <Loading />}
 
-        <NewDataHeaderComponent
-          backLink={"/datamanagement/newdata/part1"}
-          nextLink={"/datamanagement/newdata/part3"}
-        />
-        <ShippingBillHeader />
 
         <div className="container text-center text-green-700 font-sans font-semibold text-[24px]">
         Shipping Bill - Part 2

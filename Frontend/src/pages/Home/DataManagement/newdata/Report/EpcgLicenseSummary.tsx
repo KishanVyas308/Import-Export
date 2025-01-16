@@ -2,16 +2,16 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import { authAtom } from '../../../../../../atoms/authAtom';
-import { BACKEND_URL } from '../../../../../../Globle';
-import InputField from '../../../../../components/InputField';
-import NewDataButtons from '../../NewDataButtons';
-import Loading from '../../../../../components/Loading';
-import Divider from '../../../../../components/Divider';
-import { fetchCustomers } from '../../../../../utility/dataFetch';
-import { CustomerDetail } from '../../../../../utility/types/customerDetail';
+import { authAtom } from '../../../../../atoms/authAtom';
+import { CustomerDetail } from '../../../../utility/types/customerDetail';
+import { fetchCustomers } from '../../../../utility/dataFetch';
+import { BACKEND_URL } from '../../../../../Globle';
+import Loading from '../../../../components/Loading';
+import InputField from '../../../../components/InputField';
+import Divider from '../../../../components/Divider';
+import NewDataButtons from '../NewDataButtons';
 
-const EPCGLicensePage = () => {
+const EpcgLicenseSummary = () => {
 
     const { user } = useRecoilValue(authAtom);
     const [cookies] = useCookies(['token']);
@@ -1158,4 +1158,4 @@ const EPCGLicensePage = () => {
     );
 };
 
-export default EPCGLicensePage;
+export default EpcgLicenseSummary;
