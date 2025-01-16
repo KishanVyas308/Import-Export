@@ -290,7 +290,7 @@ const EpcgLicenseSummary = () => {
 
         try {
             const res = await axios.post(
-                `${BACKEND_URL}/documentslist/epcglicense`,
+                `${BACKEND_URL}/documentslist/epcglicensesummary`,
                 jsonData,
                 {
                     headers: {

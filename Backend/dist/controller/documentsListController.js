@@ -60,15 +60,20 @@ function addEWayBill(req, res) {
 function addEpcgLicense(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const responce = yield __1.prisma.ePCGLicense.create({
-                data: req.body,
+            const _a = req.body, { hsCodeEoList, averageExportList } = _a, epcgLicenseDetails = __rest(_a, ["hsCodeEoList", "averageExportList"]);
+            const response = yield __1.prisma.documentEpcgLicense.create({
+                data: Object.assign(Object.assign({}, epcgLicenseDetails), { DocumentEpcgLicenseEoAsPerLicense: {
+                        create: hsCodeEoList,
+                    }, DocumentEpcgLicenseActualExport: {
+                        create: averageExportList,
+                    } }),
             });
+            return res.json({ message: "Added successfully", response });
         }
         catch (e) {
             console.log(e);
             return res.json({ message: e });
         }
-        return res.json({ message: "Added successfully" });
     });
 }
 function addEbrc(req, res) {
