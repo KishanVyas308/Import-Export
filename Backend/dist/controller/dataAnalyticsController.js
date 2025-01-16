@@ -427,7 +427,7 @@ function epcgLicenceDataOnDate(req, res) {
             return res.status(200).json({ selectDateError: 'Start date and end date are required' });
         }
         try {
-            const EpcgLicense = yield __1.prisma.ePCGLicense.findMany({
+            const EpcgLicense = yield __1.prisma.documentEpcgLicense.findMany({
                 where: {
                     uploadedDate: {
                         gte: new Date(startDate),

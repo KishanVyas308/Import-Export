@@ -33,16 +33,25 @@ export async function addEWayBill(req: any, res: any) {
 
 export async function addEpcgLicense(req: any, res: any) {
   try {
-    const responce = await prisma.ePCGLicense.create({
-      data: req.body,
+    const { hsCodeEoList, averageExportList, ...epcgLicenseDetails } = req.body;
+
+    const response = await prisma.documentEpcgLicense.create({
+      data: {
+        ...epcgLicenseDetails,
+        DocumentEpcgLicenseEoAsPerLicense: {
+          create: hsCodeEoList,
+        },
+        DocumentEpcgLicenseActualExport: {
+          create: averageExportList,
+        },
+      },
     });
+
+    return res.json({ message: "Added successfully", response });
   } catch (e) {
     console.log(e);
-    
     return res.json({ message: e });
   }
-
-  return res.json({ message: "Added successfully" });
 }
 
 export async function addEbrc(req: any, res: any) {

@@ -65,10 +65,11 @@ model user {
   EpcgList                       EpcgList[]
   Invoice                        Invoice[]
   EWayBillDetails                EWayBillDetails[]
-  EPCGLicense                    EPCGLicense[]
+  EPCGLicenseSummary             EPCGLicenseSummary[]
   EBRC                           EBRC[]
   EInvoice                       EInvoice[]
   AdvanceLicense                 AdvanceLicense[]
+  DocumentEpcgLicense            DocumentEpcgLicense[]
 }
 
 model ExcelDataFinal {
@@ -813,56 +814,57 @@ model EpcgList {
 
   @@index([addedByUserId], name: "userId")
 }
-model Invoice {
-  id                             String   @id @default(cuid())
-  sellerName                     String?  @default("")
-  sellerAddress                  String?  @default("")
-  sellerPanNumber                String?  @default("")
-  sellerGstNumber                String?  @default("")
-  buyerBillToName                String?  @default("")
-  buyerBillToAddress             String?  @default("")
-  buyerContactNumber             String?  @default("")
-  buyerGstNumber                 String?  @default("")
-  buyerShipToName                String?  @default("")
-  buyerShipToAddress             String?  @default("")
-  buyerShipToContactNumber       String?  @default("")
-  buyerShipToGstNumber           String?  @default("")
-  invoiceNumber                  String?  @default("")
-  invoiceDate                    String?  @default("")
-  quickResponseCode              String?  @default("")
-  
-  subTotal                       String?  @default("")
-  amountInWords                  String?  @default("")
-  notes                          String?  @default("")
-  bankName                       String?  @default("")
-  accountNumber                  String?  @default("")
-  ifscCode                       String?  @default("")
-  taxRate                        String?  @default("")
-  igst                           String?  @default("")
-  termsAndConditions             String?  @default("")
-  authorizedSignature            String?  @default("")
-  user                           user     @relation(fields: [addedByUserId], references: [id])
-  addedByUserId                  String
-  uploadedDate                   DateTime @default(now())
 
-  productDetails           InvoiceProductDetail[]
+model Invoice {
+  id                       String  @id @default(cuid())
+  sellerName               String? @default("")
+  sellerAddress            String? @default("")
+  sellerPanNumber          String? @default("")
+  sellerGstNumber          String? @default("")
+  buyerBillToName          String? @default("")
+  buyerBillToAddress       String? @default("")
+  buyerContactNumber       String? @default("")
+  buyerGstNumber           String? @default("")
+  buyerShipToName          String? @default("")
+  buyerShipToAddress       String? @default("")
+  buyerShipToContactNumber String? @default("")
+  buyerShipToGstNumber     String? @default("")
+  invoiceNumber            String? @default("")
+  invoiceDate              String? @default("")
+  quickResponseCode        String? @default("")
+
+  subTotal            String?  @default("")
+  amountInWords       String?  @default("")
+  notes               String?  @default("")
+  bankName            String?  @default("")
+  accountNumber       String?  @default("")
+  ifscCode            String?  @default("")
+  taxRate             String?  @default("")
+  igst                String?  @default("")
+  termsAndConditions  String?  @default("")
+  authorizedSignature String?  @default("")
+  user                user     @relation(fields: [addedByUserId], references: [id])
+  addedByUserId       String
+  uploadedDate        DateTime @default(now())
+
+  productDetails InvoiceProductDetail[]
 
   @@index([addedByUserId], name: "userId")
 }
 
 model InvoiceProductDetail {
-  id                            String   @id @default(cuid())
-  productDetailSrNo             String?  @default("")
-  productDetailDescription      String?  @default("")
-  productDetailHSN              String?  @default("")
+  id                             String  @id @default(cuid())
+  productDetailSrNo              String? @default("")
+  productDetailDescription       String? @default("")
+  productDetailHSN               String? @default("")
   productDetailTypeOfProductsUQC String? @default("")
-  productDetailQty              String?  @default("")
-  productDetailRateOfProduct    String?  @default("")
-  productDetailAmount           String?  @default("")
-  productDetailTaxPayableOnRcm  String?  @default("")
+  productDetailQty               String? @default("")
+  productDetailRateOfProduct     String? @default("")
+  productDetailAmount            String? @default("")
+  productDetailTaxPayableOnRcm   String? @default("")
 
-  Invoice                       Invoice  @relation(fields: [invoiceId], references: [id])
-  invoiceId                     String
+  Invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId String
 
   @@index([invoiceId], name: "invoiceId")
 }
@@ -913,8 +915,212 @@ model EWayBillDetails {
   @@index([addedByUserId], name: "userId")
 }
 
-model EPCGLicense {
+model EBRC {
+  id                             String   @id @default(cuid())
+  firmName                       String   @default("")
+  address                        String   @default("")
+  iec                            String   @default("")
+  shippingBillNo                 String   @default("")
+  shippingBillDate               String   @default("")
+  shippingBillPort               String   @default("")
+  bankName                       String   @default("")
+  bankFileNoAndUploadedDate      String   @default("")
+  billIdNo                       String   @default("")
+  bankRealisationCertificateNo   String   @default("")
+  dateOfRealisationOfMoneyByBank String   @default("")
+  realisedValueInForeignCurrency String   @default("")
+  currencyOfRealisation          String   @default("")
+  dateTimeOfPrinting             String   @default("")
+  user                           user     @relation(fields: [addedByUserId], references: [id])
+  addedByUserId                  String
+  uploadedDate                   DateTime @default(now())
+
+  @@index([addedByUserId], name: "userId")
+}
+
+model EInvoice {
+  id              String  @id @default(cuid())
+  sellerName      String? @default("")
+  sellerAddress   String? @default("")
+  sellerPanNumber String? @default("")
+  sellerGstNumber String? @default("")
+
+  eInvoiceDetailQRCode     String? @default("")
+  eInvoiceDetailIrnNo      String? @default("")
+  eInvoiceDetailAckNo      String? @default("")
+  eInvoiceDetailAckDate    String? @default("")
+  eInvoiceDetailEWayBillNo String? @default("")
+
+  BuyerDetailBillToName          String? @default("")
+  BuyerDetailBillToAddress       String? @default("")
+  BuyerDetailBillToContactNumber String? @default("")
+  BuyerDetailBillToGstNumber     String? @default("")
+
+  BuyerDetailShipToName          String? @default("")
+  BuyerDetailShipToAddress       String? @default("")
+  BuyerDetailShipToContactNumber String? @default("")
+  BuyerDetailShipToGstNumber     String? @default("")
+
+  invoiceDetailNumber            String? @default("")
+  invoiceDetailDate              String? @default("")
+  invoiceDetailQuickResponseCode String? @default("")
+
+  subTotal      String? @default("")
+  amountInWords String? @default("")
+  notes         String? @default("")
+
+  bankDetailBankName      String? @default("")
+  bankDetailAccountNumber String? @default("")
+  bankDetailIfscCode      String? @default("")
+
+  taxCalculationTaxRate              String? @default("")
+  taxCalculationIgstEitherCgstOrSgst String? @default("")
+
+  termsAndConditions  String? @default("")
+  authorizedSignature String? @default("")
+
+  user          user     @relation(fields: [addedByUserId], references: [id])
+  addedByUserId String
+  uploadedDate  DateTime @default(now())
+
+  productDetails EInvoiceProductDetail[]
+
+  @@index([addedByUserId], name: "userId")
+}
+
+model EInvoiceProductDetail {
+  id                             String  @id @default(cuid())
+  productDetailSrNo              String? @default("")
+  productDetailDescription       String? @default("")
+  productDetailHSN               String? @default("")
+  productDetailTypeOfProductsUQC String? @default("")
+  productDetailQty               String? @default("")
+  productDetailRateOfProduct     String? @default("")
+  productDetailAmount            String? @default("")
+  productDetailTaxPayableOnRcm   String? @default("")
+
+  eInvoiceId String
+  eInvoice   EInvoice @relation(fields: [eInvoiceId], references: [id])
+
+  @@index([eInvoiceId], name: "eInvoiceId")
+}
+
+model AdvanceLicense {
   id           String @id @default(cuid())
+  srNo         String @default("")
+  customerName String @default("")
+  licenseNo    String @default("")
+  licenseDate  String @default("")
+  fileNo       String @default("")
+  fileDate     String @default("")
+  sion         String @default("")
+  licenseType  String @default("")
+
+  importDataQuantity       String @default("")
+  importDataCifValueInr    String @default("")
+  importDataCifValueUsd    String @default("")
+  importDataDutySavedValue String @default("")
+
+  exportDataQuantity             String @default("")
+  exportDataFobValueInr          String @default("")
+  exportDataFobValueUsd          String @default("")
+  exportDataValueAdditionPercent String @default("")
+
+  actualImportQuantity          String @default("")
+  actualImportCifValueInr       String @default("")
+  actualImportCifValueUsd       String @default("")
+  actualImportDutySavedValue    String @default("")
+  actualImportNoOfBillOfEntries String @default("")
+
+  exportObligationImposedQuantity             String @default("")
+  exportObligationImposedFobValueInr          String @default("")
+  exportObligationImposedFobValueUsd          String @default("")
+  exportObligationImposedValueAdditionPercent String @default("")
+
+  exportDataActualDoneDirectExportQuantity             String @default("")
+  exportDataActualDoneDirectExportFobValueInr          String @default("")
+  exportDataActualDoneDirectExportFobValueUsd          String @default("")
+  exportDataActualDoneDirectExportValueAdditionPercent String @default("")
+  exportDataActualDoneDirectExportNoOfShippingBills    String @default("")
+
+  exportDataActualDoneIndirectExportQuantity             String @default("")
+  exportDataActualDoneIndirectExportFobValueInr          String @default("")
+  exportDataActualDoneIndirectExportFobValueUsd          String @default("")
+  exportDataActualDoneIndirectExportValueAdditionPercent String @default("")
+  exportDataActualDoneIndirectExportNoOfShippingBills    String @default("")
+
+  exportDataActualDoneTotalExportQuantity             String @default("")
+  exportDataActualDoneTotalExportFobValueInr          String @default("")
+  exportDataActualDoneTotalExportFobValueUsd          String @default("")
+  exportDataActualDoneTotalExportValueAdditionPercent String @default("")
+  exportDataActualDoneTotalExportNoOfShippingBills    String @default("")
+
+  remarks       String   @default("")
+  user          user     @relation(fields: [addedByUserId], references: [id])
+  addedByUserId String
+  uploadedDate  DateTime @default(now())
+
+  @@index([addedByUserId], name: "userId")
+}
+
+model DocumentEpcgLicense {
+  id           String @id @default(cuid())
+  srNo         String @default("")
+  customerName String @default("")
+  licenseNo    String @default("")
+  licenseDate  String @default("")
+  fileNo       String @default("")
+  fileDate     String @default("")
+  licenseType  String @default("")
+
+  bankGuaranteeAmountRs     String @default("")
+  bankGuaranteeValidityFrom String @default("")
+  bankGuaranteeValidityTo   String @default("")
+  bankGuaranteeSubmittedTo  String @default("")
+
+  dutySavedValueAmountInr           String @default("")
+  DocumentEpcgLicenseEoAsPerLicense DocumentEpcgLicenseEoAsPerLicense[]
+
+  dutyUtilizedValue String @default("")
+
+  remarks String @default("")
+
+  user                            user                              @relation(fields: [addedByUserId], references: [id])
+  addedByUserId                   String
+  uploadedDate                    DateTime                          @default(now())
+  DocumentEpcgLicenseActualExport DocumentEpcgLicenseActualExport[]
+
+  @@index([addedByUserId], name: "userId")
+}
+
+model DocumentEpcgLicenseEoAsPerLicense {
+  id String @id @default(cuid())
+
+  hsCodeEoInr      String @default("")
+  descriptionEoUsd String @default("")
+
+  DocumentEpcgLicense DocumentEpcgLicense @relation(fields: [epcgLicenseId], references: [id])
+  epcgLicenseId       String
+
+  @@index([epcgLicenseId], name: "epcgLicenseId")
+}
+
+model DocumentEpcgLicenseActualExport {
+  id                          String @id @default(cuid())
+  hsCodeEoImposedAsPerLicense String @default("")
+  descriptionNoOfYears        String @default("")
+  descriptionTotalAEOImposed  String @default("")
+
+  DocumentEpcgLicense DocumentEpcgLicense @relation(fields: [epcgLicenseId], references: [id])
+  epcgLicenseId       String
+
+  @@index([epcgLicenseId], name: "epcgLicenseId")
+}
+
+// Report
+
+model EPCGLicenseSummary {
+  id           String  @id @default(cuid())
   srNo         String? @default("")
   customerName String? @default("")
   licenseNo    String? @default("")
@@ -1004,156 +1210,8 @@ model EPCGLicense {
   totalEOPeriodTotalExportNoOfShippingBills String? @default("")
   totalEOPeriodTotalExportPercent           String? @default("")
   totalEOPeriodTotalExportPropDutySaved     String? @default("")
-  remarks                                  String? @default("")
+  remarks                                   String? @default("")
 
-  user          user     @relation(fields: [addedByUserId], references: [id])
-  addedByUserId String
-  uploadedDate  DateTime @default(now())
-
-  @@index([addedByUserId], name: "userId")
-}
-
-model EBRC {
-  id                             String   @id @default(cuid())
-  firmName                       String @default("")
-  address                        String @default("")
-  iec                            String @default("")
-  shippingBillNo                 String @default("")
-  shippingBillDate               String @default("")
-  shippingBillPort               String @default("")
-  bankName                       String @default("")
-  bankFileNoAndUploadedDate      String @default("")
-  billIdNo                       String @default("")
-  bankRealisationCertificateNo   String @default("")
-  dateOfRealisationOfMoneyByBank String @default("")
-  realisedValueInForeignCurrency String @default("")
-  currencyOfRealisation          String @default("")
-  dateTimeOfPrinting             String @default("")
-  user                           user     @relation(fields: [addedByUserId], references: [id])
-  addedByUserId                  String
-  uploadedDate                   DateTime @default(now())
-
-  @@index([addedByUserId], name: "userId")
-}
-
-model EInvoice {
-  id              String  @id @default(cuid())
-  sellerName      String? @default("")
-  sellerAddress   String? @default("")
-  sellerPanNumber String? @default("")
-  sellerGstNumber String? @default("")
-
-  eInvoiceDetailQRCode     String? @default("")
-  eInvoiceDetailIrnNo      String? @default("")
-  eInvoiceDetailAckNo      String? @default("")
-  eInvoiceDetailAckDate    String? @default("")
-  eInvoiceDetailEWayBillNo String? @default("")
-
-  BuyerDetailBillToName          String? @default("")
-  BuyerDetailBillToAddress       String? @default("")
-  BuyerDetailBillToContactNumber String? @default("")
-  BuyerDetailBillToGstNumber     String? @default("")
-
-  BuyerDetailShipToName          String? @default("")
-  BuyerDetailShipToAddress       String? @default("")
-  BuyerDetailShipToContactNumber String? @default("")
-  BuyerDetailShipToGstNumber     String? @default("")
-
-  invoiceDetailNumber            String? @default("")
-  invoiceDetailDate              String? @default("")
-  invoiceDetailQuickResponseCode String? @default("")
-  
-  subTotal                       String? @default("")
-  amountInWords                  String? @default("")
-  notes                          String? @default("")
-
-  bankDetailBankName      String? @default("")
-  bankDetailAccountNumber String? @default("")
-  bankDetailIfscCode      String? @default("")
-
-  taxCalculationTaxRate              String? @default("")
-  taxCalculationIgstEitherCgstOrSgst String? @default("")
-
-  termsAndConditions  String? @default("")
-  authorizedSignature String? @default("")
-
-  user          user     @relation(fields: [addedByUserId], references: [id])
-  addedByUserId String
-  uploadedDate  DateTime @default(now())
-
-  productDetails EInvoiceProductDetail[]
-
-  @@index([addedByUserId], name: "userId")
-}
-
-model EInvoiceProductDetail {
-  id                          String  @id @default(cuid())
-  productDetailSrNo           String? @default("")
-  productDetailDescription    String? @default("")
-  productDetailHSN            String? @default("")
-  productDetailTypeOfProductsUQC String? @default("")
-  productDetailQty            String? @default("")
-  productDetailRateOfProduct  String? @default("")
-  productDetailAmount         String? @default("")
-  productDetailTaxPayableOnRcm String? @default("")
-
-  eInvoiceId String
-  eInvoice   EInvoice @relation(fields: [eInvoiceId], references: [id])
-
-  @@index([eInvoiceId], name: "eInvoiceId")
-}
-
-model AdvanceLicense {
-  id           String @id @default(cuid())
-  srNo         String @default("")
-  customerName String @default("")
-  licenseNo    String @default("")
-  licenseDate  String @default("")
-  fileNo       String @default("")
-  fileDate     String @default("")
-  sion         String @default("")
-  licenseType  String @default("")
-
-  importDataQuantity       String @default("")
-  importDataCifValueInr    String @default("")
-  importDataCifValueUsd    String @default("")
-  importDataDutySavedValue String @default("")
-
-  exportDataQuantity             String @default("")
-  exportDataFobValueInr          String @default("")
-  exportDataFobValueUsd          String @default("")
-  exportDataValueAdditionPercent String @default("")
-
-  actualImportQuantity          String @default("")
-  actualImportCifValueInr       String @default("")
-  actualImportCifValueUsd       String @default("")
-  actualImportDutySavedValue    String @default("")
-  actualImportNoOfBillOfEntries String @default("")
-
-  exportObligationImposedQuantity             String @default("")
-  exportObligationImposedFobValueInr          String @default("")
-  exportObligationImposedFobValueUsd          String @default("")
-  exportObligationImposedValueAdditionPercent String @default("")
-
-  exportDataActualDoneDirectExportQuantity             String @default("")
-  exportDataActualDoneDirectExportFobValueInr          String @default("")
-  exportDataActualDoneDirectExportFobValueUsd          String @default("")
-  exportDataActualDoneDirectExportValueAdditionPercent String @default("")
-  exportDataActualDoneDirectExportNoOfShippingBills    String @default("")
-
-  exportDataActualDoneIndirectExportQuantity             String @default("")
-  exportDataActualDoneIndirectExportFobValueInr          String @default("")
-  exportDataActualDoneIndirectExportFobValueUsd          String @default("")
-  exportDataActualDoneIndirectExportValueAdditionPercent String @default("")
-  exportDataActualDoneIndirectExportNoOfShippingBills    String @default("")
-
-  exportDataActualDoneTotalExportQuantity             String @default("")
-  exportDataActualDoneTotalExportFobValueInr          String @default("")
-  exportDataActualDoneTotalExportFobValueUsd          String @default("")
-  exportDataActualDoneTotalExportValueAdditionPercent String @default("")
-  exportDataActualDoneTotalExportNoOfShippingBills    String @default("")
-
-  remarks       String @default("")
   user          user     @relation(fields: [addedByUserId], references: [id])
   addedByUserId String
   uploadedDate  DateTime @default(now())

@@ -452,7 +452,7 @@ async function epcgLicenceDataOnDate(req: any, res: any) {
     }
 
     try {
-        const EpcgLicense = await prisma.ePCGLicense.findMany({
+        const EpcgLicense = await prisma.documentEpcgLicense.findMany({
             where: {
                 uploadedDate: {
                     gte: new Date(startDate),
