@@ -7,7 +7,6 @@ import { useCookies } from 'react-cookie';
 import { useRecoilValue } from 'recoil';
 import { authAtom } from '../../../../../../atoms/authAtom';
 import Loading from '../../../../../components/Loading';
-import NewDataHeaderComponent from '../../NewDataHeaderComponent';
 
 const Invoice = () => {
 
@@ -138,10 +137,7 @@ const Invoice = () => {
     <div className="bg-[#e6e7e9] w-full h-full min-h-screen">
       <div className="container mx-auto px-4 py-8 ">
         {loading && <Loading />}
-        <NewDataHeaderComponent
-          backLink={"/datamanagement"}
-          nextLink={"/datamanagement/newdata/part2"}
-        />
+       
         <div className="container mx-auto px-4 py-8">
           <div className="container text-center text-green-700 font-sans font-semibold text-[24px]">
             Invoice

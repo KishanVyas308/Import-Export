@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Loading from "../../../../../components/Loading";
-import NewDataHeaderComponent from "../../NewDataHeaderComponent";
 import InputField, { SelectInputField } from "../../../../../components/InputField";
 import NewDataButtons from "../../NewDataButtons";
 import { useCookies } from "react-cookie";
@@ -328,10 +327,7 @@ const ShippingBillPage = () => {
       <div className="container mx-auto px-4 py-8 ">
         {loading && <Loading />}
 
-        <NewDataHeaderComponent
-          backLink={"/datamanagement"}
-          nextLink={"/datamanagement/newdata/part2"}
-        />
+        
 
         <div className="container text-center text-green-700 font-sans font-semibold text-[24px]">
           Direct Export

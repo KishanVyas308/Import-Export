@@ -6,7 +6,6 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import Loading from '../../../../components/Loading';
-import NewDataHeaderComponent from '../NewDataHeaderComponent';
 
 const NewDataAnalytics = () => {
     enum Mode {
@@ -101,10 +100,7 @@ const NewDataAnalytics = () => {
         <div className="bg-[#e6e7e9] w-full h-full min-h-screen">
             <div className="container mx-auto px-4 py-8 ">
                 {loading && <Loading />}
-                <NewDataHeaderComponent
-                    backLink={"/datamanagement"}
-                    nextLink={"/datamanagement/newdata/part2"}
-                />
+                
                 <h1 className="text-2xl mb-4">Filter Data</h1>
                 <div className="grid grid-cols-2 gap-4">
                     <select

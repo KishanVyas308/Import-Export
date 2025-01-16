@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import NewDataHeaderComponent from './Home/DataManagement/newdata/NewDataHeaderComponent';
 
 const UnderDevelopment = () => {
     const navigate = useNavigate();
@@ -14,12 +13,6 @@ const UnderDevelopment = () => {
         
         <div className="bg-[#e6e7e9] w-full h-full min-h-screen">
         <div className="container mx-auto px-4 py-8 ">
-          
-            <NewDataHeaderComponent
-                backLink={"/datamanagement"}
-                nextLink={"/datamanagement/newdata/part2"}
-            />
-    
             <DotLottieReact
                 src="https://assets10.lottiefiles.com/packages/lf20_jcikwtux.json"
                 autoplay
