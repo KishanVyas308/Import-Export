@@ -65,7 +65,7 @@ model user {
   EpcgList                       EpcgList[]
   Invoice                        Invoice[]
   EWayBillDetails                EWayBillDetails[]
-  EPCGLicenseSummary             EPCGLicenseSummary[]
+  // ReportEPCGLicenseSummary       ReportEPCGLicenseSummary[]
   EBRC                           EBRC[]
   EInvoice                       EInvoice[]
   AdvanceLicense                 AdvanceLicense[]
@@ -883,6 +883,7 @@ model EWayBillDetails {
   ewaybillSupplyType                   String?
   ewaybillSubType                      String?
   ewaybillTransactionType              String?
+  ewaybillIrnNo                    String?
   supplierGstin                        String?
   supplierName                         String?
   supplierState                        String?
@@ -1078,7 +1079,7 @@ model DocumentEpcgLicense {
   bankGuaranteeValidityTo   String @default("")
   bankGuaranteeSubmittedTo  String @default("")
 
-  dutySavedValueAmountInr           String @default("")
+  dutySavedValueAmountInr           String                              @default("")
   DocumentEpcgLicenseEoAsPerLicense DocumentEpcgLicenseEoAsPerLicense[]
 
   dutyUtilizedValue String @default("")
@@ -1117,104 +1118,134 @@ model DocumentEpcgLicenseActualExport {
   @@index([epcgLicenseId], name: "epcgLicenseId")
 }
 
-// Report
+// // Report
 
-model EPCGLicenseSummary {
-  id           String  @id @default(cuid())
-  srNo         String? @default("")
-  customerName String? @default("")
-  licenseNo    String? @default("")
-  licenseDate  String? @default("")
-  fileNo       String? @default("")
-  fileDate     String? @default("")
-  licenseType  String? @default("")
+// model ReportEPCGLicenseSummary {
+//   id          String  @id @default(cuid())
+//   srNo        String? @default("")
+//   partyName   String? @default("")
+//   licenseNo   String? @default("")
+//   licenseDate String? @default("")
+//   fileNo      String? @default("")
+//   fileDate    String? @default("")
+//   licenseType String? @default("")
 
-  bankGuaranteeAmountRs    String? @default("")
-  bankGuaranteeValidity    String? @default("")
-  bankGuaranteeSubmittedTo String? @default("")
+//   bankGuaranteeAmountRs     String? @default("")
+//   bankGuaranteeValidityFrom String? @default("")
+//   bankGuaranteeValidityTo   String? @default("")
+//   bankGuaranteeSubmittedTo  String? @default("")
 
-  dutySavedValueAmountInr String? @default("")
-  dutySavedEoInr          String? @default("")
-  dutySavedEoUsd          String? @default("")
+//   dutySavedValueAmountInr String? @default("")
 
-  ActualUtilizationBaseDutyUtilizedValue String? @default("")
-  ActualUtilizationBaseDutyeoInr         String? @default("")
-  ActualUtilizationBaseDutyeoUsd         String? @default("")
-  installationDate                       String? @default("")
+//   ReportEpcgLicenseSummaryEoAsPerLicense ReportEpcgLicenseSummaryEoAsPerLicense[]
 
-  AverageExportImposedAsPerLicenseInr String? @default("")
-  AverageExportNoOfYears              String? @default("")
-  AverageExportTotalAeoImposedInr     String? @default("")
-  AverageExportFulfilledInr           String? @default("")
-  AverageExportNoOfShippingBills      String? @default("")
-  AverageExportFulfilledPercent       String? @default("")
+//   duetyUtilizedValue String? @default("")
 
-  block1stImposedBlockCompletionDate String? @default("")
-  block1stImposedEoInr               String? @default("")
-  block1stImposedEoUsd               String? @default("")
+//   ReportDocumentEpcgLicenseSummaryActualExport ReportDocumentEpcgLicenseSummaryActualExport[]
+//   installationDate                       String? @default("")
 
-  block1stDirectExportEoInr             String? @default("")
-  block1stDirectExportEoUsd             String? @default("")
-  block1stDirectExportNoOfShippingBills String? @default("")
-  block1stDirectExportPercent           String? @default("")
-  block1stDirectExportPropDutySaved     String? @default("")
+//   AverageExportImposedAsPerLicenseInr String? @default("")
+//   AverageExportNoOfYears              String? @default("")
+//   AverageExportTotalAeoImposedInr     String? @default("")
+//   AverageExportFulfilledInr           String? @default("")
+//   AverageExportNoOfShippingBills      String? @default("")
+//   AverageExportFulfilledPercent       String? @default("")
 
-  block1stIndirectExportEoInr             String? @default("")
-  block1stIndirectExportEoUsd             String? @default("")
-  block1stIndirectExportNoOfShippingBills String? @default("")
-  block1stIndirectExportPercent           String? @default("")
-  block1stIndirectExportPropDutySaved     String? @default("")
+//   block1stImposedBlockCompletionDate String? @default("")
+//   block1stImposedEoInr               String? @default("")
+//   block1stImposedEoUsd               String? @default("")
 
-  block1stTotalExportEoInr             String? @default("")
-  block1stTotalExportEoUsd             String? @default("")
-  block1stTotalExportNoOfShippingBills String? @default("")
-  block1stTotalExportPercent           String? @default("")
-  block1stTotalExportPropDutySaved     String? @default("")
+//   block1stDirectExportEoInr             String? @default("")
+//   block1stDirectExportEoUsd             String? @default("")
+//   block1stDirectExportNoOfShippingBills String? @default("")
+//   block1stDirectExportPercent           String? @default("")
+//   block1stDirectExportPropDutySaved     String? @default("")
 
-  block2ndImposedBlockCompletionDate String? @default("")
-  block2ndImposedEoInr               String? @default("")
-  block2ndImposedEoUsd               String? @default("")
+//   block1stIndirectExportEoInr             String? @default("")
+//   block1stIndirectExportEoUsd             String? @default("")
+//   block1stIndirectExportNoOfShippingBills String? @default("")
+//   block1stIndirectExportPercent           String? @default("")
+//   block1stIndirectExportPropDutySaved     String? @default("")
 
-  block2ndDirectExportEoInr             String? @default("")
-  block2ndDirectExportEoUsd             String? @default("")
-  block2ndDirectExportNoOfShippingBills String? @default("")
-  block2ndDirectExportPercent           String? @default("")
-  block2ndDirectExportPropDutySaved     String? @default("")
+//   block1stTotalExportEoInr             String? @default("")
+//   block1stTotalExportEoUsd             String? @default("")
+//   block1stTotalExportNoOfShippingBills String? @default("")
+//   block1stTotalExportPercent           String? @default("")
+//   block1stTotalExportPropDutySaved     String? @default("")
 
-  block2ndIndirectExportEoInr             String? @default("")
-  block2ndIndirectExportEoUsd             String? @default("")
-  block2ndIndirectExportNoOfShippingBills String? @default("")
-  block2ndIndirectExportPercent           String? @default("")
-  block2ndIndirectExportPropDutySaved     String? @default("")
+//   block2ndImposedBlockCompletionDate String? @default("")
+//   block2ndImposedEoInr               String? @default("")
+//   block2ndImposedEoUsd               String? @default("")
 
-  block2ndTotalExportEoInr             String? @default("")
-  block2ndTotalExportEoUsd             String? @default("")
-  block2ndTotalExportNoOfShippingBills String? @default("")
-  block2ndTotalExportPercent           String? @default("")
-  block2ndTotalExportPropDutySaved     String? @default("")
+//   block2ndDirectExportEoInr             String? @default("")
+//   block2ndDirectExportEoUsd             String? @default("")
+//   block2ndDirectExportNoOfShippingBills String? @default("")
+//   block2ndDirectExportPercent           String? @default("")
+//   block2ndDirectExportPropDutySaved     String? @default("")
 
-  totalEOPeriodDirectExportEoInr             String? @default("")
-  totalEOPeriodDirectExportEoUsd             String? @default("")
-  totalEOPeriodDirectExportNoOfShippingBills String? @default("")
-  totalEOPeriodDirectExportPercent           String? @default("")
-  totalEOPeriodDirectExportPropDutySaved     String? @default("")
+//   block2ndIndirectExportEoInr             String? @default("")
+//   block2ndIndirectExportEoUsd             String? @default("")
+//   block2ndIndirectExportNoOfShippingBills String? @default("")
+//   block2ndIndirectExportPercent           String? @default("")
+//   block2ndIndirectExportPropDutySaved     String? @default("")
 
-  totalEOPeriodIndirectExportEoInr             String? @default("")
-  totalEOPeriodIndirectExportEoUsd             String? @default("")
-  totalEOPeriodIndirectExportNoOfShippingBills String? @default("")
-  totalEOPeriodIndirectExportPercent           String? @default("")
-  totalEOPeriodIndirectExportPropDutySaved     String? @default("")
+//   block2ndTotalExportEoInr             String? @default("")
+//   block2ndTotalExportEoUsd             String? @default("")
+//   block2ndTotalExportNoOfShippingBills String? @default("")
+//   block2ndTotalExportPercent           String? @default("")
+//   block2ndTotalExportPropDutySaved     String? @default("")
 
-  totalEOPeriodTotalExportEoInr             String? @default("")
-  totalEOPeriodTotalExportEoUsd             String? @default("")
-  totalEOPeriodTotalExportNoOfShippingBills String? @default("")
-  totalEOPeriodTotalExportPercent           String? @default("")
-  totalEOPeriodTotalExportPropDutySaved     String? @default("")
-  remarks                                   String? @default("")
+//   totalEOPeriodDirectExportEoInr             String? @default("")
+//   totalEOPeriodDirectExportEoUsd             String? @default("")
+//   totalEOPeriodDirectExportNoOfShippingBills String? @default("")
+//   totalEOPeriodDirectExportPercent           String? @default("")
+//   totalEOPeriodDirectExportPropDutySaved     String? @default("")
 
-  user          user     @relation(fields: [addedByUserId], references: [id])
-  addedByUserId String
-  uploadedDate  DateTime @default(now())
+//   totalEOPeriodIndirectExportEoInr             String? @default("")
+//   totalEOPeriodIndirectExportEoUsd             String? @default("")
+//   totalEOPeriodIndirectExportNoOfShippingBills String? @default("")
+//   totalEOPeriodIndirectExportPercent           String? @default("")
+//   totalEOPeriodIndirectExportPropDutySaved     String? @default("")
 
-  @@index([addedByUserId], name: "userId")
-}
+//   totalEOPeriodTotalExportEoInr             String? @default("")
+//   totalEOPeriodTotalExportEoUsd             String? @default("")
+//   totalEOPeriodTotalExportNoOfShippingBills String? @default("")
+//   totalEOPeriodTotalExportPercent           String? @default("")
+//   totalEOPeriodTotalExportPropDutySaved     String? @default("")
+//   remarks                                   String? @default("")
+
+//   user                                          user                                            @relation(fields: [addedByUserId], references: [id])
+//   addedByUserId                                 String
+//   uploadedDate                                  DateTime                                        @default(now())
+ 
+
+//   @@index([addedByUserId], name: "userId")
+// }
+
+// model ReportEpcgLicenseSummaryEoAsPerLicense {
+//   id String @id @default(cuid())
+
+//   hsCodeEoInr      String @default("")
+//   descriptionEoUsd String @default("")
+
+//   ReportEPCGLicenseSummary ReportEPCGLicenseSummary @relation(fields: [epcgLicenseSummaryId], references: [id])
+//   epcgLicenseSummaryId     String
+
+//   @@index([epcgLicenseSummaryId], name: "epcgLicenseSummaryId")
+// }
+
+// model ReportDocumentEpcgLicenseSummaryActualExport {
+//   id                          String @id @default(cuid())
+//   hsCodeEoImposedAsPerLicense String @default("")
+//   descriptionNoOfYears        String @default("")
+//   descriptionTotalAEOImposed  String @default("")
+
+//   ReportEPCGLicenseSummary ReportEPCGLicenseSummary @relation(fields: [epcgLicenseSummaryId], references: [id])
+//   epcgLicenseSummaryId     String
+
+//   @@index([epcgLicenseSummaryId], name: "epcgLicenseSummaryId")
+// }
+
+// model ReportEPCGLicenseSummary1stBlock {
+
+// }

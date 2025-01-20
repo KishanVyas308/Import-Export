@@ -251,8 +251,8 @@ const ShippingBillPage = () => {
       shippingBillDate: basicSheet.shippingBillDate,
       directExportsInRupees: fobValueInRupees,
       directExportsInDollars: fobValueInDoller,
-      totalInRupees: fobValueInRupees + annexureA.thirdPartyExportsInRupees,
-      totalInDollars: fobValueInDoller + annexureA.thirdPartyExportsInDollars,
+      totalInRupees:( Number(fobValueInRupees) + Number(annexureA.thirdPartyExportsInRupees)).toString(),
+      totalInDollars: (Number(fobValueInDoller) + Number(annexureA.thirdPartyExportsInDollars)).toString(),
     };
 
 

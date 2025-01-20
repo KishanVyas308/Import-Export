@@ -201,6 +201,9 @@ const EInvoicePage = () => {
                             <div className="container text-center text-green-700 font-sans font-semibold text-lg">
                                 Buyer Details (Bill To)
                             </div>
+                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
+                               Bill To
+                            </div>
                             <InputField
                                 label="Bill To Name"
                                 value={eInvoiceDetails.BuyerDetailBillToName}
@@ -225,10 +228,10 @@ const EInvoicePage = () => {
                                 onChange={(e) => handleInputChange('BuyerDetailBillToGstNumber', e.target.value)}
                                 type="text"
                             />
-                        </div>
-                        <div className="bg-white p-4 rounded-md">
-                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
-                                Buyer Details (Ship To)
+                       
+                           
+                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
+                                 Ship To
                             </div>
                             <InputField
                                 label="Ship To Name"

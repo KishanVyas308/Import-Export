@@ -27,6 +27,7 @@ const EWayBillDetails = () => {
         ewaybillSupplyType: '',
         ewaybillSubType: '',
         ewaybillTransactionType: '',
+        ewaybillIrnNo: '',
         supplierGstin: '',
         supplierName: '',
         supplierState: '',
@@ -136,7 +137,7 @@ const EWayBillDetails = () => {
                                     setEwayBillDetails({ ...ewayBillDetails, ewaybillModeOfTransportation: e.target.value })
                                 }
                                 options={["Ship", "Air", "Road", "Rail" ]}
-                                type="slect"
+                                type="select"
                             />
                             <InputField
                                 label="Approx Distance"
@@ -203,6 +204,14 @@ const EWayBillDetails = () => {
                                 }
                                 options={["Regular", "Bill To Ship To", "Bill From Dispatch From", "Combination" ]}
                                 type="select"
+                            />
+                              <InputField
+                                label="IRN No"
+                                value={ewayBillDetails.ewaybillIrnNo}
+                                onChange={(e) =>
+                                    setEwayBillDetails({ ...ewayBillDetails, ewaybillIrnNo: e.target.value })
+                                }
+                                type="text"
                             />
                         </div>
                         <div className="bg-white p-4 rounded-md">
