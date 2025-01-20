@@ -18,84 +18,144 @@ const EpcgLicenseSummary = () => {
     const [loading, setLoading] = useState(false);
     const [customerNames, setCustomerNames] = useState<CustomerDetail[]>([]);
 
+    // Drop Down means - type = select and opttion = array of given things
+
+
     // State to manage EPCG License details
     const [epcgLicenseDetails, setEpcgLicenseDetails] = useState({
-        srNo: '', // 1
-        customerName: '', // 2
-        licenseNo: '', // 3
-        licenseDate: '', // 4
-        fileNo: '', // 5
-        fileDate: '', // 6
-        licenseType: '', // 7
-        bankGuaranteeAmountRs: '', // 8
-        bankGuaranteeSubmittedTo: '', // 10
-        bankGuaranteeValidityFrom: '', // 9.1
-        bankGuaranteeValidityTo: '', // 9.2
-        dutySavedValueAmountInr: '', // 11
-        dutySavedEoInr: '', // 12
-        dutySavedEoUsd: '', // 13
-        ActualUtilizationBaseDutyUtilizedValue: '', // 14
-        ActualUtilizationBaseDutyeoInr: '', // 15
-        ActualUtilizationBaseDutyeoUsd: '', // 16
-        installationDate: '', // 17
-        AverageExportImposedAsPerLicenseInr: '', // 18
-        AverageExportNoOfYears: '', // 19
-        AverageExportTotalAeoImposedInr: '', // 20
-        AverageExportFulfilledInr: '', // 21
-        AverageExportNoOfShippingBills: '', // 22
-        AverageExportFulfilledPercent: '', // 23
-        block1stImposedBlockCompletionDate: '', // 24
-        block1stImposedEoInr: '', // 25
-        block1stImposedEoUsd: '', // 26
-        block1stDirectExportEoInr: '', // 27
-        block1stDirectExportEoUsd: '', // 28
-        block1stDirectExportNoOfShippingBills: '', // 29
-        block1stDirectExportPercent: '', // 30
-        block1stDirectExportPropDutySaved: '', // 31
-        block1stIndirectExportEoInr: '', // 32
-        block1stIndirectExportEoUsd: '', // 33
-        block1stIndirectExportNoOfShippingBills: '', // 34
-        block1stIndirectExportPercent: '', // 35
-        block1stIndirectExportPropDutySaved: '', // 36
-        block1stTotalExportEoInr: '', // 37
-        block1stTotalExportEoUsd: '', // 38
-        block1stTotalExportNoOfShippingBills: '', // 39
-        block1stTotalExportPercent: '', // 40
-        block1stTotalExportPropDutySaved: '', // 41
-        block2ndImposedBlockCompletionDate: '', // 42
-        block2ndImposedEoInr: '', // 43
-        block2ndImposedEoUsd: '', // 44
-        block2ndDirectExportEoInr: '', // 45
-        block2ndDirectExportEoUsd: '', // 46
-        block2ndDirectExportNoOfShippingBills: '', // 47
-        block2ndDirectExportPercent: '', // 48
-        block2ndDirectExportPropDutySaved: '', // 49
-        block2ndIndirectExportEoInr: '', // 50
-        block2ndIndirectExportEoUsd: '', // 51
-        block2ndIndirectExportNoOfShippingBills: '', // 52
-        block2ndIndirectExportPercent: '', // 53
-        block2ndIndirectExportPropDutySaved: '', // 54
-        block2ndTotalExportEoInr: '', // 55
-        block2ndTotalExportEoUsd: '', // 56
-        block2ndTotalExportNoOfShippingBills: '', // 57
-        block2ndTotalExportPercent: '', // 58
-        block2ndTotalExportPropDutySaved: '', // 59
-        totalEOPeriodDirectExportEoInr: '', // 60
-        totalEOPeriodDirectExportEoUsd: '', // 61
-        totalEOPeriodDirectExportNoOfShippingBills: '', // 62
-        totalEOPeriodDirectExportPercent: '', // 63
-        totalEOPeriodDirectExportPropDutySaved: '', // 64
-        totalEOPeriodIndirectExportEoInr: '', // 65
-        totalEOPeriodIndirectExportEoUsd: '', // 66
-        totalEOPeriodIndirectExportNoOfShippingBills: '', // 67
-        totalEOPeriodIndirectExportPercent: '', // 68
-        totalEOPeriodIndirectExportPropDutySaved: '', // 69
-        totalEOPeriodTotalExportEoInr: '', // 70
-        totalEOPeriodTotalExportEoUsd: '', // 71
-        totalEOPeriodTotalExportNoOfShippingBills: '', // 72
-        totalEOPeriodTotalExportPercent: '', // 73
-        totalEOPeriodTotalExportPropDutySaved: '', // 74
-        remarks: '' // 75
+        srNo: '', // A // no calculation  // Number  
+        partyName: '', // B // no calculation  // Customer Name Drop Down Fetch from Customer List
+        licenseNo: '', // C // no calculation // Number
+        licenseDate: '', // D // no calculation // Date
+        fileNo: '', // E // no calculation // Number
+        fileDate: '', // F  // no calculation // Date
+        licenseType: '', // G // no calculation // Drop Down [Domestic, Import]
+        bankGuaranteeAmountRs: '', // H // no calculation  // Number
+        bankGuaranteeValidityFrom: '', // I.1 // no calculation // Date
+        bankGuaranteeValidityTo: '', // I.2 // no calculation // Date
+        bankGuaranteeSubmittedTo: '', // J // no calculation // text
+        dutySavedValueAmountInr: '', // K // no calculation // Number
+        hsCodeAsPerLicenseEoInr: '', // L // no calculation // Number
+        descriptionAsPerLicenseEoUsd: '', // M // no calculation // Number
+        dutySavedValueDutyUtilizedValue: '', // N // no calculation // Number
+        
+        hsCodeAsPerEoFullfillmentSummaryEoInr: '', // O // (L * N) / K // Number 
+        descriptionAsPerEoFullfillmentSummaryEoUsd: '', // P // (M * N) / K // Number
+        installationDate: '', // Q // no calculation // Date
+
+        averageExportImposedAsPerLicenseInr: '', // R // no calculation // Number
+        averageExportNoOfYears: '', // S // no calculation // Number
+        averageExportTotalAeoImposedInr: '', // T // (R * S) // Number
+        averageExportFulfilledInr: '', // U // no calculation // Number
+        averageExportNoOfShippingBills: '', // V // no calculation // Number
+        averageExportFulfilledPercent: '', // W // (U / T) // Number
+
+        block1stImposedBlockCompletionDate: '', // X // (D + 4 years - 1 day) // Date
+        block1stImposedBlockExtension: '', // Y // no calculation // Drop Down [Yes, No]
+        block1stImposedExtensionYearIfAny: '', // Z // no calculation // Dorp Doen [5 years, 6 years]
+        block1stImposedBlockExtensionDate: '', // AA // (D + 6 years - 1 day) // Date
+        block1stImposedBlockBlanceDaysCompletionDate: '', // AB (x - Current Date) // Number
+        block1stImposedBlockBlanceDaysExtensionDate: '', // AC (AA - Current Date) // Number
+        block1stImposedEoInr: '', // AD // (O * 50%) // Number
+        block1stImposedEoUsd: '', // AE // (P * 50%) // Number
+
+        block1stDirectExportEoInr: '', // AF // no calculation // Number
+        block1stDirectExportEoUsd: '', // AG // no calculation // Number
+        block1stDirectExportNoOfShippingBills: '', // AH // no calculation // Number
+        block1stDirectExportPercent: '', // AI // (AG / P) // Number
+        block1stDirectExportPropDutySaved: '', // AJ // (N * AI) // Number
+
+        block1stIndirectExportEoInr: '', // AK // no calculation // Number
+        block1stIndirectExportEoUsd: '', // AL // no calculation // Number
+        block1stIndirectExportNoOfShippingBills: '', // AM // no calculation // Number 
+        block1stIndirectExportPercent: '', // AN // (AL / P) // Number
+        block1stIndirectExportPropDutySaved: '', // AO // (N * AN) // Number
+ 
+        block1stTotalExportEoInr: '', // AP // (AF + AK) // Number
+        block1stTotalExportEoUsd: '', // AQ // (AG + AL) // Number
+        block1stTotalExportNoOfShippingBills: '', // AR // (AH + AM) // Number
+        block1stTotalExportPercent: '', // AS // (AQ / P) // Number
+        block1stTotalExportPropDutySaved: '', // AT // (N * AS) // Number
+
+        block1stDifferentialEoEoInr: '', // AU // (AD - AP) // Number
+        block1stDifferentialEoEoInrPercent: '', // AV // (AU / O) // Number
+        block1stDifferentialEoEoUsd: '', // AW // (AE - AQ) // Number
+        block1stDifferentialEoEoUsdPercent: '', // AX // (AW / P) // Number
+        block1stDifferentialEoPropDutySaved: '', // AY // (N * AX) // Number
+
+
+        block2ndImposed2ndBlockEoPeriodCompletionDate: '', // AZ // (D + 6 years - 1 day) // Date
+        block2ndImposedEoPeriodExtensionIfAny: '', // BA // no calculation // Drop Down [Yes, No]
+        block2ndImposedEoPeriodExtensionYear: '', // BB // no calculation // Drop Down [1 years, 2 years]
+        block2ndImposedEoPeriodExtensionDate: '', // BC // no calculation // Drop Down [D + 8 years - 1 day , D + 7 years - 1 day]
+        block2ndImposedEoPeriodBalanceDaysCompletionDate: '', // BD // (AZ - Current Date) // Number
+        block2ndImposedEoPeriodBalanceDaysExtensionDate: '', // BE // (BC - Current Date) // Number
+        block2ndImposedEoInr: '', // BF // (O * 50%) // Number
+        block2ndImposedEoUsd: '', // BG // (P * 50%) // Number
+
+        block2ndDirectExportEoInr: '', // BH // no calculation // Number
+        block2ndDirectExportEoUsd: '', // BI // no calculation // Number
+        block2ndDirectExportNoOfShippingBills: '', // BJ // no calculation // Number
+        block2ndDirectExportPercent: '', // BK // (BI / P) // Number
+        block2ndDirectExportPropDutySaved: '', // BL // (N * BK) // Number
+
+        block2ndIndirectExportEoInr: '', // BM // no calculation // Number
+        block2ndIndirectExportEoUsd: '', // BN // no calculation // Number
+        block2ndIndirectExportNoOfShippingBills: '', // BO // no calculation // Number
+        block2ndIndirectExportPercent: '', // BP // (BN / P) // Number
+        block2ndIndirectExportPropDutySaved: '', // BQ // (N * BP) // Number
+
+        block2ndTotalExportEoInr: '', // BR // (BH + BM) // Number
+        block2ndTotalExportEoUsd: '', // BS // (BI + BN) // Number
+        block2ndTotalExportNoOfShippingBills: '', // BT // (BJ + BO) // Number
+        block2ndTotalExportPercent: '', // BU // (BS / P) // Number
+        block2ndTotalExportPropDutySaved: '', // BV // (N * BU) // Number
+
+        block2ndDifferentialEoEoInr: '', // BW // (BF - BR) // Number
+        block2ndDifferentialEoEoInrPercent: '', // BX // (BW / O) // Number
+        block2ndDifferentialEoEoUsd: '', // BY // (BG - BS) // Number
+        block2ndDifferentialEoEoUsdPercent: '', // BZ // (BY / P) // Number
+        block2ndDifferentialEoPropDutySaved: '', // CA // (N * BZ) // Number
+
+        totalEoPeriodImposedEoPeriodCompletionDate: '', // CB // AZ // Date
+        totalEoPeriodImposedEoPeriodExtensionIfAny: '', // CC // BA // Drop Down [Yes, No]
+        totalEoPeriodImposedEoPeriodExtensionYear: '', // CD // BB // Drop Down [1 years, 2 years]
+        totalEoPeriodImposedEoPeriodExtensionDate: '', // CE // BC // Drop Down [D + 8 years - 1 day , D + 7 years - 1 day]
+        totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate: '', // CF // BD // Number
+        totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate: '', // CG // BE // Number
+        totalEoPeriodImposedEoInr: '', // CH // (AD + BF) // Number
+        totalEoPeriodImposedEoUsd: '', // CI // (AE + BG) // Number
+
+        totalEOPeriodDirectExportEoInr: '', // CJ // (AF + BH) // Number
+        totalEOPeriodDirectExportEoUsd: '', // CK // (AG + BI) // Number
+        totalEOPeriodDirectExportNoOfShippingBills: '', // CL // (AH + BJ) // Number
+        totalEOPeriodDirectExportPercent: '', // CM // (AI + BK) // Number
+        totalEOPeriodDirectExportPropDutySaved: '', // CN // (AJ + BL) // Number
+
+        totalEOPeriodIndirectExportEoInr: '', // CO // (AK + BM) // Number
+        totalEOPeriodIndirectExportEoUsd: '', // CP // (AL + BN) // Number
+        totalEOPeriodIndirectExportNoOfShippingBills: '', // CQ // (AM + BO) // Number
+        totalEOPeriodIndirectExportPercent: '', // CR // (AN + BP) // Number
+        totalEOPeriodIndirectExportPropDutySaved: '', // CS // (AO + BQ) // Number
+
+        totalEOPeriodTotalExportEoInr: '', // CT // (CJ + CO) // Number
+        totalEOPeriodTotalExportEoUsd: '', // CU // (CK + CP) // Number
+        totalEOPeriodTotalExportNoOfShippingBills: '', // CV // (CL + CQ) // Number
+        totalEOPeriodTotalExportPercent: '', // CW // (CM + CR) // Number
+        totalEOPeriodTotalExportPropDutySaved: '', // CX // (CN + CS) // Number
+
+        totalEoPeriodDifferentialEoEoInr: '', // CY // (O - CT) // Number
+        totalEoPeriodDifferentialEoEoInrPercent: '', // CZ // (CY / O) // Number
+        totalEoPeriodDifferentialEoEoUsd: '', // DA // (P - CU) // Number
+        totalEoPeriodDifferentialEoEoUsdPercent: '', // DB // (DA / P) // Number
+        totalEoPeriodDifferentialEoPropDutySaved: '', // DC // (N * DB) // Number
+
+        EarlyEoFullfillment1stEoDate: '', // DD // no calculation // Date
+        EarlyEoFullfillmentLastEoDate: '', // DE // no calculation // Date
+        EarlyEoFullfillmentEoPeriodWithin3yearsOrNot: '', // DF // (D - DD) < 3 years 
+        EarlyEoFullfillmentEarlyEoFullfillment: '', // DG // no calculation // Drop Down [Yes, No] The condition should be "yes" if the EO period is within three years.
+
+        remarks: '', // DH // no calculation // text
     });
 
     useEffect(() => {
@@ -109,204 +169,251 @@ const EpcgLicenseSummary = () => {
     }
         , []);
 
+    // const calculatedEpcgLicenseDetails = useMemo(() => {
+    //     const {
+    //         dutySavedValueAmountInr,
+    //         hsCodeAsPerLicenseEoInr,
+    //         descriptionAsPerLicenseEoUsd,
+    //         dutySavedValueDutyUtilizedValue,
+    //         licenseDate,
+    //         averageExportImposedAsPerLicenseInr,
+    //         averageExportNoOfYears,
+    //         block1stImposedBlockCompletionDate,
+    //         block1stImposedBlockExtension,
+    //         block1stImposedExtensionYearIfAny,
+    //         block2ndImposed2ndBlockEoPeriodCompletionDate,
+    //         block2ndImposedEoPeriodExtensionIfAny,
+    //         block2ndImposedEoPeriodExtensionYear,
+    //         EarlyEoFullfillment1stEoDate,
+    //         EarlyEoFullfillmentLastEoDate,
+    //     } = epcgLicenseDetails;
 
-    useMemo(() => {
-        const updatedActualUtilizationBaseDutyeoInr  = 
-        (parseFloat(epcgLicenseDetails.dutySavedEoInr) * 
-        parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyUtilizedValue) / 
-        parseFloat(epcgLicenseDetails.dutySavedValueAmountInr)).toString();// 15
-        const updatedActualUtilizationBaseDutyeoUsd = 
-        (parseFloat(epcgLicenseDetails.dutySavedEoUsd) * 
-        parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyUtilizedValue) / 
-        parseFloat(epcgLicenseDetails.dutySavedValueAmountInr)).toString();// 16
-        const updatedAverageExportTotalAeoImposedInr =
-        (parseFloat(epcgLicenseDetails.AverageExportImposedAsPerLicenseInr) * 
-        parseFloat(epcgLicenseDetails.AverageExportNoOfYears)).toString();// 20
-        const updatedActualExportFulfilledPercent =
-        (parseFloat(epcgLicenseDetails.AverageExportFulfilledInr) / 
-        parseFloat(epcgLicenseDetails.AverageExportTotalAeoImposedInr)).toString();// 23
+    //     const O = String((Number(hsCodeAsPerLicenseEoInr) * Number(dutySavedValueDutyUtilizedValue)) / Number(dutySavedValueAmountInr));
+    //     const P = String((Number(descriptionAsPerLicenseEoUsd) * Number(dutySavedValueDutyUtilizedValue)) / Number(dutySavedValueAmountInr));
+    //     const T = String(Number(averageExportImposedAsPerLicenseInr) * Number(averageExportNoOfYears));
+    //     const W = String((Number(epcgLicenseDetails.averageExportFulfilledInr) / Number(T)) * 100);
+    //     const X = licenseDate ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 4 - 1)).toISOString().split('T')[0] : '';
+    //     const AA = licenseDate ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 6 - 1)).toISOString().split('T')[0] : '';
+    //     const AB = String(Math.ceil((new Date(X).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
+    //     const AC = String(Math.ceil((new Date(AA).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
+    //     const AD = String(Number(O) * 0.5);
+    //     const AE = String(Number(P) * 0.5);
+    //     const AI = String((Number(epcgLicenseDetails.block1stDirectExportEoUsd) / Number(P)) * 100);
+    //     const AJ = String(Number(dutySavedValueDutyUtilizedValue) * Number(AI));
+    //     const AN = String((Number(epcgLicenseDetails.block1stIndirectExportEoUsd) / Number(P)) * 100);
+    //     const AO = String(Number(dutySavedValueDutyUtilizedValue) * Number(AN));
+    //     const AP = String(Number(epcgLicenseDetails.block1stDirectExportEoInr) + Number(epcgLicenseDetails.block1stIndirectExportEoInr));
+    //     const AQ = String(Number(epcgLicenseDetails.block1stDirectExportEoUsd) + Number(epcgLicenseDetails.block1stIndirectExportEoUsd));
+    //     const AR = String(Number(epcgLicenseDetails.block1stDirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block1stIndirectExportNoOfShippingBills));
+    //     const AS = String((Number(AQ) / Number(P)) * 100);
+    //     const AT = String(Number(dutySavedValueDutyUtilizedValue) * Number(AS));
+    //     const AU = String(Number(AD) - Number(AP));
+    //     const AV = String((Number(AU) / Number(O)) * 100);
+    //     const AW = String(Number(AE) - Number(AQ));
+    //     const AX = String((Number(AW) / Number(P)) * 100);
+    //     const AY = String(Number(dutySavedValueDutyUtilizedValue) * Number(AX));
+    //     const AZ = new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 6 - 1)).toISOString().split('T')[0];
+    //     const BC = block2ndImposedEoPeriodExtensionYear === '1 years' ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 7 - 1)).toISOString().split('T')[0] : new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 8 - 1)).toISOString().split('T')[0];
+    //     const BD = String(Math.ceil((new Date(AZ).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
+    //     const BE = String(Math.ceil((new Date(BC).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
+    //     const BF = String(Number(O) * 0.5);
+    //     const BG = String(Number(P) * 0.5);
+    //     const BK = String((Number(epcgLicenseDetails.block2ndDirectExportEoUsd) / Number(P)) * 100);
+    //     const BL = String(Number(dutySavedValueDutyUtilizedValue) * Number(BK));
+    //     const BP = String((Number(epcgLicenseDetails.block2ndIndirectExportEoUsd) / Number(P)) * 100);
+    //     const BQ = String(Number(dutySavedValueDutyUtilizedValue) * Number(BP));
+    //     const BR = String(Number(epcgLicenseDetails.block2ndDirectExportEoInr) + Number(epcgLicenseDetails.block2ndIndirectExportEoInr));
+    //     const BS = String(Number(epcgLicenseDetails.block2ndDirectExportEoUsd) + Number(epcgLicenseDetails.block2ndIndirectExportEoUsd));
+    //     const BT = String(Number(epcgLicenseDetails.block2ndDirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block2ndIndirectExportNoOfShippingBills));
+    //     const BU = String((Number(BS) / Number(P)) * 100);
+    //     const BV = String(Number(dutySavedValueDutyUtilizedValue) * Number(BU));
+    //     const BW = String(Number(BF) - Number(BR));
+    //     const BX = String((Number(BW) / Number(O)) * 100);
+    //     const BY = String(Number(BG) - Number(BS));
+    //     const BZ = String((Number(BY) / Number(P)) * 100);
+    //     const CA = String(Number(dutySavedValueDutyUtilizedValue) * Number(BZ));
+    //     const CB = AZ;
+    //     const CC = block2ndImposedEoPeriodExtensionIfAny;
+    //     const CD = block2ndImposedEoPeriodExtensionYear;
+    //     const CE = BC;
+    //     const CF = BD;
+    //     const CG = BE;
+    //     const CH = String(Number(AD) + Number(BF));
+    //     const CI = String(Number(AE) + Number(BG));
+    //     const CJ = String(Number(epcgLicenseDetails.block1stDirectExportEoInr) + Number(epcgLicenseDetails.block2ndDirectExportEoInr));
+    //     const CK = String(Number(epcgLicenseDetails.block1stDirectExportEoUsd) + Number(epcgLicenseDetails.block2ndDirectExportEoUsd));
+    //     const CL = String(Number(epcgLicenseDetails.block1stDirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block2ndDirectExportNoOfShippingBills));
+    //     const CM = String(Number(AI) + Number(BK));
+    //     const CN = String(Number(AJ) + Number(BL));
+    //     const CO = String(Number(epcgLicenseDetails.block1stIndirectExportEoInr) + Number(epcgLicenseDetails.block2ndIndirectExportEoInr));
+    //     const CP = String(Number(epcgLicenseDetails.block1stIndirectExportEoUsd) + Number(epcgLicenseDetails.block2ndIndirectExportEoUsd));
+    //     const CQ = String(Number(epcgLicenseDetails.block1stIndirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block2ndIndirectExportNoOfShippingBills));
+    //     const CR = String(Number(AN) + Number(BP));
+    //     const CS = String(Number(AO) + Number(BQ));
+    //     const CT = String(Number(CJ) + Number(CO));
+    //     const CU = String(Number(CK) + Number(CP));
+    //     const CV = String(Number(CL) + Number(CQ));
+    //     const CW = String(Number(CM) + Number(CR));
+    //     const CX = String(Number(CN) + Number(CS));
+    //     const CY = String(Number(O) - Number(CT));
+    //     const CZ = String((Number(CY) / Number(O)) * 100);
+    //     const DA = String(Number(P) - Number(CU));
+    //     const DB = String((Number(DA) / Number(P)) * 100);
+    //     const DC = String(Number(dutySavedValueDutyUtilizedValue) * Number(DB));
+    //     const DF = (new Date(licenseDate).getTime() - new Date(EarlyEoFullfillment1stEoDate).getTime()) / (1000 * 3600 * 24 * 365) < 3;
+    //     const DG = DF ? 'Yes' : 'No';
 
-        setEpcgLicenseDetails({
-            ...epcgLicenseDetails,
-            ActualUtilizationBaseDutyeoInr: updatedActualUtilizationBaseDutyeoInr,
-            ActualUtilizationBaseDutyeoUsd: updatedActualUtilizationBaseDutyeoUsd,
-            AverageExportTotalAeoImposedInr: updatedAverageExportTotalAeoImposedInr,
-            AverageExportFulfilledPercent: updatedActualExportFulfilledPercent,
-        });
+    //     return {
+    //         ...epcgLicenseDetails,
+    //         hsCodeAsPerEoFullfillmentSummaryEoInr: O,
+    //         descriptionAsPerEoFullfillmentSummaryEoUsd: P,
+    //         averageExportTotalAeoImposedInr: T,
+    //         averageExportFulfilledPercent: W,
+    //         block1stImposedBlockCompletionDate: X,
+    //         block1stImposedBlockExtensionDate: AA,
+    //         block1stImposedBlockBlanceDaysCompletionDate: AB,
+    //         block1stImposedBlockBlanceDaysExtensionDate: AC,
+    //         block1stImposedEoInr: AD,
+    //         block1stImposedEoUsd: AE,
+    //         block1stDirectExportPercent: AI,
+    //         block1stDirectExportPropDutySaved: AJ,
+    //         block1stIndirectExportPercent: AN,
+    //         block1stIndirectExportPropDutySaved: AO,
+    //         block1stTotalExportEoInr: AP,
+    //         block1stTotalExportEoUsd: AQ,
+    //         block1stTotalExportNoOfShippingBills: AR,
+    //         block1stTotalExportPercent: AS,
+    //         block1stTotalExportPropDutySaved: AT,
+    //         block1stDifferentialEoEoInr: AU,
+    //         block1stDifferentialEoEoInrPercent: AV,
+    //         block1stDifferentialEoEoUsd: AW,
+    //         block1stDifferentialEoEoUsdPercent: AX,
+    //         block1stDifferentialEoPropDutySaved: AY,
+    //         block2ndImposed2ndBlockEoPeriodCompletionDate: AZ,
+    //         block2ndImposedEoPeriodExtensionDate: BC,
+    //         block2ndImposedEoPeriodBalanceDaysCompletionDate: BD,
+    //         block2ndImposedEoPeriodBalanceDaysExtensionDate: BE,
+    //         block2ndImposedEoInr: BF,
+    //         block2ndImposedEoUsd: BG,
+    //         block2ndDirectExportPercent: BK,
+    //         block2ndDirectExportPropDutySaved: BL,
+    //         block2ndIndirectExportPercent: BP,
+    //         block2ndIndirectExportPropDutySaved: BQ,
+    //         block2ndTotalExportEoInr: BR,
+    //         block2ndTotalExportEoUsd: BS,
+    //         block2ndTotalExportNoOfShippingBills: BT,
+    //         block2ndTotalExportPercent: BU,
+    //         block2ndTotalExportPropDutySaved: BV,
+    //         block2ndDifferentialEoEoInr: BW,
+    //         block2ndDifferentialEoEoInrPercent: BX,
+    //         block2ndDifferentialEoEoUsd: BY,
+    //         block2ndDifferentialEoEoUsdPercent: BZ,
+    //         block2ndDifferentialEoPropDutySaved: CA,
+    //         totalEoPeriodImposedEoPeriodCompletionDate: CB,
+    //         totalEoPeriodImposedEoPeriodExtensionIfAny: CC,
+    //         totalEoPeriodImposedEoPeriodExtensionYear: CD,
+    //         totalEoPeriodImposedEoPeriodExtensionDate: CE,
+    //         totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate: CF,
+    //         totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate: CG,
+    //         totalEoPeriodImposedEoInr: CH,
+    //         totalEoPeriodImposedEoUsd: CI,
+    //         totalEOPeriodDirectExportEoInr: CJ,
+    //         totalEOPeriodDirectExportEoUsd: CK,
+    //         totalEOPeriodDirectExportNoOfShippingBills: CL,
+    //         totalEOPeriodDirectExportPercent: CM,
+    //         totalEOPeriodDirectExportPropDutySaved: CN,
+    //         totalEOPeriodIndirectExportEoInr: CO,
+    //         totalEOPeriodIndirectExportEoUsd: CP,
+    //         totalEOPeriodIndirectExportNoOfShippingBills: CQ,
+    //         totalEOPeriodIndirectExportPercent: CR,
+    //         totalEOPeriodIndirectExportPropDutySaved: CS,
+    //         totalEOPeriodTotalExportEoInr: CT,
+    //         totalEOPeriodTotalExportEoUsd: CU,
+    //         totalEOPeriodTotalExportNoOfShippingBills: CV,
+    //         totalEOPeriodTotalExportPercent: CW,
+    //         totalEOPeriodTotalExportPropDutySaved: CX,
+    //         totalEoPeriodDifferentialEoEoInr: CY,
+    //         totalEoPeriodDifferentialEoEoInrPercent: CZ,
+    //         totalEoPeriodDifferentialEoEoUsd: DA,
+    //            totalEoPeriodDifferentialEoEoUsdPercent: DB,
+    //         totalEoPeriodDifferentialEoPropDutySaved: DC,
+    //         EarlyEoFullfillmentEoPeriodWithin3yearsOrNot: String(DF),
+    //         EarlyEoFullfillmentEarlyEoFullfillment: DG,
+    //     };
+    // }, [epcgLicenseDetails]);
 
-    }, [
-        epcgLicenseDetails.dutySavedValueAmountInr, // 11
-        epcgLicenseDetails.dutySavedEoInr,// 12
-        epcgLicenseDetails.dutySavedEoUsd,// 13
-        epcgLicenseDetails.ActualUtilizationBaseDutyUtilizedValue,// 14
-        epcgLicenseDetails.AverageExportImposedAsPerLicenseInr,// 18
-        epcgLicenseDetails.AverageExportNoOfYears,// 19
-        epcgLicenseDetails.AverageExportFulfilledInr,// 21
-    ]);
-    useEffect(() => {
-        const updatedBlock1stImposedEoInr = (parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyeoInr) * 0.5).toString(); // 25
-        const updatedBlock1stImposedEoUsd = (parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyeoUsd) * 0.5).toString(); // 26
-        const updatedBlock1stDirectExportPercent = (parseFloat(epcgLicenseDetails.block1stDirectExportEoUsd) / parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyeoUsd)).toString(); // 30
-        const updatedBlock1stDirectExportPropDutySaved = (parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyUtilizedValue) *  parseFloat(updatedBlock1stDirectExportPercent)).toString(); // 31
-        const updatedBlock1stIndirectExportPercent = (parseFloat(epcgLicenseDetails.block1stIndirectExportEoUsd) / parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyeoUsd)).toString(); // 35
-        const updatedBlock1stIndirectExportPropDutySaved = (parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyUtilizedValue) * parseFloat(updatedBlock1stIndirectExportPercent)).toString(); // 36
-        const updatedBlock1stTotalExportEoInr = (parseFloat(epcgLicenseDetails.block1stDirectExportEoInr) + parseFloat(epcgLicenseDetails.block1stIndirectExportEoInr)).toString(); // 37
-        const updatedBlock1stTotalExportEoUsd = (parseFloat(epcgLicenseDetails.block1stDirectExportEoUsd) + parseFloat(epcgLicenseDetails.block1stIndirectExportEoUsd)).toString(); // 38
-        const updatedBlock1stTotalExportNoOfShippingBills = (parseFloat(epcgLicenseDetails.block1stDirectExportNoOfShippingBills) + parseFloat(epcgLicenseDetails.block1stIndirectExportNoOfShippingBills)).toString(); // 39
-        const updatedBlock1stTotalExportPercent = (parseFloat(updatedBlock1stTotalExportEoUsd) / parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyeoUsd)).toString(); // 40
-        const updatedBlock1stTotalExportPropDutySaved = (parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyUtilizedValue) *  parseFloat(updatedBlock1stTotalExportPercent)).toString(); // 41
-        const updatedBlock2ndImposedEoInr = (parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyeoInr) * 0.5).toString(); // 43
-        const updatedBlock2ndImposedEoUsd = (parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyeoUsd) * 0.5).toString(); // 44
-        const updatedBlock2ndDirectExportPercent = (parseFloat(epcgLicenseDetails.block2ndDirectExportEoUsd) / parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyeoUsd)).toString(); // 48
-        const updatedBlock2ndDirectExportPropDutySaved = (parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyUtilizedValue) * parseFloat(updatedBlock2ndDirectExportPercent)).toString(); // 49
-        const updatedBlock2ndIndirectExportPercent = (parseFloat(epcgLicenseDetails.block2ndIndirectExportEoUsd) / parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyeoUsd)).toString(); // 53
-        const updatedBlock2ndIndirectExportPropDutySaved = (parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyUtilizedValue) * parseFloat(updatedBlock2ndIndirectExportPercent)).toString(); // 54
-        const updatedBlock2ndTotalExportEoInr = (parseFloat(epcgLicenseDetails.block2ndDirectExportEoInr) + parseFloat(epcgLicenseDetails.block2ndIndirectExportEoInr)).toString(); // 55
-        const updatedBlock2ndTotalExportEoUsd = (parseFloat(epcgLicenseDetails.block2ndDirectExportEoUsd) + parseFloat(epcgLicenseDetails.block2ndIndirectExportEoUsd)).toString(); // 56
-        const updatedBlock2ndTotalExportNoOfShippingBills = (parseFloat(epcgLicenseDetails.block2ndDirectExportNoOfShippingBills) + parseFloat(epcgLicenseDetails.block2ndIndirectExportNoOfShippingBills)).toString(); // 57
-        const updatedBlock2ndTotalExportPercent = (parseFloat(updatedBlock2ndTotalExportEoUsd) / parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyeoUsd)).toString(); // 58
-        const updatedBlock2ndTotalExportPropDutySaved = (parseFloat(updatedBlock2ndTotalExportPercent) * parseFloat(epcgLicenseDetails.ActualUtilizationBaseDutyUtilizedValue)).toString(); // 59
-        const updatedTotalEOPeriodDirectExportEoInr = (parseFloat(epcgLicenseDetails.block1stDirectExportEoInr) + parseFloat(epcgLicenseDetails.block2ndDirectExportEoInr)).toString(); // 60
-        const updatedTotalEOPeriodDirectExportEoUsd = (parseFloat(epcgLicenseDetails.block1stDirectExportEoUsd) + parseFloat(epcgLicenseDetails.block2ndDirectExportEoUsd)).toString(); // 61
-        const updatedTotalEOPeriodDirectExportNoOfShippingBills = (parseFloat(epcgLicenseDetails.block1stDirectExportNoOfShippingBills) + parseFloat(epcgLicenseDetails.block2ndDirectExportNoOfShippingBills)).toString(); // 62
-        const updatedTotalEOPeriodDirectExportPercent = (parseFloat(epcgLicenseDetails.block1stDirectExportPercent) + parseFloat(epcgLicenseDetails.block2ndDirectExportPercent)).toString(); // 63
-        const updatedTotalEOPeriodDirectExportPropDutySaved = (parseFloat(epcgLicenseDetails.block1stDirectExportPropDutySaved) + parseFloat(epcgLicenseDetails.block2ndDirectExportPropDutySaved)).toString(); // 64
-        const updatedTotalEOPeriodIndirectExportEoInr = (parseFloat(epcgLicenseDetails.block1stIndirectExportEoInr) + parseFloat(epcgLicenseDetails.block2ndIndirectExportEoInr)).toString(); // 65
-        const updatedTotalEOPeriodIndirectExportEoUsd = (parseFloat(epcgLicenseDetails.block1stIndirectExportEoUsd) + parseFloat(epcgLicenseDetails.block2ndIndirectExportEoUsd)).toString(); // 66
-        const updatedTotalEOPeriodIndirectExportNoOfShippingBills = (parseFloat(epcgLicenseDetails.block1stIndirectExportNoOfShippingBills) + parseFloat(epcgLicenseDetails.block2ndIndirectExportNoOfShippingBills)).toString(); // 67
-        const updatedTotalEOPeriodIndirectExportPercent = (parseFloat(epcgLicenseDetails.block1stIndirectExportPercent) + parseFloat(epcgLicenseDetails.block2ndIndirectExportPercent)).toString(); // 68
-        const updatedTotalEOPeriodIndirectExportPropDutySaved = (parseFloat(epcgLicenseDetails.block1stIndirectExportPropDutySaved) + parseFloat(epcgLicenseDetails.block2ndIndirectExportPropDutySaved)).toString(); // 69
-        const updatedTotalEOPeriodTotalExportEoInr = (parseFloat(epcgLicenseDetails.totalEOPeriodDirectExportEoInr) + parseFloat(epcgLicenseDetails.totalEOPeriodIndirectExportEoInr)).toString(); // 70
-        const updatedTotalEOPeriodTotalExportEoUsd = (parseFloat(epcgLicenseDetails.totalEOPeriodDirectExportEoUsd) + parseFloat(epcgLicenseDetails.totalEOPeriodIndirectExportEoUsd)).toString(); // 71
-        const updatedTotalEOPeriodTotalExportNoOfShippingBills = (parseFloat(epcgLicenseDetails.totalEOPeriodDirectExportNoOfShippingBills) + parseFloat(epcgLicenseDetails.totalEOPeriodIndirectExportNoOfShippingBills)).toString(); // 72
-        const updatedTotalEOPeriodTotalExportPercent = (parseFloat(epcgLicenseDetails.totalEOPeriodDirectExportPercent) + parseFloat(epcgLicenseDetails.totalEOPeriodIndirectExportPercent)).toString(); // 73
-        const updatedTotalEOPeriodTotalExportPropDutySaved = (parseFloat(epcgLicenseDetails.totalEOPeriodDirectExportPropDutySaved) + parseFloat(epcgLicenseDetails.totalEOPeriodIndirectExportPropDutySaved)).toString(); // 74
-
-
-        setEpcgLicenseDetails({
-            ...epcgLicenseDetails,
-            block1stImposedEoInr: updatedBlock1stImposedEoInr,
-            block1stImposedEoUsd: updatedBlock1stImposedEoUsd,
-            block1stDirectExportPercent: updatedBlock1stDirectExportPercent,
-            block1stDirectExportPropDutySaved: updatedBlock1stDirectExportPropDutySaved,
-            block1stIndirectExportPercent: updatedBlock1stIndirectExportPercent,
-            block1stIndirectExportPropDutySaved: updatedBlock1stIndirectExportPropDutySaved,
-            block1stTotalExportEoInr: updatedBlock1stTotalExportEoInr,
-            block1stTotalExportEoUsd: updatedBlock1stTotalExportEoUsd,
-            block1stTotalExportNoOfShippingBills: updatedBlock1stTotalExportNoOfShippingBills,
-            block1stTotalExportPercent: updatedBlock1stTotalExportPercent,
-            block1stTotalExportPropDutySaved: updatedBlock1stTotalExportPropDutySaved,
-            block2ndImposedEoInr: updatedBlock2ndImposedEoInr,
-            block2ndImposedEoUsd: updatedBlock2ndImposedEoUsd,
-            block2ndDirectExportPercent: updatedBlock2ndDirectExportPercent,
-            block2ndDirectExportPropDutySaved: updatedBlock2ndDirectExportPropDutySaved,
-            block2ndIndirectExportPercent: updatedBlock2ndIndirectExportPercent,
-            block2ndIndirectExportPropDutySaved: updatedBlock2ndIndirectExportPropDutySaved,
-            block2ndTotalExportEoInr: updatedBlock2ndTotalExportEoInr,
-            block2ndTotalExportEoUsd: updatedBlock2ndTotalExportEoUsd,
-            block2ndTotalExportNoOfShippingBills: updatedBlock2ndTotalExportNoOfShippingBills,
-            block2ndTotalExportPercent: updatedBlock2ndTotalExportPercent,
-            block2ndTotalExportPropDutySaved: updatedBlock2ndTotalExportPropDutySaved,
-            totalEOPeriodDirectExportEoInr: updatedTotalEOPeriodDirectExportEoInr,
-            totalEOPeriodDirectExportEoUsd: updatedTotalEOPeriodDirectExportEoUsd,
-            totalEOPeriodDirectExportNoOfShippingBills: updatedTotalEOPeriodDirectExportNoOfShippingBills,
-            totalEOPeriodDirectExportPercent: updatedTotalEOPeriodDirectExportPercent,
-            totalEOPeriodDirectExportPropDutySaved: updatedTotalEOPeriodDirectExportPropDutySaved,
-            totalEOPeriodIndirectExportEoInr: updatedTotalEOPeriodIndirectExportEoInr,
-            totalEOPeriodIndirectExportEoUsd: updatedTotalEOPeriodIndirectExportEoUsd,
-            totalEOPeriodIndirectExportPercent: updatedTotalEOPeriodIndirectExportPercent,
-            totalEOPeriodIndirectExportPropDutySaved: updatedTotalEOPeriodIndirectExportPropDutySaved,
-            totalEOPeriodTotalExportEoInr: updatedTotalEOPeriodTotalExportEoInr,
-            totalEOPeriodTotalExportEoUsd: updatedTotalEOPeriodTotalExportEoUsd,
-            totalEOPeriodTotalExportPercent: updatedTotalEOPeriodTotalExportPercent,
-            totalEOPeriodTotalExportPropDutySaved: updatedTotalEOPeriodTotalExportPropDutySaved,
-            totalEOPeriodIndirectExportNoOfShippingBills: updatedTotalEOPeriodIndirectExportNoOfShippingBills,
-            totalEOPeriodTotalExportNoOfShippingBills: updatedTotalEOPeriodTotalExportNoOfShippingBills,
-        });
-    }, [
-        epcgLicenseDetails.ActualUtilizationBaseDutyeoInr,
-        epcgLicenseDetails.ActualUtilizationBaseDutyeoUsd,
-        epcgLicenseDetails.ActualUtilizationBaseDutyUtilizedValue,
-        epcgLicenseDetails.block1stDirectExportEoInr,
-        epcgLicenseDetails.block1stDirectExportEoUsd,
-        epcgLicenseDetails.block1stDirectExportNoOfShippingBills,
-        epcgLicenseDetails.block1stDirectExportPercent,
-        epcgLicenseDetails.block1stDirectExportPropDutySaved,
-        epcgLicenseDetails.block1stIndirectExportEoInr,
-        epcgLicenseDetails.block1stIndirectExportEoUsd,
-        epcgLicenseDetails.block1stIndirectExportNoOfShippingBills,
-        epcgLicenseDetails.block1stIndirectExportPercent,
-        epcgLicenseDetails.block1stIndirectExportPropDutySaved,
-        epcgLicenseDetails.block1stTotalExportEoInr,
-        epcgLicenseDetails.block1stTotalExportEoUsd,
-        epcgLicenseDetails.block1stTotalExportNoOfShippingBills,
-        epcgLicenseDetails.block1stTotalExportPercent,
-        epcgLicenseDetails.block1stTotalExportPropDutySaved,
-        epcgLicenseDetails.block2ndDirectExportEoInr,
-        epcgLicenseDetails.block2ndDirectExportEoUsd,
-        epcgLicenseDetails.block2ndDirectExportNoOfShippingBills,
-        epcgLicenseDetails.block2ndDirectExportPercent,
-        epcgLicenseDetails.block2ndDirectExportPropDutySaved,
-        epcgLicenseDetails.block2ndIndirectExportEoInr,
-        epcgLicenseDetails.block2ndIndirectExportEoUsd,
-        epcgLicenseDetails.block2ndIndirectExportNoOfShippingBills,
-        epcgLicenseDetails.block2ndIndirectExportPercent,
-        epcgLicenseDetails.block2ndIndirectExportPropDutySaved,
-        epcgLicenseDetails.block2ndTotalExportEoInr,
-        epcgLicenseDetails.block2ndTotalExportEoUsd,
-        epcgLicenseDetails.block2ndTotalExportNoOfShippingBills,
-        epcgLicenseDetails.block2ndTotalExportPercent,
-        epcgLicenseDetails.block2ndTotalExportPropDutySaved,
-        epcgLicenseDetails.dutySavedEoInr,
-        epcgLicenseDetails.dutySavedEoUsd,
-        epcgLicenseDetails.dutySavedValueAmountInr,
-        epcgLicenseDetails.totalEOPeriodDirectExportEoInr,
-        epcgLicenseDetails.totalEOPeriodDirectExportEoUsd,
-        epcgLicenseDetails.totalEOPeriodDirectExportNoOfShippingBills,
-        epcgLicenseDetails.totalEOPeriodDirectExportPercent,
-        epcgLicenseDetails.totalEOPeriodDirectExportPropDutySaved,
-        epcgLicenseDetails.totalEOPeriodIndirectExportEoInr,
-        epcgLicenseDetails.totalEOPeriodIndirectExportEoUsd,
-        epcgLicenseDetails.totalEOPeriodIndirectExportNoOfShippingBills,
-        epcgLicenseDetails.totalEOPeriodIndirectExportPercent,
-        epcgLicenseDetails.totalEOPeriodIndirectExportPropDutySaved,
-        epcgLicenseDetails.totalEOPeriodTotalExportEoInr,
-        epcgLicenseDetails.totalEOPeriodTotalExportEoUsd,
-        epcgLicenseDetails.totalEOPeriodTotalExportNoOfShippingBills,
-        epcgLicenseDetails.totalEOPeriodTotalExportPercent,
-        epcgLicenseDetails.totalEOPeriodTotalExportPropDutySaved,
-    ]);
-
-    const handleSubmit = async () => {
-        setLoading(true);
-        const { bankGuaranteeValidityFrom, bankGuaranteeValidityTo, ...restDetails } = epcgLicenseDetails;
-        const jsonData = {
-            ...restDetails,
-            bankGuaranteeValidity: `${bankGuaranteeValidityFrom} to ${bankGuaranteeValidityTo}`,
-            addedByUserId: user.id, // Ensure user ID is included
-        };
-
-        console.log('jsonData', jsonData);
-
-        try {
-            const res = await axios.post(
-                `${BACKEND_URL}/documentslist/epcglicensesummary`,
-                jsonData,
-                {
-                    headers: {
-                        Authorization: cookies.token,
-                    },
-                }
-            );
-
-            alert(res.data.message);
-            setLoading(false);
-        } catch (error) {
-            alert('Error in saving data');
-            setLoading(false);
-        }
-    };
-
+    // useEffect(() => {
+    //     setEpcgLicenseDetails({
+    //         ...calculatedEpcgLicenseDetails,
+    //         hsCodeAsPerEoFullfillmentSummaryEoInr: String(calculatedEpcgLicenseDetails.hsCodeAsPerEoFullfillmentSummaryEoInr),
+    //         descriptionAsPerEoFullfillmentSummaryEoUsd: String(calculatedEpcgLicenseDetails.descriptionAsPerEoFullfillmentSummaryEoUsd),
+    //         averageExportTotalAeoImposedInr: String(calculatedEpcgLicenseDetails.averageExportTotalAeoImposedInr),
+    //         averageExportFulfilledPercent: String(calculatedEpcgLicenseDetails.averageExportFulfilledPercent),
+    //         block1stImposedBlockBlanceDaysCompletionDate: String(calculatedEpcgLicenseDetails.block1stImposedBlockBlanceDaysCompletionDate),
+    //         block1stImposedBlockBlanceDaysExtensionDate: String(calculatedEpcgLicenseDetails.block1stImposedBlockBlanceDaysExtensionDate),
+    //         block1stImposedEoInr: String(calculatedEpcgLicenseDetails.block1stImposedEoInr),
+    //         block1stImposedEoUsd: String(calculatedEpcgLicenseDetails.block1stImposedEoUsd),
+    //         block1stDirectExportPercent: String(calculatedEpcgLicenseDetails.block1stDirectExportPercent),
+    //         block1stDirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block1stDirectExportPropDutySaved),
+    //         block1stIndirectExportPercent: String(calculatedEpcgLicenseDetails.block1stIndirectExportPercent),
+    //         block1stIndirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block1stIndirectExportPropDutySaved),
+    //         block1stTotalExportEoInr: String(calculatedEpcgLicenseDetails.block1stTotalExportEoInr),
+    //         block1stTotalExportEoUsd: String(calculatedEpcgLicenseDetails.block1stTotalExportEoUsd),
+    //         block1stTotalExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.block1stTotalExportNoOfShippingBills),
+    //         block1stTotalExportPercent: String(calculatedEpcgLicenseDetails.block1stTotalExportPercent),
+    //         block1stTotalExportPropDutySaved: String(calculatedEpcgLicenseDetails.block1stTotalExportPropDutySaved),
+    //         block1stDifferentialEoEoInr: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoInr),
+    //         block1stDifferentialEoEoInrPercent: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoInrPercent),
+    //         block1stDifferentialEoEoUsd: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoUsd),
+    //         block1stDifferentialEoEoUsdPercent: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoUsdPercent),
+    //         block1stDifferentialEoPropDutySaved: String(calculatedEpcgLicenseDetails.block1stDifferentialEoPropDutySaved),
+    //         block2ndImposedEoPeriodBalanceDaysCompletionDate: String(calculatedEpcgLicenseDetails.block2ndImposedEoPeriodBalanceDaysCompletionDate),
+    //         block2ndImposedEoPeriodBalanceDaysExtensionDate: String(calculatedEpcgLicenseDetails.block2ndImposedEoPeriodBalanceDaysExtensionDate),
+    //         block2ndImposedEoInr: String(calculatedEpcgLicenseDetails.block2ndImposedEoInr),
+    //         block2ndImposedEoUsd: String(calculatedEpcgLicenseDetails.block2ndImposedEoUsd),
+    //         block2ndDirectExportPercent: String(calculatedEpcgLicenseDetails.block2ndDirectExportPercent),
+    //         block2ndDirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndDirectExportPropDutySaved),
+    //         block2ndIndirectExportPercent: String(calculatedEpcgLicenseDetails.block2ndIndirectExportPercent),
+    //         block2ndIndirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndIndirectExportPropDutySaved),
+    //         block2ndTotalExportEoInr: String(calculatedEpcgLicenseDetails.block2ndTotalExportEoInr),
+    //         block2ndTotalExportEoUsd: String(calculatedEpcgLicenseDetails.block2ndTotalExportEoUsd),
+    //         block2ndTotalExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.block2ndTotalExportNoOfShippingBills),
+    //         block2ndTotalExportPercent: String(calculatedEpcgLicenseDetails.block2ndTotalExportPercent),
+    //         block2ndTotalExportPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndTotalExportPropDutySaved),
+    //         block2ndDifferentialEoEoInr: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoInr),
+    //         block2ndDifferentialEoEoInrPercent: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoInrPercent),
+    //         block2ndDifferentialEoEoUsd: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoUsd),
+    //         block2ndDifferentialEoEoUsdPercent: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoUsdPercent),
+    //         block2ndDifferentialEoPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoPropDutySaved),
+    //         totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate),
+    //         totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate),
+    //         totalEoPeriodImposedEoInr: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoInr),
+    //         totalEoPeriodImposedEoUsd: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoUsd),
+    //         totalEOPeriodDirectExportEoInr: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportEoInr),
+    //         totalEOPeriodDirectExportEoUsd: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportEoUsd),
+    //         totalEOPeriodDirectExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportNoOfShippingBills),
+    //         totalEOPeriodDirectExportPercent: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportPercent),
+    //         totalEOPeriodDirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportPropDutySaved),
+    //         totalEOPeriodIndirectExportEoInr: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportEoInr),
+    //         totalEOPeriodIndirectExportEoUsd: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportEoUsd),
+    //         totalEOPeriodIndirectExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportNoOfShippingBills),
+    //         totalEOPeriodIndirectExportPercent: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportPercent),
+    //         totalEOPeriodIndirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportPropDutySaved),
+    //         totalEOPeriodTotalExportEoInr: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportEoInr),
+    //         totalEOPeriodTotalExportEoUsd: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportEoUsd),
+    //         totalEOPeriodTotalExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportNoOfShippingBills),
+    //         totalEOPeriodTotalExportPercent: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportPercent),
+    //         totalEOPeriodTotalExportPropDutySaved: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportPropDutySaved),
+    //         totalEoPeriodDifferentialEoEoInr: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoInr),
+    //         totalEoPeriodDifferentialEoEoInrPercent: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoInrPercent),
+    //         totalEoPeriodDifferentialEoEoUsd: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoUsd),
+    //         totalEoPeriodDifferentialEoEoUsdPercent: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoUsdPercent),
+    //         totalEoPeriodDifferentialEoPropDutySaved: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoPropDutySaved),
+    //         EarlyEoFullfillmentEoPeriodWithin3yearsOrNot: String(calculatedEpcgLicenseDetails.EarlyEoFullfillmentEoPeriodWithin3yearsOrNot),
+    //         EarlyEoFullfillmentEarlyEoFullfillment: String(calculatedEpcgLicenseDetails.EarlyEoFullfillmentEarlyEoFullfillment),
+    //     });
+    // }, [calculatedEpcgLicenseDetails]);
+    
     return (
         <div className="bg-[#e6e7e9] w-full h-full min-h-screen">
             <div className="container mx-auto px-4 py-8">
@@ -335,9 +442,9 @@ const EpcgLicenseSummary = () => {
                                 options={
                                     customerNames.map((customer) => customer.customerName)
                                 }
-                                value={epcgLicenseDetails.customerName}
+                                value={epcgLicenseDetails.partyName}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, customerName: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, partyName: e.target.value })
                                 }
                             />
                             <InputField
@@ -400,7 +507,7 @@ const EpcgLicenseSummary = () => {
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, bankGuaranteeSubmittedTo: e.target.value })
                                 }
-                                type="number"
+                                type="text"
                             />
                             <InputField
                                 label="Validity From"
@@ -432,18 +539,18 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="EO (INR)"
-                                value={epcgLicenseDetails.dutySavedEoInr}
+                                label="HS Code (INR)"
+                                value={epcgLicenseDetails.hsCodeAsPerLicenseEoInr}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, dutySavedEoInr: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, hsCodeAsPerLicenseEoInr: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
-                                label="EO (USD)"
-                                value={epcgLicenseDetails.dutySavedEoUsd}
+                                label="Description (USD)"
+                                value={epcgLicenseDetails.descriptionAsPerLicenseEoUsd}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, dutySavedEoUsd: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, descriptionAsPerLicenseEoUsd: e.target.value })
                                 }
                                 type="number"
                             />
@@ -454,32 +561,29 @@ const EpcgLicenseSummary = () => {
                             </div>
                             <InputField
                                 label="Duty Utilized Value"
-                                value={epcgLicenseDetails.ActualUtilizationBaseDutyUtilizedValue}
+                                value={epcgLicenseDetails.dutySavedValueDutyUtilizedValue}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, ActualUtilizationBaseDutyUtilizedValue: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, dutySavedValueDutyUtilizedValue: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
-                                label="EO (INR)"
-                                value={epcgLicenseDetails.ActualUtilizationBaseDutyeoInr}
+                                label="HS Code (INR)"
+                                value={epcgLicenseDetails.hsCodeAsPerEoFullfillmentSummaryEoInr}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, ActualUtilizationBaseDutyeoInr: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, hsCodeAsPerEoFullfillmentSummaryEoInr: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
-                                label="EO (USD)"
-                                value={epcgLicenseDetails.ActualUtilizationBaseDutyeoUsd}
+                                label="Description (USD)"
+                                value={epcgLicenseDetails.descriptionAsPerEoFullfillmentSummaryEoUsd}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, ActualUtilizationBaseDutyeoUsd: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, descriptionAsPerEoFullfillmentSummaryEoUsd: e.target.value })
                                 }
                                 type="number"
                             />
-
-
                             <Divider />
-
                             <InputField
                                 label="Installation Date"
                                 value={epcgLicenseDetails.installationDate}
@@ -495,62 +599,59 @@ const EpcgLicenseSummary = () => {
                             </div>
                             <InputField
                                 label="Imposed As Per License (INR)"
-                                value={epcgLicenseDetails.AverageExportImposedAsPerLicenseInr}
+                                value={epcgLicenseDetails.averageExportImposedAsPerLicenseInr}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, AverageExportImposedAsPerLicenseInr: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, averageExportImposedAsPerLicenseInr: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
                                 label="No Of Years"
-                                value={epcgLicenseDetails.AverageExportNoOfYears}
+                                value={epcgLicenseDetails.averageExportNoOfYears}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, AverageExportNoOfYears: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, averageExportNoOfYears: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
                                 label="Total AEO Imposed (INR)"
-                                value={epcgLicenseDetails.AverageExportTotalAeoImposedInr}
+                                value={epcgLicenseDetails.averageExportTotalAeoImposedInr}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, AverageExportTotalAeoImposedInr: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, averageExportTotalAeoImposedInr: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
                                 label="Fulfilled (INR)"
-                                value={epcgLicenseDetails.AverageExportFulfilledInr}
+                                value={epcgLicenseDetails.averageExportFulfilledInr}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, AverageExportFulfilledInr: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, averageExportFulfilledInr: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
                                 label="No Of Shipping Bills"
-                                value={epcgLicenseDetails.AverageExportNoOfShippingBills}
+                                value={epcgLicenseDetails.averageExportNoOfShippingBills}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, AverageExportNoOfShippingBills: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, averageExportNoOfShippingBills: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
                                 label="Fulfilled (%)"
-                                value={epcgLicenseDetails.AverageExportFulfilledPercent}
+                                value={epcgLicenseDetails.averageExportFulfilledPercent}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, AverageExportFulfilledPercent: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, averageExportFulfilledPercent: e.target.value })
                                 }
                                 type="number"
                             />
                         </div>
                         <div className="bg-white p-4 rounded-md">
                             <div className="container text-center text-green-700 font-sans font-semibold text-lg">
-                                Block 1st Details
-                            </div>
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Imposed
+                                Block 1st Imposed
                             </div>
                             <InputField
-                                label="Imposed Block Completion Date"
+                                label="Block Completion Date"
                                 value={epcgLicenseDetails.block1stImposedBlockCompletionDate}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stImposedBlockCompletionDate: e.target.value })
@@ -558,7 +659,49 @@ const EpcgLicenseSummary = () => {
                                 type="date"
                             />
                             <InputField
-                                label="Imposed EO (INR)"
+                                label="Block Extension"
+                                value={epcgLicenseDetails.block1stImposedBlockExtension}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stImposedBlockExtension: e.target.value })
+                                }
+                                options={['Yes', 'No']}
+                                type="select"
+                            />
+                            <InputField
+                                label="Extension Year If Any"
+                                value={epcgLicenseDetails.block1stImposedExtensionYearIfAny}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stImposedExtensionYearIfAny: e.target.value })
+                                }
+                                options={['5 years', '6 years']}
+                                type="select"
+                            />
+                            <InputField
+                                label="Block Extension Date"
+                                value={epcgLicenseDetails.block1stImposedBlockExtensionDate}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stImposedBlockExtensionDate: e.target.value })
+                                }
+                                type="date"
+                            />
+                            <InputField
+                                label="Balance Days Completion Date"
+                                value={epcgLicenseDetails.block1stImposedBlockBlanceDaysCompletionDate}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stImposedBlockBlanceDaysCompletionDate: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="Balance Days Extension Date"
+                                value={epcgLicenseDetails.block1stImposedBlockBlanceDaysExtensionDate}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stImposedBlockBlanceDaysExtensionDate: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="EO (INR)"
                                 value={epcgLicenseDetails.block1stImposedEoInr}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stImposedEoInr: e.target.value })
@@ -566,18 +709,20 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Imposed EO (USD)"
+                                label="EO (USD)"
                                 value={epcgLicenseDetails.block1stImposedEoUsd}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stImposedEoUsd: e.target.value })
                                 }
                                 type="number"
                             />
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Direct Export
+                        </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Block 1st Direct Export
                             </div>
                             <InputField
-                                label="Direct Export EO (INR)"
+                                label="EO (INR)"
                                 value={epcgLicenseDetails.block1stDirectExportEoInr}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stDirectExportEoInr: e.target.value })
@@ -585,7 +730,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export EO (USD)"
+                                label="EO (USD)"
                                 value={epcgLicenseDetails.block1stDirectExportEoUsd}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stDirectExportEoUsd: e.target.value })
@@ -593,7 +738,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export No Of Shipping Bills"
+                                label="No Of Shipping Bills"
                                 value={epcgLicenseDetails.block1stDirectExportNoOfShippingBills}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stDirectExportNoOfShippingBills: e.target.value })
@@ -601,7 +746,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export Percent"
+                                label="Percent"
                                 value={epcgLicenseDetails.block1stDirectExportPercent}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stDirectExportPercent: e.target.value })
@@ -609,18 +754,20 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export Prop Duty Saved"
+                                label="Prop Duty Saved"
                                 value={epcgLicenseDetails.block1stDirectExportPropDutySaved}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stDirectExportPropDutySaved: e.target.value })
                                 }
                                 type="number"
                             />
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Indirect Export
+                        </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Block 1st Indirect Export
                             </div>
                             <InputField
-                                label="Indirect Export EO (INR)"
+                                label="EO (INR)"
                                 value={epcgLicenseDetails.block1stIndirectExportEoInr}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stIndirectExportEoInr: e.target.value })
@@ -628,7 +775,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export EO (USD)"
+                                label="EO (USD)"
                                 value={epcgLicenseDetails.block1stIndirectExportEoUsd}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stIndirectExportEoUsd: e.target.value })
@@ -636,7 +783,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export No Of Shipping Bills"
+                                label="No Of Shipping Bills"
                                 value={epcgLicenseDetails.block1stIndirectExportNoOfShippingBills}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stIndirectExportNoOfShippingBills: e.target.value })
@@ -644,7 +791,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export Percent"
+                                label="Percent"
                                 value={epcgLicenseDetails.block1stIndirectExportPercent}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stIndirectExportPercent: e.target.value })
@@ -652,18 +799,20 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export Prop Duty Saved"
+                                label="Prop Duty Saved"
                                 value={epcgLicenseDetails.block1stIndirectExportPropDutySaved}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stIndirectExportPropDutySaved: e.target.value })
                                 }
                                 type="number"
                             />
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Total Export
+                        </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Block 1st Total Export
                             </div>
                             <InputField
-                                label="Total Export EO (INR)"
+                                label="EO (INR)"
                                 value={epcgLicenseDetails.block1stTotalExportEoInr}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stTotalExportEoInr: e.target.value })
@@ -671,7 +820,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export EO (USD)"
+                                label="EO (USD)"
                                 value={epcgLicenseDetails.block1stTotalExportEoUsd}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stTotalExportEoUsd: e.target.value })
@@ -679,7 +828,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export No Of Shipping Bills"
+                                label="No Of Shipping Bills"
                                 value={epcgLicenseDetails.block1stTotalExportNoOfShippingBills}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stTotalExportNoOfShippingBills: e.target.value })
@@ -687,7 +836,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export Percent"
+                                label="Percent"
                                 value={epcgLicenseDetails.block1stTotalExportPercent}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stTotalExportPercent: e.target.value })
@@ -695,7 +844,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export Prop Duty Saved"
+                                label="Prop Duty Saved"
                                 value={epcgLicenseDetails.block1stTotalExportPropDutySaved}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stTotalExportPropDutySaved: e.target.value })
@@ -703,24 +852,108 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                         </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Block 1st Differential EO
+                            </div>
+                            <InputField
+                                label="EO (INR)"
+                                value={epcgLicenseDetails.block1stDifferentialEoEoInr}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stDifferentialEoEoInr: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="EO (INR) Percent"
+                                value={epcgLicenseDetails.block1stDifferentialEoEoInrPercent}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stDifferentialEoEoInrPercent: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="EO (USD)"
+                                value={epcgLicenseDetails.block1stDifferentialEoEoUsd}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stDifferentialEoEoUsd: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="EO (USD) Percent"
+                                value={epcgLicenseDetails.block1stDifferentialEoEoUsdPercent}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stDifferentialEoEoUsdPercent: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="Prop Duty Saved"
+                                value={epcgLicenseDetails.block1stDifferentialEoPropDutySaved}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block1stDifferentialEoPropDutySaved: e.target.value })
+                                }
+                                type="number"
+                            />
+                        </div>
 
                         <div className="bg-white p-4 rounded-md">
                             <div className="container text-center text-green-700 font-sans font-semibold text-lg">
-                                Block 2nd Details
-                            </div>
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Imposed
+                                Block 2nd Imposed
                             </div>
                             <InputField
-                                label="Imposed Block Completion Date"
-                                value={epcgLicenseDetails.block2ndImposedBlockCompletionDate}
+                                label="Block EO Period Completion Date"
+                                value={epcgLicenseDetails.block2ndImposed2ndBlockEoPeriodCompletionDate}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndImposedBlockCompletionDate: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndImposed2ndBlockEoPeriodCompletionDate: e.target.value })
                                 }
                                 type="date"
                             />
                             <InputField
-                                label="Imposed EO (INR)"
+                                label="EO Period Extension If Any"
+                                value={epcgLicenseDetails.block2ndImposedEoPeriodExtensionIfAny}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndImposedEoPeriodExtensionIfAny: e.target.value })
+                                }
+                                options={['Yes', 'No']}
+                                type="select"
+                            />
+                            <InputField
+                                label="EO Period Extension Year"
+                                value={epcgLicenseDetails.block2ndImposedEoPeriodExtensionYear}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndImposedEoPeriodExtensionYear: e.target.value })
+                                }
+                                options={['1 years', '2 years']}
+                                type="select"
+                            />
+                            <InputField
+                                label="EO Period Extension Date"
+                                value={epcgLicenseDetails.block2ndImposedEoPeriodExtensionDate}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndImposedEoPeriodExtensionDate: e.target.value })
+                                }
+                                type="date"
+                            />
+                            <InputField
+                                label="Balance Days Completion Date"
+                                value={epcgLicenseDetails.block2ndImposedEoPeriodBalanceDaysCompletionDate}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndImposedEoPeriodBalanceDaysCompletionDate: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="Balance Days Extension Date"
+                                value={epcgLicenseDetails.block2ndImposedEoPeriodBalanceDaysExtensionDate}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndImposedEoPeriodBalanceDaysExtensionDate: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="EO (INR)"
                                 value={epcgLicenseDetails.block2ndImposedEoInr}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndImposedEoInr: e.target.value })
@@ -728,18 +961,20 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Imposed EO (USD)"
+                                label="EO (USD)"
                                 value={epcgLicenseDetails.block2ndImposedEoUsd}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndImposedEoUsd: e.target.value })
                                 }
                                 type="number"
                             />
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Direct Export
+                        </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Block 2nd Direct Export
                             </div>
                             <InputField
-                                label="Direct Export EO (INR)"
+                                label="EO (INR)"
                                 value={epcgLicenseDetails.block2ndDirectExportEoInr}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndDirectExportEoInr: e.target.value })
@@ -747,7 +982,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export EO (USD)"
+                                label="EO (USD)"
                                 value={epcgLicenseDetails.block2ndDirectExportEoUsd}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndDirectExportEoUsd: e.target.value })
@@ -755,7 +990,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export No Of Shipping Bills"
+                                label="No Of Shipping Bills"
                                 value={epcgLicenseDetails.block2ndDirectExportNoOfShippingBills}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndDirectExportNoOfShippingBills: e.target.value })
@@ -763,7 +998,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export Percent"
+                                label="Percent"
                                 value={epcgLicenseDetails.block2ndDirectExportPercent}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndDirectExportPercent: e.target.value })
@@ -771,18 +1006,20 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export Prop Duty Saved"
+                                label="Prop Duty Saved"
                                 value={epcgLicenseDetails.block2ndDirectExportPropDutySaved}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndDirectExportPropDutySaved: e.target.value })
                                 }
                                 type="number"
                             />
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Indirect Export
+                        </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Block 2nd Indirect Export
                             </div>
                             <InputField
-                                label="Indirect Export EO (INR)"
+                                label="EO (INR)"
                                 value={epcgLicenseDetails.block2ndIndirectExportEoInr}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndIndirectExportEoInr: e.target.value })
@@ -790,7 +1027,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export EO (USD)"
+                                label="EO (USD)"
                                 value={epcgLicenseDetails.block2ndIndirectExportEoUsd}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndIndirectExportEoUsd: e.target.value })
@@ -798,7 +1035,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export No Of Shipping Bills"
+                                label="No Of Shipping Bills"
                                 value={epcgLicenseDetails.block2ndIndirectExportNoOfShippingBills}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndIndirectExportNoOfShippingBills: e.target.value })
@@ -806,7 +1043,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export Percent"
+                                label="Percent"
                                 value={epcgLicenseDetails.block2ndIndirectExportPercent}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndIndirectExportPercent: e.target.value })
@@ -814,18 +1051,20 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export Prop Duty Saved"
+                                label="Prop Duty Saved"
                                 value={epcgLicenseDetails.block2ndIndirectExportPropDutySaved}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndIndirectExportPropDutySaved: e.target.value })
                                 }
                                 type="number"
                             />
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Total Export
+                        </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Block 2nd Total Export
                             </div>
                             <InputField
-                                label="Total Export EO (INR)"
+                                label="EO (INR)"
                                 value={epcgLicenseDetails.block2ndTotalExportEoInr}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndTotalExportEoInr: e.target.value })
@@ -833,7 +1072,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export EO (USD)"
+                                label="EO (USD)"
                                 value={epcgLicenseDetails.block2ndTotalExportEoUsd}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndTotalExportEoUsd: e.target.value })
@@ -841,7 +1080,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export No Of Shipping Bills"
+                                label="No Of Shipping Bills"
                                 value={epcgLicenseDetails.block2ndTotalExportNoOfShippingBills}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndTotalExportNoOfShippingBills: e.target.value })
@@ -849,7 +1088,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export Percent"
+                                label="Percent"
                                 value={epcgLicenseDetails.block2ndTotalExportPercent}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndTotalExportPercent: e.target.value })
@@ -857,7 +1096,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export Prop Duty Saved"
+                                label="Prop Duty Saved"
                                 value={epcgLicenseDetails.block2ndTotalExportPropDutySaved}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndTotalExportPropDutySaved: e.target.value })
@@ -867,13 +1106,126 @@ const EpcgLicenseSummary = () => {
                         </div>
                         <div className="bg-white p-4 rounded-md">
                             <div className="container text-center text-green-700 font-sans font-semibold text-lg">
-                                Total EO Period Details
-                            </div>
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Direct Export
+                                Block 2nd Differential EO
                             </div>
                             <InputField
-                                label="Direct Export EO (INR)"
+                                label="EO (INR)"
+                                value={epcgLicenseDetails.block2ndDifferentialEoEoInr}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndDifferentialEoEoInr: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="EO (INR) Percent"
+                                value={epcgLicenseDetails.block2ndDifferentialEoEoInrPercent}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndDifferentialEoEoInrPercent: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="EO (USD)"
+                                value={epcgLicenseDetails.block2ndDifferentialEoEoUsd}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndDifferentialEoEoUsd: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="EO (USD) Percent"
+                                value={epcgLicenseDetails.block2ndDifferentialEoEoUsdPercent}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndDifferentialEoEoUsdPercent: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="Prop Duty Saved"
+                                value={epcgLicenseDetails.block2ndDifferentialEoPropDutySaved}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, block2ndDifferentialEoPropDutySaved: e.target.value })
+                                }
+                                type="number"
+                            />
+                        </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Total EO Period Imposed
+                            </div>
+                            <InputField
+                                label="EO Period Completion Date"
+                                value={epcgLicenseDetails.totalEoPeriodImposedEoPeriodCompletionDate}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodImposedEoPeriodCompletionDate: e.target.value })
+                                }
+                                type="date"
+                            />
+                            <InputField
+                                label="EO Period Extension If Any"
+                                value={epcgLicenseDetails.totalEoPeriodImposedEoPeriodExtensionIfAny}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodImposedEoPeriodExtensionIfAny: e.target.value })
+                                }
+                                options={['Yes', 'No']}
+                                type="select"
+                            />
+                            <InputField
+                                label="EO Period Extension Year"
+                                value={epcgLicenseDetails.totalEoPeriodImposedEoPeriodExtensionYear}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodImposedEoPeriodExtensionYear: e.target.value })
+                                }
+                                options={['1 years', '2 years']}
+                                type="select"
+                            />
+                            <InputField
+                                label="EO Period Extension Date"
+                                value={epcgLicenseDetails.totalEoPeriodImposedEoPeriodExtensionDate}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodImposedEoPeriodExtensionDate: e.target.value })
+                                }
+                                type="date"
+                            />
+                            <InputField
+                                label="Balance Days Completion Date"
+                                value={epcgLicenseDetails.totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="Balance Days Extension Date"
+                                value={epcgLicenseDetails.totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="EO (INR)"
+                                value={epcgLicenseDetails.totalEoPeriodImposedEoInr}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodImposedEoInr: e.target.value })
+                                }
+                                type="number"
+                            />
+                            <InputField
+                                label="EO (USD)"
+                                value={epcgLicenseDetails.totalEoPeriodImposedEoUsd}
+                                onChange={(e) =>
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodImposedEoUsd: e.target.value })
+                                }
+                                type="number"
+                            />
+                        </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Total EO Period Direct Export
+                            </div>
+                            <InputField
+                                label="EO (INR)"
                                 value={epcgLicenseDetails.totalEOPeriodDirectExportEoInr}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodDirectExportEoInr: e.target.value })
@@ -881,7 +1233,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export EO (USD)"
+                                label="EO (USD)"
                                 value={epcgLicenseDetails.totalEOPeriodDirectExportEoUsd}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodDirectExportEoUsd: e.target.value })
@@ -889,7 +1241,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export No Of Shipping Bills"
+                                label="No Of Shipping Bills"
                                 value={epcgLicenseDetails.totalEOPeriodDirectExportNoOfShippingBills}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodDirectExportNoOfShippingBills: e.target.value })
@@ -897,7 +1249,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export Percent"
+                                label="Percent"
                                 value={epcgLicenseDetails.totalEOPeriodDirectExportPercent}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodDirectExportPercent: e.target.value })
@@ -905,18 +1257,20 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export Prop Duty Saved"
+                                label="Prop Duty Saved"
                                 value={epcgLicenseDetails.totalEOPeriodDirectExportPropDutySaved}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodDirectExportPropDutySaved: e.target.value })
                                 }
                                 type="number"
                             />
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Indirect Export
+                        </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Total EO Period Indirect Export
                             </div>
                             <InputField
-                                label="Indirect Export EO (INR)"
+                                label="EO (INR)"
                                 value={epcgLicenseDetails.totalEOPeriodIndirectExportEoInr}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodIndirectExportEoInr: e.target.value })
@@ -924,7 +1278,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export EO (USD)"
+                                label="EO (USD)"
                                 value={epcgLicenseDetails.totalEOPeriodIndirectExportEoUsd}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodIndirectExportEoUsd: e.target.value })
@@ -932,7 +1286,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export No Of Shipping Bills"
+                                label="No Of Shipping Bills"
                                 value={epcgLicenseDetails.totalEOPeriodIndirectExportNoOfShippingBills}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodIndirectExportNoOfShippingBills: e.target.value })
@@ -940,7 +1294,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export Percent"
+                                label="Percent"
                                 value={epcgLicenseDetails.totalEOPeriodIndirectExportPercent}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodIndirectExportPercent: e.target.value })
@@ -948,18 +1302,20 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Indirect Export Prop Duty Saved"
+                                label="Prop Duty Saved"
                                 value={epcgLicenseDetails.totalEOPeriodIndirectExportPropDutySaved}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodIndirectExportPropDutySaved: e.target.value })
                                 }
                                 type="number"
                             />
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Total Export
+                        </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Total EO Period Total Export
                             </div>
                             <InputField
-                                label="Total Export EO (INR)"
+                                label="EO (INR)"
                                 value={epcgLicenseDetails.totalEOPeriodTotalExportEoInr}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodTotalExportEoInr: e.target.value })
@@ -967,7 +1323,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export EO (USD)"
+                                label="EO (USD)"
                                 value={epcgLicenseDetails.totalEOPeriodTotalExportEoUsd}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodTotalExportEoUsd: e.target.value })
@@ -975,7 +1331,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export No Of Shipping Bills"
+                                label="No Of Shipping Bills"
                                 value={epcgLicenseDetails.totalEOPeriodTotalExportNoOfShippingBills}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodTotalExportNoOfShippingBills: e.target.value })
@@ -983,7 +1339,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export Percent"
+                                label="Percent"
                                 value={epcgLicenseDetails.totalEOPeriodTotalExportPercent}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodTotalExportPercent: e.target.value })
@@ -991,7 +1347,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Total Export Prop Duty Saved"
+                                label="Prop Duty Saved"
                                 value={epcgLicenseDetails.totalEOPeriodTotalExportPropDutySaved}
                                 onChange={(e) =>
                                     setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodTotalExportPropDutySaved: e.target.value })
@@ -1001,136 +1357,85 @@ const EpcgLicenseSummary = () => {
                         </div>
                         <div className="bg-white p-4 rounded-md">
                             <div className="container text-center text-green-700 font-sans font-semibold text-lg">
-                                Total EO Period Details
-                            </div>
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Direct Export
+                                Total EO Period Differential EO
                             </div>
                             <InputField
-                                label="Direct Export EO (INR)"
-                                value={epcgLicenseDetails.totalEOPeriodDirectExportEoInr}
+                                label="EO (INR)"
+                                value={epcgLicenseDetails.totalEoPeriodDifferentialEoEoInr}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodDirectExportEoInr: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodDifferentialEoEoInr: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export EO (USD)"
-                                value={epcgLicenseDetails.totalEOPeriodDirectExportEoUsd}
+                                label="EO (INR) Percent"
+                                value={epcgLicenseDetails.totalEoPeriodDifferentialEoEoInrPercent}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodDirectExportEoUsd: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodDifferentialEoEoInrPercent: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export No Of Shipping Bills"
-                                value={epcgLicenseDetails.totalEOPeriodDirectExportNoOfShippingBills}
+                                label="EO (USD)"
+                                value={epcgLicenseDetails.totalEoPeriodDifferentialEoEoUsd}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodDirectExportNoOfShippingBills: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodDifferentialEoEoUsd: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export Percent"
-                                value={epcgLicenseDetails.totalEOPeriodDirectExportPercent}
+                                label="EO (USD) Percent"
+                                value={epcgLicenseDetails.totalEoPeriodDifferentialEoEoUsdPercent}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodDirectExportPercent: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodDifferentialEoEoUsdPercent: e.target.value })
                                 }
                                 type="number"
                             />
                             <InputField
-                                label="Direct Export Prop Duty Saved"
-                                value={epcgLicenseDetails.totalEOPeriodDirectExportPropDutySaved}
+                                label="Prop Duty Saved"
+                                value={epcgLicenseDetails.totalEoPeriodDifferentialEoPropDutySaved}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodDirectExportPropDutySaved: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEoPeriodDifferentialEoPropDutySaved: e.target.value })
                                 }
                                 type="number"
                             />
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Indirect Export
+                        </div>
+                        <div className="bg-white p-4 rounded-md">
+                            <div className="container text-center text-green-700 font-sans font-semibold text-lg">
+                                Early EO Fulfillment
                             </div>
                             <InputField
-                                label="Indirect Export EO (INR)"
-                                value={epcgLicenseDetails.totalEOPeriodIndirectExportEoInr}
+                                label="1st EO Date"
+                                value={epcgLicenseDetails.EarlyEoFullfillment1stEoDate}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodIndirectExportEoInr: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, EarlyEoFullfillment1stEoDate: e.target.value })
                                 }
-                                type="number"
+                                type="date"
                             />
                             <InputField
-                                label="Indirect Export EO (USD)"
-                                value={epcgLicenseDetails.totalEOPeriodIndirectExportEoUsd}
+                                label="Last EO Date"
+                                value={epcgLicenseDetails.EarlyEoFullfillmentLastEoDate}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodIndirectExportEoUsd: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, EarlyEoFullfillmentLastEoDate: e.target.value })
                                 }
-                                type="number"
+                                type="date"
                             />
                             <InputField
-                                label="Indirect Export No Of Shipping Bills"
-                                value={epcgLicenseDetails.totalEOPeriodIndirectExportNoOfShippingBills}
+                                label="EO Period Within 3 Years Or Not"
+                                value={epcgLicenseDetails.EarlyEoFullfillmentEoPeriodWithin3yearsOrNot}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodIndirectExportNoOfShippingBills: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, EarlyEoFullfillmentEoPeriodWithin3yearsOrNot: e.target.value })
                                 }
-                                type="number"
+                                type="text"
                             />
                             <InputField
-                                label="Indirect Export Percent"
-                                value={epcgLicenseDetails.totalEOPeriodIndirectExportPercent}
+                                label="Early EO Fulfillment"
+                                value={epcgLicenseDetails.EarlyEoFullfillmentEarlyEoFullfillment}
                                 onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodIndirectExportPercent: e.target.value })
+                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, EarlyEoFullfillmentEarlyEoFullfillment: e.target.value })
                                 }
-                                type="number"
-                            />
-                            <InputField
-                                label="Indirect Export Prop Duty Saved"
-                                value={epcgLicenseDetails.totalEOPeriodIndirectExportPropDutySaved}
-                                onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodIndirectExportPropDutySaved: e.target.value })
-                                }
-                                type="number"
-                            />
-                            <div className="container text-center text-green-700 font-sans font-semibold text-base">
-                                Total Export
-                            </div>
-                            <InputField
-                                label="Total Export EO (INR)"
-                                value={epcgLicenseDetails.totalEOPeriodTotalExportEoInr}
-                                onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodTotalExportEoInr: e.target.value })
-                                }
-                                type="number"
-                            />
-                            <InputField
-                                label="Total Export EO (USD)"
-                                value={epcgLicenseDetails.totalEOPeriodTotalExportEoUsd}
-                                onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodTotalExportEoUsd: e.target.value })
-                                }
-                                type="number"
-                            />
-                            <InputField
-                                label="Total Export No Of Shipping Bills"
-                                value={epcgLicenseDetails.totalEOPeriodTotalExportNoOfShippingBills}
-                                onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodTotalExportNoOfShippingBills: e.target.value })
-                                }
-                                type="number"
-                            />
-                            <InputField
-                                label="Total Export Percent"
-                                value={epcgLicenseDetails.totalEOPeriodTotalExportPercent}
-                                onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodTotalExportPercent: e.target.value })
-                                }
-                                type="number"
-                            />
-                            <InputField
-                                label="Total Export Prop Duty Saved"
-                                value={epcgLicenseDetails.totalEOPeriodTotalExportPropDutySaved}
-                                onChange={(e) =>
-                                    setEpcgLicenseDetails({ ...epcgLicenseDetails, totalEOPeriodTotalExportPropDutySaved: e.target.value })
-                                }
-                                type="number"
+                                options={['Yes', 'No']}
+                                type="select"
                             />
                         </div>
                         <div className="bg-white p-4 rounded-md">
@@ -1150,7 +1455,7 @@ const EpcgLicenseSummary = () => {
                     <NewDataButtons
                         backLink=""
                         nextLink=""
-                        handleSubmit={handleSubmit}
+                        handleSubmit={() => {}}
                     />
                 </div>
             </div>

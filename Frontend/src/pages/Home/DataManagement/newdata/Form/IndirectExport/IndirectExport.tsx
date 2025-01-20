@@ -398,9 +398,9 @@ const IndirectExport = () => {
 
 
 
-    const taxInvoiceTax = Number(basicSheet.invoiceValue2) - Number(basicSheet.basicAmount);
-    const lowerOfInvoiceAndBankStatement = (Math.min( Number(basicSheet.invoiceValue2), Number(basicSheet.amountRealised))).toString();
-    const proportionateAmountOf6ForInRs = ((Number(lowerOfInvoiceAndBankStatement) * Number(basicSheet.basicAmount)) / Number(basicSheet.invoiceValue2)).toString();
+    const taxInvoiceTax = Number(basicSheet.invoiceValue) - Number(basicSheet.basicAmount);
+    const lowerOfInvoiceAndBankStatement = (Math.min( Number(basicSheet.invoiceValue), Number(basicSheet.amountRealised))).toString();
+    const proportionateAmountOf6ForInRs = ((Number(lowerOfInvoiceAndBankStatement) * Number(basicSheet.basicAmount)) / Number(basicSheet.invoiceValue)).toString();
 
     const updatedAnnexure2 = {
       srNo: basicSheet.srNo,
@@ -410,7 +410,7 @@ const IndirectExport = () => {
       taxInvoiceDate: basicSheet.invoiceDate,
       taxInvoiceBasicAmount: basicSheet.basicAmount,
       taxInvoiceTax: taxInvoiceTax,
-      taxInvoiceInvoiceValue: basicSheet.invoiceValue2,
+      taxInvoiceInvoiceValue: basicSheet.invoiceValue,
       paymentDetailsDate: basicSheet.bankPaymentReceivedDate,
       paymentDetailsAmountReceived: basicSheet.amountReceived,
       paymentDetailsAmountRealised: basicSheet.amountRealised,
@@ -455,15 +455,15 @@ const IndirectExport = () => {
 
     const updatedAnnexureA = {
       srNo: basicSheet.srNo,
-      productExportered: basicSheet.product,
+      sameProductOrService: basicSheet.product,
       shippingBillNo: basicSheet.shippingBillNo,
       shippingBillDate: basicSheet.shippingBillDate,
-      directExportsInRupees: updatedCalculationSheet.fobValueLowerOf5_6_7Rs,
-      directExportsInDollars: updatedCalculationSheet.fobValueLowerOf5_6_7Us,
-      thirdPartyExportsInRupees: updatedCalculationSheet.fobValueLowerOf5_6_7Rs,
-      thirdPartyExportsInDollars: updatedCalculationSheet.fobValueLowerOf5_6_7Us,
-      totalInRupees: (updatedCalculationSheet.fobValueLowerOf5_6_7Rs),
-      totalInDollars: updatedCalculationSheet.fobValueLowerOf5_6_7Us,
+      directExportsRs: updatedCalculationSheet.fobValueLowerOf5_6_7Rs,
+      directExportsUs: updatedCalculationSheet.fobValueLowerOf5_6_7Us,
+      thirdPartyExportsRs: updatedCalculationSheet.fobValueLowerOf5_6_7Rs,
+      thirdPartyExportsUs: updatedCalculationSheet.fobValueLowerOf5_6_7Us,
+      totalRs: (updatedCalculationSheet.fobValueLowerOf5_6_7Rs),
+      totalUs: updatedCalculationSheet.fobValueLowerOf5_6_7Us,
     };
 
 
