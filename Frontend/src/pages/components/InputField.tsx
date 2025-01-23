@@ -21,17 +21,18 @@ const InputField: React.FC<InputFieldProps> = ({ label, type = "text", value, on
     <div className="w-full min-w-[200px] text-[20px] my-2">
       <div className="relative">
         {type === "select" ? (
-          <select
+            <select
             value={value}
             onChange={onChange}
-            className={`cursor-pointer peer w-full bg-transparent placeholder:text-transparent text-slate-700 text-sm border border-slate-400 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow`}
-          >
+            className={`peer w-full bg-transparent placeholder:text-transparent text-slate-700 text-sm border border-slate-400 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow`}
+            >
+            <option value="" disabled className=' text-gray-800'>Options</option>
             {options?.map((option, index) => (
               <option key={index} value={option} className='cursor-pointer'>
-                {option}
+              {option}
               </option>
             ))}
-          </select>
+            </select>
         ) : (
           <input
             type={type}
