@@ -157,8 +157,6 @@ export async function getSummary(req: any, res: any) {
       },
     });
 
-    console.log(annexureA);
-
     // const totalDirectExportsInDollars = annexureA.reduce((sum, record) => {
     //   return sum + parseFloat(record.directExportsInDollars);
     // }, 0);
@@ -169,7 +167,6 @@ export async function getSummary(req: any, res: any) {
           record.directExportsInDollars
         );
     });
-    console.log(totalDirectExportsInDollars);
     
 
     const EOImposed = "1340782";

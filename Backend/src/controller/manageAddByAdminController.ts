@@ -66,7 +66,6 @@ const {
   addedByUserId,
 } = req.body;
 
-console.log(req.body);
 
 try {
   const exporter = await prisma.client.create({

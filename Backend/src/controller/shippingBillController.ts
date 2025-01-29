@@ -9,10 +9,6 @@ export async function part1section1(req: any, res: any) {
     const shippingBill = await checkIsCurrentSheetIsCompleted(
       data.addedByUserId
     );
-
-    console.log("added by userid ", data.addedByUserId);
-    
-    console.log("shippingBill", shippingBill);
     
 
     if (!shippingBill) return res.json({ message: "User not found" });
@@ -611,7 +607,6 @@ async function checkIsCurrentSheetIsCompleted(addedByUserId: any) {
       id: addedByUserId,
     },
   });
-  console.log("user", user);
   
   if (!user) {
     return null;
