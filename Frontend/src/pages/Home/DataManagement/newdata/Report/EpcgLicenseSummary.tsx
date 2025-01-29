@@ -169,250 +169,341 @@ const EpcgLicenseSummary = () => {
     }
         , []);
 
-    // const calculatedEpcgLicenseDetails = useMemo(() => {
-    //     const {
-    //         dutySavedValueAmountInr,
-    //         hsCodeAsPerLicenseEoInr,
-    //         descriptionAsPerLicenseEoUsd,
-    //         dutySavedValueDutyUtilizedValue,
-    //         licenseDate,
-    //         averageExportImposedAsPerLicenseInr,
-    //         averageExportNoOfYears,
-    //         block1stImposedBlockCompletionDate,
-    //         block1stImposedBlockExtension,
-    //         block1stImposedExtensionYearIfAny,
-    //         block2ndImposed2ndBlockEoPeriodCompletionDate,
-    //         block2ndImposedEoPeriodExtensionIfAny,
-    //         block2ndImposedEoPeriodExtensionYear,
-    //         EarlyEoFullfillment1stEoDate,
-    //         EarlyEoFullfillmentLastEoDate,
-    //     } = epcgLicenseDetails;
+    const calculatedEpcgLicenseDetails = useMemo(() => {
+        const {
+            dutySavedValueAmountInr,
+            hsCodeAsPerLicenseEoInr,
+            descriptionAsPerLicenseEoUsd,
+            dutySavedValueDutyUtilizedValue,
+            licenseDate,
+            averageExportImposedAsPerLicenseInr,
+            averageExportNoOfYears,
+            block2ndImposedEoPeriodExtensionIfAny,
+            block2ndImposedEoPeriodExtensionYear,
+            EarlyEoFullfillment1stEoDate,
+        } = epcgLicenseDetails;
 
-    //     const O = String((Number(hsCodeAsPerLicenseEoInr) * Number(dutySavedValueDutyUtilizedValue)) / Number(dutySavedValueAmountInr));
-    //     const P = String((Number(descriptionAsPerLicenseEoUsd) * Number(dutySavedValueDutyUtilizedValue)) / Number(dutySavedValueAmountInr));
-    //     const T = String(Number(averageExportImposedAsPerLicenseInr) * Number(averageExportNoOfYears));
-    //     const W = String((Number(epcgLicenseDetails.averageExportFulfilledInr) / Number(T)) * 100);
-    //     const X = licenseDate ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 4 - 1)).toISOString().split('T')[0] : '';
-    //     const AA = licenseDate ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 6 - 1)).toISOString().split('T')[0] : '';
-    //     const AB = String(Math.ceil((new Date(X).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
-    //     const AC = String(Math.ceil((new Date(AA).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
-    //     const AD = String(Number(O) * 0.5);
-    //     const AE = String(Number(P) * 0.5);
-    //     const AI = String((Number(epcgLicenseDetails.block1stDirectExportEoUsd) / Number(P)) * 100);
-    //     const AJ = String(Number(dutySavedValueDutyUtilizedValue) * Number(AI));
-    //     const AN = String((Number(epcgLicenseDetails.block1stIndirectExportEoUsd) / Number(P)) * 100);
-    //     const AO = String(Number(dutySavedValueDutyUtilizedValue) * Number(AN));
-    //     const AP = String(Number(epcgLicenseDetails.block1stDirectExportEoInr) + Number(epcgLicenseDetails.block1stIndirectExportEoInr));
-    //     const AQ = String(Number(epcgLicenseDetails.block1stDirectExportEoUsd) + Number(epcgLicenseDetails.block1stIndirectExportEoUsd));
-    //     const AR = String(Number(epcgLicenseDetails.block1stDirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block1stIndirectExportNoOfShippingBills));
-    //     const AS = String((Number(AQ) / Number(P)) * 100);
-    //     const AT = String(Number(dutySavedValueDutyUtilizedValue) * Number(AS));
-    //     const AU = String(Number(AD) - Number(AP));
-    //     const AV = String((Number(AU) / Number(O)) * 100);
-    //     const AW = String(Number(AE) - Number(AQ));
-    //     const AX = String((Number(AW) / Number(P)) * 100);
-    //     const AY = String(Number(dutySavedValueDutyUtilizedValue) * Number(AX));
-    //     const AZ = new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 6 - 1)).toISOString().split('T')[0];
-    //     const BC = block2ndImposedEoPeriodExtensionYear === '1 years' ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 7 - 1)).toISOString().split('T')[0] : new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 8 - 1)).toISOString().split('T')[0];
-    //     const BD = String(Math.ceil((new Date(AZ).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
-    //     const BE = String(Math.ceil((new Date(BC).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
-    //     const BF = String(Number(O) * 0.5);
-    //     const BG = String(Number(P) * 0.5);
-    //     const BK = String((Number(epcgLicenseDetails.block2ndDirectExportEoUsd) / Number(P)) * 100);
-    //     const BL = String(Number(dutySavedValueDutyUtilizedValue) * Number(BK));
-    //     const BP = String((Number(epcgLicenseDetails.block2ndIndirectExportEoUsd) / Number(P)) * 100);
-    //     const BQ = String(Number(dutySavedValueDutyUtilizedValue) * Number(BP));
-    //     const BR = String(Number(epcgLicenseDetails.block2ndDirectExportEoInr) + Number(epcgLicenseDetails.block2ndIndirectExportEoInr));
-    //     const BS = String(Number(epcgLicenseDetails.block2ndDirectExportEoUsd) + Number(epcgLicenseDetails.block2ndIndirectExportEoUsd));
-    //     const BT = String(Number(epcgLicenseDetails.block2ndDirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block2ndIndirectExportNoOfShippingBills));
-    //     const BU = String((Number(BS) / Number(P)) * 100);
-    //     const BV = String(Number(dutySavedValueDutyUtilizedValue) * Number(BU));
-    //     const BW = String(Number(BF) - Number(BR));
-    //     const BX = String((Number(BW) / Number(O)) * 100);
-    //     const BY = String(Number(BG) - Number(BS));
-    //     const BZ = String((Number(BY) / Number(P)) * 100);
-    //     const CA = String(Number(dutySavedValueDutyUtilizedValue) * Number(BZ));
-    //     const CB = AZ;
-    //     const CC = block2ndImposedEoPeriodExtensionIfAny;
-    //     const CD = block2ndImposedEoPeriodExtensionYear;
-    //     const CE = BC;
-    //     const CF = BD;
-    //     const CG = BE;
-    //     const CH = String(Number(AD) + Number(BF));
-    //     const CI = String(Number(AE) + Number(BG));
-    //     const CJ = String(Number(epcgLicenseDetails.block1stDirectExportEoInr) + Number(epcgLicenseDetails.block2ndDirectExportEoInr));
-    //     const CK = String(Number(epcgLicenseDetails.block1stDirectExportEoUsd) + Number(epcgLicenseDetails.block2ndDirectExportEoUsd));
-    //     const CL = String(Number(epcgLicenseDetails.block1stDirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block2ndDirectExportNoOfShippingBills));
-    //     const CM = String(Number(AI) + Number(BK));
-    //     const CN = String(Number(AJ) + Number(BL));
-    //     const CO = String(Number(epcgLicenseDetails.block1stIndirectExportEoInr) + Number(epcgLicenseDetails.block2ndIndirectExportEoInr));
-    //     const CP = String(Number(epcgLicenseDetails.block1stIndirectExportEoUsd) + Number(epcgLicenseDetails.block2ndIndirectExportEoUsd));
-    //     const CQ = String(Number(epcgLicenseDetails.block1stIndirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block2ndIndirectExportNoOfShippingBills));
-    //     const CR = String(Number(AN) + Number(BP));
-    //     const CS = String(Number(AO) + Number(BQ));
-    //     const CT = String(Number(CJ) + Number(CO));
-    //     const CU = String(Number(CK) + Number(CP));
-    //     const CV = String(Number(CL) + Number(CQ));
-    //     const CW = String(Number(CM) + Number(CR));
-    //     const CX = String(Number(CN) + Number(CS));
-    //     const CY = String(Number(O) - Number(CT));
-    //     const CZ = String((Number(CY) / Number(O)) * 100);
-    //     const DA = String(Number(P) - Number(CU));
-    //     const DB = String((Number(DA) / Number(P)) * 100);
-    //     const DC = String(Number(dutySavedValueDutyUtilizedValue) * Number(DB));
-    //     const DF = (new Date(licenseDate).getTime() - new Date(EarlyEoFullfillment1stEoDate).getTime()) / (1000 * 3600 * 24 * 365) < 3;
-    //     const DG = DF ? 'Yes' : 'No';
+        const O = String((Number(hsCodeAsPerLicenseEoInr) * Number(dutySavedValueDutyUtilizedValue)) / Number(dutySavedValueAmountInr));
+        const P = String((Number(descriptionAsPerLicenseEoUsd) * Number(dutySavedValueDutyUtilizedValue)) / Number(dutySavedValueAmountInr));
+        const T = String(Number(averageExportImposedAsPerLicenseInr) * Number(averageExportNoOfYears));
+        const W = String((Number(epcgLicenseDetails.averageExportFulfilledInr) / Number(T)) * 100);
+        const X = licenseDate ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 4 - 1)).toISOString().split('T')[0] : '';
+        const AA = licenseDate ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 6 - 1)).toISOString().split('T')[0] : '';
+        const AB = String(Math.ceil((new Date(X).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
+        const AC = String(Math.ceil((new Date(AA).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
+        const AD = String(Number(O) * 0.5);
+        const AE = String(Number(P) * 0.5);
+        const AI = String((Number(epcgLicenseDetails.block1stDirectExportEoUsd) / Number(P)) * 100);
+        const AJ = String(Number(dutySavedValueDutyUtilizedValue) * Number(AI));
+        const AN = String((Number(epcgLicenseDetails.block1stIndirectExportEoUsd) / Number(P)) * 100);
+        const AO = String(Number(dutySavedValueDutyUtilizedValue) * Number(AN));
+        const AP = String(Number(epcgLicenseDetails.block1stDirectExportEoInr) + Number(epcgLicenseDetails.block1stIndirectExportEoInr));
+        const AQ = String(Number(epcgLicenseDetails.block1stDirectExportEoUsd) + Number(epcgLicenseDetails.block1stIndirectExportEoUsd));
+        const AR = String(Number(epcgLicenseDetails.block1stDirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block1stIndirectExportNoOfShippingBills));
+        const AS = String((Number(AQ) / Number(P)) * 100);
+        const AT = String(Number(dutySavedValueDutyUtilizedValue) * Number(AS));
+        const AU = String(Number(AD) - Number(AP));
+        const AV = String((Number(AU) / Number(O)) * 100);
+        const AW = String(Number(AE) - Number(AQ));
+        const AX = String((Number(AW) / Number(P)) * 100);
+        const AY = String(Number(dutySavedValueDutyUtilizedValue) * Number(AX));
+        const AZ = licenseDate ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 6 - 1)).toISOString().split('T')[0] : '';
+        const BC = licenseDate ? (block2ndImposedEoPeriodExtensionYear === '1 years' ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 7 - 1)).toISOString().split('T')[0] : new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 8 - 1)).toISOString().split('T')[0]) : '';
+        const BD = String(Math.ceil((new Date(AZ).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
+        const BE = String(Math.ceil((new Date(BC).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
+        const BF = String(Number(O) * 0.5);
+        const BG = String(Number(P) * 0.5);
+        const BK = String((Number(epcgLicenseDetails.block2ndDirectExportEoUsd) / Number(P)) * 100);
+        const BL = String(Number(dutySavedValueDutyUtilizedValue) * Number(BK));
+        const BP = String((Number(epcgLicenseDetails.block2ndIndirectExportEoUsd) / Number(P)) * 100);
+        const BQ = String(Number(dutySavedValueDutyUtilizedValue) * Number(BP));
+        const BR = String(Number(epcgLicenseDetails.block2ndDirectExportEoInr) + Number(epcgLicenseDetails.block2ndIndirectExportEoInr));
+        const BS = String(Number(epcgLicenseDetails.block2ndDirectExportEoUsd) + Number(epcgLicenseDetails.block2ndIndirectExportEoUsd));
+        const BT = String(Number(epcgLicenseDetails.block2ndDirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block2ndIndirectExportNoOfShippingBills));
+        const BU = String((Number(BS) / Number(P)) * 100);
+        const BV = String(Number(dutySavedValueDutyUtilizedValue) * Number(BU));
+        const BW = String(Number(BF) - Number(BR));
+        const BX = String((Number(BW) / Number(O)) * 100);
+        const BY = String(Number(BG) - Number(BS));
+        const BZ = String((Number(BY) / Number(P)) * 100);
+        const CA = String(Number(dutySavedValueDutyUtilizedValue) * Number(BZ));
+        const CB = AZ;
+        const CC = block2ndImposedEoPeriodExtensionIfAny;
+        const CD = block2ndImposedEoPeriodExtensionYear;
+        const CE = BC;
+        const CF = BD;
+        const CG = BE;
+        const CH = String(Number(AD) + Number(BF));
+        const CI = String(Number(AE) + Number(BG));
+        const CJ = String(Number(epcgLicenseDetails.block1stDirectExportEoInr) + Number(epcgLicenseDetails.block2ndDirectExportEoInr));
+        const CK = String(Number(epcgLicenseDetails.block1stDirectExportEoUsd) + Number(epcgLicenseDetails.block2ndDirectExportEoUsd));
+        const CL = String(Number(epcgLicenseDetails.block1stDirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block2ndDirectExportNoOfShippingBills));
+        const CM = String(Number(AI) + Number(BK));
+        const CN = String(Number(AJ) + Number(BL));
+        const CO = String(Number(epcgLicenseDetails.block1stIndirectExportEoInr) + Number(epcgLicenseDetails.block2ndIndirectExportEoInr));
+        const CP = String(Number(epcgLicenseDetails.block1stIndirectExportEoUsd) + Number(epcgLicenseDetails.block2ndIndirectExportEoUsd));
+        const CQ = String(Number(epcgLicenseDetails.block1stIndirectExportNoOfShippingBills) + Number(epcgLicenseDetails.block2ndIndirectExportNoOfShippingBills));
+        const CR = String(Number(AN) + Number(BP));
+        const CS = String(Number(AO) + Number(BQ));
+        const CT = String(Number(CJ) + Number(CO));
+        const CU = String(Number(CK) + Number(CP));
+        const CV = String(Number(CL) + Number(CQ));
+        const CW = String(Number(CM) + Number(CR));
+        const CX = String(Number(CN) + Number(CS));
+        const CY = String(Number(O) - Number(CT));
+        const CZ = String((Number(CY) / Number(O)) * 100);
+        const DA = String(Number(P) - Number(CU));
+        const DB = String((Number(DA) / Number(P)) * 100);
+        const DC = String(Number(dutySavedValueDutyUtilizedValue) * Number(DB));
+        const DF = (new Date(licenseDate).getTime() - new Date(EarlyEoFullfillment1stEoDate).getTime()) / (1000 * 3600 * 24 * 365) < 3;
+        const DG = DF ? 'Yes' : 'No';
 
-    //     return {
-    //         ...epcgLicenseDetails,
-    //         hsCodeAsPerEoFullfillmentSummaryEoInr: O,
-    //         descriptionAsPerEoFullfillmentSummaryEoUsd: P,
-    //         averageExportTotalAeoImposedInr: T,
-    //         averageExportFulfilledPercent: W,
-    //         block1stImposedBlockCompletionDate: X,
-    //         block1stImposedBlockExtensionDate: AA,
-    //         block1stImposedBlockBlanceDaysCompletionDate: AB,
-    //         block1stImposedBlockBlanceDaysExtensionDate: AC,
-    //         block1stImposedEoInr: AD,
-    //         block1stImposedEoUsd: AE,
-    //         block1stDirectExportPercent: AI,
-    //         block1stDirectExportPropDutySaved: AJ,
-    //         block1stIndirectExportPercent: AN,
-    //         block1stIndirectExportPropDutySaved: AO,
-    //         block1stTotalExportEoInr: AP,
-    //         block1stTotalExportEoUsd: AQ,
-    //         block1stTotalExportNoOfShippingBills: AR,
-    //         block1stTotalExportPercent: AS,
-    //         block1stTotalExportPropDutySaved: AT,
-    //         block1stDifferentialEoEoInr: AU,
-    //         block1stDifferentialEoEoInrPercent: AV,
-    //         block1stDifferentialEoEoUsd: AW,
-    //         block1stDifferentialEoEoUsdPercent: AX,
-    //         block1stDifferentialEoPropDutySaved: AY,
-    //         block2ndImposed2ndBlockEoPeriodCompletionDate: AZ,
-    //         block2ndImposedEoPeriodExtensionDate: BC,
-    //         block2ndImposedEoPeriodBalanceDaysCompletionDate: BD,
-    //         block2ndImposedEoPeriodBalanceDaysExtensionDate: BE,
-    //         block2ndImposedEoInr: BF,
-    //         block2ndImposedEoUsd: BG,
-    //         block2ndDirectExportPercent: BK,
-    //         block2ndDirectExportPropDutySaved: BL,
-    //         block2ndIndirectExportPercent: BP,
-    //         block2ndIndirectExportPropDutySaved: BQ,
-    //         block2ndTotalExportEoInr: BR,
-    //         block2ndTotalExportEoUsd: BS,
-    //         block2ndTotalExportNoOfShippingBills: BT,
-    //         block2ndTotalExportPercent: BU,
-    //         block2ndTotalExportPropDutySaved: BV,
-    //         block2ndDifferentialEoEoInr: BW,
-    //         block2ndDifferentialEoEoInrPercent: BX,
-    //         block2ndDifferentialEoEoUsd: BY,
-    //         block2ndDifferentialEoEoUsdPercent: BZ,
-    //         block2ndDifferentialEoPropDutySaved: CA,
-    //         totalEoPeriodImposedEoPeriodCompletionDate: CB,
-    //         totalEoPeriodImposedEoPeriodExtensionIfAny: CC,
-    //         totalEoPeriodImposedEoPeriodExtensionYear: CD,
-    //         totalEoPeriodImposedEoPeriodExtensionDate: CE,
-    //         totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate: CF,
-    //         totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate: CG,
-    //         totalEoPeriodImposedEoInr: CH,
-    //         totalEoPeriodImposedEoUsd: CI,
-    //         totalEOPeriodDirectExportEoInr: CJ,
-    //         totalEOPeriodDirectExportEoUsd: CK,
-    //         totalEOPeriodDirectExportNoOfShippingBills: CL,
-    //         totalEOPeriodDirectExportPercent: CM,
-    //         totalEOPeriodDirectExportPropDutySaved: CN,
-    //         totalEOPeriodIndirectExportEoInr: CO,
-    //         totalEOPeriodIndirectExportEoUsd: CP,
-    //         totalEOPeriodIndirectExportNoOfShippingBills: CQ,
-    //         totalEOPeriodIndirectExportPercent: CR,
-    //         totalEOPeriodIndirectExportPropDutySaved: CS,
-    //         totalEOPeriodTotalExportEoInr: CT,
-    //         totalEOPeriodTotalExportEoUsd: CU,
-    //         totalEOPeriodTotalExportNoOfShippingBills: CV,
-    //         totalEOPeriodTotalExportPercent: CW,
-    //         totalEOPeriodTotalExportPropDutySaved: CX,
-    //         totalEoPeriodDifferentialEoEoInr: CY,
-    //         totalEoPeriodDifferentialEoEoInrPercent: CZ,
-    //         totalEoPeriodDifferentialEoEoUsd: DA,
-    //            totalEoPeriodDifferentialEoEoUsdPercent: DB,
-    //         totalEoPeriodDifferentialEoPropDutySaved: DC,
-    //         EarlyEoFullfillmentEoPeriodWithin3yearsOrNot: String(DF),
-    //         EarlyEoFullfillmentEarlyEoFullfillment: DG,
-    //     };
-    // }, [epcgLicenseDetails]);
+        return {
+            ...epcgLicenseDetails,
+            hsCodeAsPerEoFullfillmentSummaryEoInr: O,
+            descriptionAsPerEoFullfillmentSummaryEoUsd: P,
+            averageExportTotalAeoImposedInr: T,
+            averageExportFulfilledPercent: W,
+            block1stImposedBlockCompletionDate: X,
+            block1stImposedBlockExtensionDate: AA,
+            block1stImposedBlockBlanceDaysCompletionDate: AB,
+            block1stImposedBlockBlanceDaysExtensionDate: AC,
+            block1stImposedEoInr: AD,
+            block1stImposedEoUsd: AE,
+            block1stDirectExportPercent: AI,
+            block1stDirectExportPropDutySaved: AJ,
+            block1stIndirectExportPercent: AN,
+            block1stIndirectExportPropDutySaved: AO,
+            block1stTotalExportEoInr: AP,
+            block1stTotalExportEoUsd: AQ,
+            block1stTotalExportNoOfShippingBills: AR,
+            block1stTotalExportPercent: AS,
+            block1stTotalExportPropDutySaved: AT,
+            block1stDifferentialEoEoInr: AU,
+            block1stDifferentialEoEoInrPercent: AV,
+            block1stDifferentialEoEoUsd: AW,
+            block1stDifferentialEoEoUsdPercent: AX,
+            block1stDifferentialEoPropDutySaved: AY,
+            block2ndImposed2ndBlockEoPeriodCompletionDate: AZ,
+            block2ndImposedEoPeriodExtensionDate: BC,
+            block2ndImposedEoPeriodBalanceDaysCompletionDate: BD,
+            block2ndImposedEoPeriodBalanceDaysExtensionDate: BE,
+            block2ndImposedEoInr: BF,
+            block2ndImposedEoUsd: BG,
+            block2ndDirectExportPercent: BK,
+            block2ndDirectExportPropDutySaved: BL,
+            block2ndIndirectExportPercent: BP,
+            block2ndIndirectExportPropDutySaved: BQ,
+            block2ndTotalExportEoInr: BR,
+            block2ndTotalExportEoUsd: BS,
+            block2ndTotalExportNoOfShippingBills: BT,
+            block2ndTotalExportPercent: BU,
+            block2ndTotalExportPropDutySaved: BV,
+            block2ndDifferentialEoEoInr: BW,
+            block2ndDifferentialEoEoInrPercent: BX,
+            block2ndDifferentialEoEoUsd: BY,
+            block2ndDifferentialEoEoUsdPercent: BZ,
+            block2ndDifferentialEoPropDutySaved: CA,
+            totalEoPeriodImposedEoPeriodCompletionDate: CB,
+            totalEoPeriodImposedEoPeriodExtensionIfAny: CC,
+            totalEoPeriodImposedEoPeriodExtensionYear: CD,
+            totalEoPeriodImposedEoPeriodExtensionDate: CE,
+            totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate: CF,
+            totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate: CG,
+            totalEoPeriodImposedEoInr: CH,
+            totalEoPeriodImposedEoUsd: CI,
+            totalEOPeriodDirectExportEoInr: CJ,
+            totalEOPeriodDirectExportEoUsd: CK,
+            totalEOPeriodDirectExportNoOfShippingBills: CL,
+            totalEOPeriodDirectExportPercent: CM,
+            totalEOPeriodDirectExportPropDutySaved: CN,
+            totalEOPeriodIndirectExportEoInr: CO,
+            totalEOPeriodIndirectExportEoUsd: CP,
+            totalEOPeriodIndirectExportNoOfShippingBills: CQ,
+            totalEOPeriodIndirectExportPercent: CR,
+            totalEOPeriodIndirectExportPropDutySaved: CS,
+            totalEOPeriodTotalExportEoInr: CT,
+            totalEOPeriodTotalExportEoUsd: CU,
+            totalEOPeriodTotalExportNoOfShippingBills: CV,
+            totalEOPeriodTotalExportPercent: CW,
+            totalEOPeriodTotalExportPropDutySaved: CX,
+            totalEoPeriodDifferentialEoEoInr: CY,
+            totalEoPeriodDifferentialEoEoInrPercent: CZ,
+            totalEoPeriodDifferentialEoEoUsd: DA,
+            totalEoPeriodDifferentialEoEoUsdPercent: DB,
+            totalEoPeriodDifferentialEoPropDutySaved: DC,
+            EarlyEoFullfillmentEoPeriodWithin3yearsOrNot: String(DF),
+            EarlyEoFullfillmentEarlyEoFullfillment: DG,
+        };
+    }, [
+        epcgLicenseDetails.dutySavedValueAmountInr,
+        epcgLicenseDetails.hsCodeAsPerLicenseEoInr,
+        epcgLicenseDetails.descriptionAsPerLicenseEoUsd,
+        epcgLicenseDetails.dutySavedValueDutyUtilizedValue,
+        epcgLicenseDetails.licenseDate,
+        epcgLicenseDetails.averageExportImposedAsPerLicenseInr,
+        epcgLicenseDetails.averageExportNoOfYears,
+        epcgLicenseDetails.block1stImposedBlockCompletionDate,
+        epcgLicenseDetails.block1stImposedBlockExtension,
+        epcgLicenseDetails.block1stImposedExtensionYearIfAny,
+        epcgLicenseDetails.block2ndImposed2ndBlockEoPeriodCompletionDate,
+        epcgLicenseDetails.block2ndImposedEoPeriodExtensionIfAny,
+        epcgLicenseDetails.block2ndImposedEoPeriodExtensionYear,
+        epcgLicenseDetails.EarlyEoFullfillment1stEoDate,
+        epcgLicenseDetails.EarlyEoFullfillmentLastEoDate,
+        epcgLicenseDetails.averageExportFulfilledInr,
+        epcgLicenseDetails.block1stDirectExportEoUsd,
+        epcgLicenseDetails.block1stIndirectExportEoUsd,
+        epcgLicenseDetails.block1stDirectExportEoInr,
+        epcgLicenseDetails.block1stIndirectExportEoInr,
+        epcgLicenseDetails.block1stDirectExportNoOfShippingBills,
+        epcgLicenseDetails.block1stIndirectExportNoOfShippingBills,
+        epcgLicenseDetails.block2ndDirectExportEoUsd,
+        epcgLicenseDetails.block2ndIndirectExportEoUsd,
+        epcgLicenseDetails.block2ndDirectExportEoInr,
+        epcgLicenseDetails.block2ndIndirectExportEoInr,
+        epcgLicenseDetails.block2ndDirectExportNoOfShippingBills,
+        epcgLicenseDetails.block2ndIndirectExportNoOfShippingBills,
+    ]);
 
-    // useEffect(() => {
-    //     setEpcgLicenseDetails({
-    //         ...calculatedEpcgLicenseDetails,
-    //         hsCodeAsPerEoFullfillmentSummaryEoInr: String(calculatedEpcgLicenseDetails.hsCodeAsPerEoFullfillmentSummaryEoInr),
-    //         descriptionAsPerEoFullfillmentSummaryEoUsd: String(calculatedEpcgLicenseDetails.descriptionAsPerEoFullfillmentSummaryEoUsd),
-    //         averageExportTotalAeoImposedInr: String(calculatedEpcgLicenseDetails.averageExportTotalAeoImposedInr),
-    //         averageExportFulfilledPercent: String(calculatedEpcgLicenseDetails.averageExportFulfilledPercent),
-    //         block1stImposedBlockBlanceDaysCompletionDate: String(calculatedEpcgLicenseDetails.block1stImposedBlockBlanceDaysCompletionDate),
-    //         block1stImposedBlockBlanceDaysExtensionDate: String(calculatedEpcgLicenseDetails.block1stImposedBlockBlanceDaysExtensionDate),
-    //         block1stImposedEoInr: String(calculatedEpcgLicenseDetails.block1stImposedEoInr),
-    //         block1stImposedEoUsd: String(calculatedEpcgLicenseDetails.block1stImposedEoUsd),
-    //         block1stDirectExportPercent: String(calculatedEpcgLicenseDetails.block1stDirectExportPercent),
-    //         block1stDirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block1stDirectExportPropDutySaved),
-    //         block1stIndirectExportPercent: String(calculatedEpcgLicenseDetails.block1stIndirectExportPercent),
-    //         block1stIndirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block1stIndirectExportPropDutySaved),
-    //         block1stTotalExportEoInr: String(calculatedEpcgLicenseDetails.block1stTotalExportEoInr),
-    //         block1stTotalExportEoUsd: String(calculatedEpcgLicenseDetails.block1stTotalExportEoUsd),
-    //         block1stTotalExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.block1stTotalExportNoOfShippingBills),
-    //         block1stTotalExportPercent: String(calculatedEpcgLicenseDetails.block1stTotalExportPercent),
-    //         block1stTotalExportPropDutySaved: String(calculatedEpcgLicenseDetails.block1stTotalExportPropDutySaved),
-    //         block1stDifferentialEoEoInr: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoInr),
-    //         block1stDifferentialEoEoInrPercent: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoInrPercent),
-    //         block1stDifferentialEoEoUsd: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoUsd),
-    //         block1stDifferentialEoEoUsdPercent: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoUsdPercent),
-    //         block1stDifferentialEoPropDutySaved: String(calculatedEpcgLicenseDetails.block1stDifferentialEoPropDutySaved),
-    //         block2ndImposedEoPeriodBalanceDaysCompletionDate: String(calculatedEpcgLicenseDetails.block2ndImposedEoPeriodBalanceDaysCompletionDate),
-    //         block2ndImposedEoPeriodBalanceDaysExtensionDate: String(calculatedEpcgLicenseDetails.block2ndImposedEoPeriodBalanceDaysExtensionDate),
-    //         block2ndImposedEoInr: String(calculatedEpcgLicenseDetails.block2ndImposedEoInr),
-    //         block2ndImposedEoUsd: String(calculatedEpcgLicenseDetails.block2ndImposedEoUsd),
-    //         block2ndDirectExportPercent: String(calculatedEpcgLicenseDetails.block2ndDirectExportPercent),
-    //         block2ndDirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndDirectExportPropDutySaved),
-    //         block2ndIndirectExportPercent: String(calculatedEpcgLicenseDetails.block2ndIndirectExportPercent),
-    //         block2ndIndirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndIndirectExportPropDutySaved),
-    //         block2ndTotalExportEoInr: String(calculatedEpcgLicenseDetails.block2ndTotalExportEoInr),
-    //         block2ndTotalExportEoUsd: String(calculatedEpcgLicenseDetails.block2ndTotalExportEoUsd),
-    //         block2ndTotalExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.block2ndTotalExportNoOfShippingBills),
-    //         block2ndTotalExportPercent: String(calculatedEpcgLicenseDetails.block2ndTotalExportPercent),
-    //         block2ndTotalExportPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndTotalExportPropDutySaved),
-    //         block2ndDifferentialEoEoInr: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoInr),
-    //         block2ndDifferentialEoEoInrPercent: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoInrPercent),
-    //         block2ndDifferentialEoEoUsd: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoUsd),
-    //         block2ndDifferentialEoEoUsdPercent: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoUsdPercent),
-    //         block2ndDifferentialEoPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoPropDutySaved),
-    //         totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate),
-    //         totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate),
-    //         totalEoPeriodImposedEoInr: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoInr),
-    //         totalEoPeriodImposedEoUsd: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoUsd),
-    //         totalEOPeriodDirectExportEoInr: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportEoInr),
-    //         totalEOPeriodDirectExportEoUsd: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportEoUsd),
-    //         totalEOPeriodDirectExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportNoOfShippingBills),
-    //         totalEOPeriodDirectExportPercent: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportPercent),
-    //         totalEOPeriodDirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportPropDutySaved),
-    //         totalEOPeriodIndirectExportEoInr: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportEoInr),
-    //         totalEOPeriodIndirectExportEoUsd: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportEoUsd),
-    //         totalEOPeriodIndirectExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportNoOfShippingBills),
-    //         totalEOPeriodIndirectExportPercent: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportPercent),
-    //         totalEOPeriodIndirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportPropDutySaved),
-    //         totalEOPeriodTotalExportEoInr: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportEoInr),
-    //         totalEOPeriodTotalExportEoUsd: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportEoUsd),
-    //         totalEOPeriodTotalExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportNoOfShippingBills),
-    //         totalEOPeriodTotalExportPercent: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportPercent),
-    //         totalEOPeriodTotalExportPropDutySaved: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportPropDutySaved),
-    //         totalEoPeriodDifferentialEoEoInr: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoInr),
-    //         totalEoPeriodDifferentialEoEoInrPercent: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoInrPercent),
-    //         totalEoPeriodDifferentialEoEoUsd: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoUsd),
-    //         totalEoPeriodDifferentialEoEoUsdPercent: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoUsdPercent),
-    //         totalEoPeriodDifferentialEoPropDutySaved: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoPropDutySaved),
-    //         EarlyEoFullfillmentEoPeriodWithin3yearsOrNot: String(calculatedEpcgLicenseDetails.EarlyEoFullfillmentEoPeriodWithin3yearsOrNot),
-    //         EarlyEoFullfillmentEarlyEoFullfillment: String(calculatedEpcgLicenseDetails.EarlyEoFullfillmentEarlyEoFullfillment),
-    //     });
-    // }, [calculatedEpcgLicenseDetails]);
+    useEffect(() => {
+        setEpcgLicenseDetails({
+            ...calculatedEpcgLicenseDetails,
+            hsCodeAsPerEoFullfillmentSummaryEoInr: String(calculatedEpcgLicenseDetails.hsCodeAsPerEoFullfillmentSummaryEoInr),
+            descriptionAsPerEoFullfillmentSummaryEoUsd: String(calculatedEpcgLicenseDetails.descriptionAsPerEoFullfillmentSummaryEoUsd),
+            averageExportTotalAeoImposedInr: String(calculatedEpcgLicenseDetails.averageExportTotalAeoImposedInr),
+            averageExportFulfilledPercent: String(calculatedEpcgLicenseDetails.averageExportFulfilledPercent),
+            block1stImposedBlockBlanceDaysCompletionDate: String(calculatedEpcgLicenseDetails.block1stImposedBlockBlanceDaysCompletionDate),
+            block1stImposedBlockBlanceDaysExtensionDate: String(calculatedEpcgLicenseDetails.block1stImposedBlockBlanceDaysExtensionDate),
+            block1stImposedEoInr: String(calculatedEpcgLicenseDetails.block1stImposedEoInr),
+            block1stImposedEoUsd: String(calculatedEpcgLicenseDetails.block1stImposedEoUsd),
+            block1stDirectExportPercent: String(calculatedEpcgLicenseDetails.block1stDirectExportPercent),
+            block1stDirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block1stDirectExportPropDutySaved),
+            block1stIndirectExportPercent: String(calculatedEpcgLicenseDetails.block1stIndirectExportPercent),
+            block1stIndirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block1stIndirectExportPropDutySaved),
+            block1stTotalExportEoInr: String(calculatedEpcgLicenseDetails.block1stTotalExportEoInr),
+            block1stTotalExportEoUsd: String(calculatedEpcgLicenseDetails.block1stTotalExportEoUsd),
+            block1stTotalExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.block1stTotalExportNoOfShippingBills),
+            block1stTotalExportPercent: String(calculatedEpcgLicenseDetails.block1stTotalExportPercent),
+            block1stTotalExportPropDutySaved: String(calculatedEpcgLicenseDetails.block1stTotalExportPropDutySaved),
+            block1stDifferentialEoEoInr: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoInr),
+            block1stDifferentialEoEoInrPercent: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoInrPercent),
+            block1stDifferentialEoEoUsd: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoUsd),
+            block1stDifferentialEoEoUsdPercent: String(calculatedEpcgLicenseDetails.block1stDifferentialEoEoUsdPercent),
+            block1stDifferentialEoPropDutySaved: String(calculatedEpcgLicenseDetails.block1stDifferentialEoPropDutySaved),
+            block2ndImposedEoPeriodBalanceDaysCompletionDate: String(calculatedEpcgLicenseDetails.block2ndImposedEoPeriodBalanceDaysCompletionDate),
+            block2ndImposedEoPeriodBalanceDaysExtensionDate: String(calculatedEpcgLicenseDetails.block2ndImposedEoPeriodBalanceDaysExtensionDate),
+            block2ndImposedEoInr: String(calculatedEpcgLicenseDetails.block2ndImposedEoInr),
+            block2ndImposedEoUsd: String(calculatedEpcgLicenseDetails.block2ndImposedEoUsd),
+            block2ndDirectExportPercent: String(calculatedEpcgLicenseDetails.block2ndDirectExportPercent),
+            block2ndDirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndDirectExportPropDutySaved),
+            block2ndIndirectExportPercent: String(calculatedEpcgLicenseDetails.block2ndIndirectExportPercent),
+            block2ndIndirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndIndirectExportPropDutySaved),
+            block2ndTotalExportEoInr: String(calculatedEpcgLicenseDetails.block2ndTotalExportEoInr),
+            block2ndTotalExportEoUsd: String(calculatedEpcgLicenseDetails.block2ndTotalExportEoUsd),
+            block2ndTotalExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.block2ndTotalExportNoOfShippingBills),
+            block2ndTotalExportPercent: String(calculatedEpcgLicenseDetails.block2ndTotalExportPercent),
+            block2ndTotalExportPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndTotalExportPropDutySaved),
+            block2ndDifferentialEoEoInr: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoInr),
+            block2ndDifferentialEoEoInrPercent: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoInrPercent),
+            block2ndDifferentialEoEoUsd: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoUsd),
+            block2ndDifferentialEoEoUsdPercent: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoEoUsdPercent),
+            block2ndDifferentialEoPropDutySaved: String(calculatedEpcgLicenseDetails.block2ndDifferentialEoPropDutySaved),
+            totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate),
+            totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate),
+            totalEoPeriodImposedEoInr: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoInr),
+            totalEoPeriodImposedEoUsd: String(calculatedEpcgLicenseDetails.totalEoPeriodImposedEoUsd),
+            totalEOPeriodDirectExportEoInr: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportEoInr),
+            totalEOPeriodDirectExportEoUsd: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportEoUsd),
+            totalEOPeriodDirectExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportNoOfShippingBills),
+            totalEOPeriodDirectExportPercent: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportPercent),
+            totalEOPeriodDirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.totalEOPeriodDirectExportPropDutySaved),
+            totalEOPeriodIndirectExportEoInr: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportEoInr),
+            totalEOPeriodIndirectExportEoUsd: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportEoUsd),
+            totalEOPeriodIndirectExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportNoOfShippingBills),
+            totalEOPeriodIndirectExportPercent: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportPercent),
+            totalEOPeriodIndirectExportPropDutySaved: String(calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportPropDutySaved),
+            totalEOPeriodTotalExportEoInr: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportEoInr),
+            totalEOPeriodTotalExportEoUsd: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportEoUsd),
+            totalEOPeriodTotalExportNoOfShippingBills: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportNoOfShippingBills),
+            totalEOPeriodTotalExportPercent: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportPercent),
+            totalEOPeriodTotalExportPropDutySaved: String(calculatedEpcgLicenseDetails.totalEOPeriodTotalExportPropDutySaved),
+            totalEoPeriodDifferentialEoEoInr: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoInr),
+            totalEoPeriodDifferentialEoEoInrPercent: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoInrPercent),
+            totalEoPeriodDifferentialEoEoUsd: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoUsd),
+            totalEoPeriodDifferentialEoEoUsdPercent: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoUsdPercent),
+            totalEoPeriodDifferentialEoPropDutySaved: String(calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoPropDutySaved),
+            EarlyEoFullfillmentEoPeriodWithin3yearsOrNot: String(calculatedEpcgLicenseDetails.EarlyEoFullfillmentEoPeriodWithin3yearsOrNot),
+            EarlyEoFullfillmentEarlyEoFullfillment: String(calculatedEpcgLicenseDetails.EarlyEoFullfillmentEarlyEoFullfillment),
+        });
+    }, [
+        calculatedEpcgLicenseDetails.hsCodeAsPerEoFullfillmentSummaryEoInr,
+        calculatedEpcgLicenseDetails.descriptionAsPerEoFullfillmentSummaryEoUsd,
+        calculatedEpcgLicenseDetails.averageExportTotalAeoImposedInr,
+        calculatedEpcgLicenseDetails.averageExportFulfilledPercent,
+        calculatedEpcgLicenseDetails.block1stImposedBlockBlanceDaysCompletionDate,
+        calculatedEpcgLicenseDetails.block1stImposedBlockBlanceDaysExtensionDate,
+        calculatedEpcgLicenseDetails.block1stImposedEoInr,
+        calculatedEpcgLicenseDetails.block1stImposedEoUsd,
+        calculatedEpcgLicenseDetails.block1stDirectExportPercent,
+        calculatedEpcgLicenseDetails.block1stDirectExportPropDutySaved,
+        calculatedEpcgLicenseDetails.block1stIndirectExportPercent,
+        calculatedEpcgLicenseDetails.block1stIndirectExportPropDutySaved,
+        calculatedEpcgLicenseDetails.block1stTotalExportEoInr,
+        calculatedEpcgLicenseDetails.block1stTotalExportEoUsd,
+        calculatedEpcgLicenseDetails.block1stTotalExportNoOfShippingBills,
+        calculatedEpcgLicenseDetails.block1stTotalExportPercent,
+        calculatedEpcgLicenseDetails.block1stTotalExportPropDutySaved,
+        calculatedEpcgLicenseDetails.block1stDifferentialEoEoInr,
+        calculatedEpcgLicenseDetails.block1stDifferentialEoEoInrPercent,
+        calculatedEpcgLicenseDetails.block1stDifferentialEoEoUsd,
+        calculatedEpcgLicenseDetails.block1stDifferentialEoEoUsdPercent,
+        calculatedEpcgLicenseDetails.block1stDifferentialEoPropDutySaved,
+        calculatedEpcgLicenseDetails.block2ndImposedEoPeriodBalanceDaysCompletionDate,
+        calculatedEpcgLicenseDetails.block2ndImposedEoPeriodBalanceDaysExtensionDate,
+        calculatedEpcgLicenseDetails.block2ndImposedEoInr,
+        calculatedEpcgLicenseDetails.block2ndImposedEoUsd,
+        calculatedEpcgLicenseDetails.block2ndDirectExportPercent,
+        calculatedEpcgLicenseDetails.block2ndDirectExportPropDutySaved,
+        calculatedEpcgLicenseDetails.block2ndIndirectExportPercent,
+        calculatedEpcgLicenseDetails.block2ndIndirectExportPropDutySaved,
+        calculatedEpcgLicenseDetails.block2ndTotalExportEoInr,
+        calculatedEpcgLicenseDetails.block2ndTotalExportEoUsd,
+        calculatedEpcgLicenseDetails.block2ndTotalExportNoOfShippingBills,
+        calculatedEpcgLicenseDetails.block2ndTotalExportPercent,
+        calculatedEpcgLicenseDetails.block2ndTotalExportPropDutySaved,
+        calculatedEpcgLicenseDetails.block2ndDifferentialEoEoInr,
+        calculatedEpcgLicenseDetails.block2ndDifferentialEoEoInrPercent,
+        calculatedEpcgLicenseDetails.block2ndDifferentialEoEoUsd,
+        calculatedEpcgLicenseDetails.block2ndDifferentialEoEoUsdPercent,
+        calculatedEpcgLicenseDetails.block2ndDifferentialEoPropDutySaved,
+        calculatedEpcgLicenseDetails.totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate,
+        calculatedEpcgLicenseDetails.totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate,
+        calculatedEpcgLicenseDetails.totalEoPeriodImposedEoInr,
+        calculatedEpcgLicenseDetails.totalEoPeriodImposedEoUsd,
+        calculatedEpcgLicenseDetails.totalEOPeriodDirectExportEoInr,
+        calculatedEpcgLicenseDetails.totalEOPeriodDirectExportEoUsd,
+        calculatedEpcgLicenseDetails.totalEOPeriodDirectExportNoOfShippingBills,
+        calculatedEpcgLicenseDetails.totalEOPeriodDirectExportPercent,
+        calculatedEpcgLicenseDetails.totalEOPeriodDirectExportPropDutySaved,
+        calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportEoInr,
+        calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportEoUsd,
+        calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportNoOfShippingBills,
+        calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportPercent,
+        calculatedEpcgLicenseDetails.totalEOPeriodIndirectExportPropDutySaved,
+        calculatedEpcgLicenseDetails.totalEOPeriodTotalExportEoInr,
+        calculatedEpcgLicenseDetails.totalEOPeriodTotalExportEoUsd,
+        calculatedEpcgLicenseDetails.totalEOPeriodTotalExportNoOfShippingBills,
+        calculatedEpcgLicenseDetails.totalEOPeriodTotalExportPercent,
+        calculatedEpcgLicenseDetails.totalEOPeriodTotalExportPropDutySaved,
+        calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoInr,
+        calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoInrPercent,
+        calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoUsd,
+        calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoEoUsdPercent,
+        calculatedEpcgLicenseDetails.totalEoPeriodDifferentialEoPropDutySaved,
+        calculatedEpcgLicenseDetails.EarlyEoFullfillmentEoPeriodWithin3yearsOrNot,
+        calculatedEpcgLicenseDetails.EarlyEoFullfillmentEarlyEoFullfillment,
+    ]);
     
     return (
         <div className="bg-[#e6e7e9] w-full h-full min-h-screen">
