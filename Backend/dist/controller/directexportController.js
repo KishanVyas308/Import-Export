@@ -121,7 +121,6 @@ function getSummary(req, res) {
                     directExportsInDollars: true,
                 },
             });
-            console.log(annexureA);
             // const totalDirectExportsInDollars = annexureA.reduce((sum, record) => {
             //   return sum + parseFloat(record.directExportsInDollars);
             // }, 0);
@@ -130,7 +129,6 @@ function getSummary(req, res) {
                 if (record.directExportsInDollars.trim() != "")
                     totalDirectExportsInDollars += parseFloat(record.directExportsInDollars);
             });
-            console.log(totalDirectExportsInDollars);
             const EOImposed = "1340782";
             const DirectExport = totalDirectExportsInDollars;
             const IndirectExport = "0";

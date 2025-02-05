@@ -53,6 +53,8 @@ const manageAddByAdminRoute_1 = __importDefault(require("./router/manageAddByAdm
 const getDataForUserRoute_1 = __importDefault(require("./router/getDataForUserRoute"));
 const documentsListRoute_1 = __importDefault(require("./router/documentList/documentsListRoute"));
 const formsRoute_1 = __importDefault(require("./router/forms/formsRoute"));
+//! TEMP CODE IMPORT
+const tempHasCodeAdd_1 = __importDefault(require("./controller/tempData/tempHasCodeAdd"));
 const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 app.use((0, cors_1.default)({
@@ -65,6 +67,8 @@ app.use(express_1.default.json());
 app.get("/api", authControler_1.myData);
 //? auth api
 app.use("/api/v1/auth", authRoute_1.default);
+//! TEMP DATA
+app.use("/api/v1/temp", tempHasCodeAdd_1.default);
 app.use(middleWare_1.verifyToken);
 //? existing data api
 app.use("/api/v1/ex", existingDataRoute_1.default);

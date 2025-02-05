@@ -1118,6 +1118,31 @@ model DocumentEpcgLicenseActualExport {
   @@index([epcgLicenseId], name: "epcgLicenseId")
 }
 
+
+model HSCode2Bit {
+  id        String @id @default(cuid())
+  HSCode    String
+  Commodity String
+}
+
+model HSCode4Bit {
+  id        String @id @default(cuid())
+  HSCode    String
+  Commodity String
+}
+
+model HSCode6Bit {
+  id        String @id @default(cuid())
+  HSCode    String
+  Commodity String
+}
+
+model HSCode8Bit {
+  id        String @id @default(cuid())
+  HSCode    String
+  Commodity String
+}
+
 // // Report
 
 // model ReportEPCGLicenseSummary {
