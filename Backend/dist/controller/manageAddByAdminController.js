@@ -48,7 +48,6 @@ const addNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.addNewUser = addNewUser;
 const addNewExpoter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { customerName, mobileNumber1, mobileNumber2, mobileNumber3, mailId1, mailId2, mailId3, firmPan, gstNo, iecNo, industryCategory, subIndustryCategory, iemUdyam, addedByUserId, } = req.body;
-    console.log(req.body);
     try {
         const exporter = yield __1.prisma.client.create({
             data: {

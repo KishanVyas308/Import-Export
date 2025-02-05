@@ -32,8 +32,6 @@ function part1section1(req, res) {
         try {
             // check if current sheet is completed
             const shippingBill = yield checkIsCurrentSheetIsCompleted(data.addedByUserId);
-            console.log("added by userid ", data.addedByUserId);
-            console.log("shippingBill", shippingBill);
             if (!shippingBill)
                 return res.json({ message: "User not found" });
             // check if part 1 section 1 is completed
@@ -554,7 +552,6 @@ function checkIsCurrentSheetIsCompleted(addedByUserId) {
                 id: addedByUserId,
             },
         });
-        console.log("user", user);
         if (!user) {
             return null;
         }
