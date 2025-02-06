@@ -10,6 +10,7 @@ import Loading from '../../../../components/Loading';
 import InputField from '../../../../components/InputField';
 import Divider from '../../../../components/Divider';
 import NewDataButtons from '../NewDataButtons';
+import { useNavigate } from 'react-router-dom';
 
 const EpcgLicenseSummary = () => {
 
@@ -18,17 +19,19 @@ const EpcgLicenseSummary = () => {
     const [loading, setLoading] = useState(false);
     const [customerNames, setCustomerNames] = useState<CustomerDetail[]>([]);
 
+    const navigate = useNavigate()
+
     // Drop Down means - type = select and opttion = array of given things
 
 
     // State to manage EPCG License details
     const [epcgLicenseDetails, setEpcgLicenseDetails] = useState({
-        srNo: '', // A // no calculation  // Number  
+        srNo: '', // A // no calculation  // Number  // manualy
         partyName: '', // B // no calculation  // Customer Name Drop Down Fetch from Customer List
         licenseNo: '', // C // no calculation // Number
         licenseDate: '', // D // no calculation // Date
         fileNo: '', // E // no calculation // Number
-        fileDate: '', // F  // no calculation // Date
+        fileDate: '', // F  // no calculation // Date  // manualy
         licenseType: '', // G // no calculation // Drop Down [Domestic, Import]
         bankGuaranteeAmountRs: '', // H // no calculation  // Number
         bankGuaranteeValidityFrom: '', // I.1 // no calculation // Date
@@ -41,7 +44,7 @@ const EpcgLicenseSummary = () => {
         
         hsCodeAsPerEoFullfillmentSummaryEoInr: '', // O // (L * N) / K // Number 
         descriptionAsPerEoFullfillmentSummaryEoUsd: '', // P // (M * N) / K // Number
-        installationDate: '', // Q // no calculation // Date
+        installationDate: '', // Q // no calculation // Date  // manualy
 
         averageExportImposedAsPerLicenseInr: '', // R // no calculation // Number
         averageExportNoOfYears: '', // S // no calculation // Number
@@ -51,8 +54,8 @@ const EpcgLicenseSummary = () => {
         averageExportFulfilledPercent: '', // W // (U / T) // Number
 
         block1stImposedBlockCompletionDate: '', // X // (D + 4 years - 1 day) // Date
-        block1stImposedBlockExtension: '', // Y // no calculation // Drop Down [Yes, No]
-        block1stImposedExtensionYearIfAny: '', // Z // no calculation // Dorp Doen [5 years, 6 years]
+        block1stImposedBlockExtension: '', // Y // no calculation // Drop Down [Yes, No]  // manualy
+        block1stImposedExtensionYearIfAny: '', // Z // no calculation // Dorp Doen [5 years, 6 years]  // manualy
         block1stImposedBlockExtensionDate: '', // AA // (D + 6 years - 1 day) // Date
         block1stImposedBlockBlanceDaysCompletionDate: '', // AB (x - Current Date) // Number
         block1stImposedBlockBlanceDaysExtensionDate: '', // AC (AA - Current Date) // Number
@@ -85,8 +88,8 @@ const EpcgLicenseSummary = () => {
 
 
         block2ndImposed2ndBlockEoPeriodCompletionDate: '', // AZ // (D + 6 years - 1 day) // Date
-        block2ndImposedEoPeriodExtensionIfAny: '', // BA // no calculation // Drop Down [Yes, No]
-        block2ndImposedEoPeriodExtensionYear: '', // BB // no calculation // Drop Down [1 years, 2 years]
+        block2ndImposedEoPeriodExtensionIfAny: '', // BA // no calculation // Drop Down [Yes, No]  // manualy
+        block2ndImposedEoPeriodExtensionYear: '', // BB // no calculation // Drop Down [1 years, 2 years]  // manualy
         block2ndImposedEoPeriodExtensionDate: '', // BC // no calculation // Drop Down [D + 8 years - 1 day , D + 7 years - 1 day]
         block2ndImposedEoPeriodBalanceDaysCompletionDate: '', // BD // (AZ - Current Date) // Number
         block2ndImposedEoPeriodBalanceDaysExtensionDate: '', // BE // (BC - Current Date) // Number
@@ -150,12 +153,12 @@ const EpcgLicenseSummary = () => {
         totalEoPeriodDifferentialEoEoUsdPercent: '', // DB // (DA / P) // Number
         totalEoPeriodDifferentialEoPropDutySaved: '', // DC // (N * DB) // Number
 
-        EarlyEoFullfillment1stEoDate: '', // DD // no calculation // Date
-        EarlyEoFullfillmentLastEoDate: '', // DE // no calculation // Date
+        EarlyEoFullfillment1stEoDate: '', // DD // no calculation // Date  // manualy
+        EarlyEoFullfillmentLastEoDate: '', // DE // no calculation // Date  // manualy
         EarlyEoFullfillmentEoPeriodWithin3yearsOrNot: '', // DF // (D - DD) < 3 years 
         EarlyEoFullfillmentEarlyEoFullfillment: '', // DG // no calculation // Drop Down [Yes, No] The condition should be "yes" if the EO period is within three years.
 
-        remarks: '', // DH // no calculation // text
+        remarks: '', // DH // no calculation // text  // manualy
     });
 
     useEffect(() => {
@@ -510,7 +513,7 @@ const EpcgLicenseSummary = () => {
             <div className="container mx-auto px-4 py-8">
                 {loading && <Loading />}
                
-                <div className="container mx-auto px-4 py-8">
+                <div className="container mx-auto px-4 py-4">
                     <div className="container text-center text-green-700 font-sans font-semibold text-[24px]">
                         EPCG License
                     </div>
@@ -1546,7 +1549,10 @@ const EpcgLicenseSummary = () => {
                     <NewDataButtons
                         backLink=""
                         nextLink=""
-                        handleSubmit={() => {}}
+                        handleSubmit={() => {
+                            navigate('analytics')
+                        }}
+                        buttonText='Go to Analytics'
                     />
                 </div>
             </div>
