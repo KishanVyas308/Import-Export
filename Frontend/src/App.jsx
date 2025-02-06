@@ -32,6 +32,7 @@ import EInvoicePage from "./pages/Home/DataManagement/newdata/DocumentList/EInvo
 import ShippingBillLayout from "./Layouts/ShippingBillLayout";
 import NewDataLayout from "./Layouts/NewDataLayout";
 import EpcgLicenseSummary from "./pages/Home/DataManagement/newdata/Report/EpcgLicenseSummary";
+import EpcgAnalytics from "./pages/Home/DataManagement/newdata/Report/EPCGLicenceSummary/EpcgAnalytics";
 
 function App() {
   return (
@@ -100,7 +101,8 @@ function App() {
             <Route path="subsidy" />
           </Route>
           <Route path="report">
-            <Route path="epcg-lic-summary" element={<ProtectedRoute element={<EpcgLicenseSummary/>} />} />
+            <Route path="epcg-lic-summary" element={<ProtectedRoute element={<EpcgLicenseSummary />} />} />
+            <Route path="epcg-lic-summary/analytics" element={<ProtectedRoute element={<EpcgAnalytics />} />} />
             <Route path="advance-lic-summary" />
             <Route path="party-wise-epcg-lic-summary" />
             <Route path="party-wise-advance-lic-summary" />
