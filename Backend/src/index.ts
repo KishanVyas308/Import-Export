@@ -16,7 +16,7 @@ import manageAddByAdminRoute from "./router/manageAddByAdminRoute";
 import getDataForUserRoute from "./router/getDataForUserRoute";
 import documentsListRoute from "./router/documentList/documentsListRoute"
 import formsRoute from "./router/forms/formsRoute"
-
+import tempRoute from "./router/tempRoute"
 
 const app = express();
 const httpServer = createServer(app);
@@ -34,6 +34,9 @@ export const prisma = new PrismaClient();
 app.use(express.json());
 
 app.get("/api", myData);
+
+//? temp api
+app.use("/api/v1/temp", tempRoute);
 
 //? auth api
 app.use("/api/v1/auth", authRoute);
