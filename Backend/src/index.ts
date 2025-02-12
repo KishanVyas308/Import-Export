@@ -35,8 +35,6 @@ app.use(express.json());
 
 app.get("/api", myData);
 
-//? temp api
-app.use("/api/v1/temp", tempRoute);
 
 //? auth api
 app.use("/api/v1/auth", authRoute);
