@@ -39,6 +39,24 @@ app.get("/api", myData);
 //? auth api
 app.use("/api/v1/auth", authRoute);
 
+//? Webhook Endpoint
+app.post("/api/webhook", express.json(), (req, res) => {
+  if (req.body.ref === "refs/heads/main") {
+    console.log("Received webhook for main branch. Deploying...");
+
+    exec("/home/udhyog/ImportExport/management-sheet/deploy.sh", (err, stdout, stderr) => {
+      if (err) {
+        console.error(`Deployment error: ${stderr}`);
+        return res.status(500).send("Deployment failed");
+      }
+      console.log(`Deployment output: ${stdout}`);
+      res.status(200).send("Deployment successful");
+    });
+  } else {
+    res.status(200).send("Not main branch, ignoring.");
+  }
+});
+
 app.use(verifyToken);
 
 //? existing data api
@@ -171,23 +189,7 @@ wss.on("connection", async (ws: any, req: any) => {
   );
 });
 
-//? Webhook Endpoint
-app.post("/api/webhook", express.json(), (req, res) => {
-  if (req.body.ref === "refs/heads/main") {
-    console.log("Received webhook for main branch. Deploying...");
 
-    exec("/home/udhyog/ImportExport/management-sheet/deploy.sh", (err, stdout, stderr) => {
-      if (err) {
-        console.error(`Deployment error: ${stderr}`);
-        return res.status(500).send("Deployment failed");
-      }
-      console.log(`Deployment output: ${stdout}`);
-      res.status(200).send("Deployment successful");
-    });
-  } else {
-    res.status(200).send("Not main branch, ignoring.");
-  }
-});
 
 
 const PORT = process.env.PORT || 3000;
