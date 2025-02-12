@@ -99,7 +99,8 @@ export const login = async (req: any, res: any) => {
     });
   } catch (error) {
     console.error("Error authenticating user:", error);
-    res.json({ message: "Please try again later" });
+    res.json({ message: "Please try again later after some time" });
+
   }
 };
 

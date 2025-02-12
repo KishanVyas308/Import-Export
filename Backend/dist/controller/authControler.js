@@ -86,7 +86,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.error("Error authenticating user:", error);
-        res.json({ message: "Please try again later" });
+        res.json({ message: "Please try again later after some time" });
     }
 });
 exports.login = login;
