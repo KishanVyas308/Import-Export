@@ -7,6 +7,9 @@ exports.isAdmin = exports.verifyToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
+    if (req.path === '/api/webhook') {
+        return next();
+    }
     if (!authHeader) {
         return res.status(403).json({ message: 'Token is missing' });
     }
