@@ -1,7 +1,5 @@
 # Management Sheet
 
-My internship work - Simple Import Export Management System
-
 ## Overview
 
 This project aims to create a simple import and export management system using modern web technologies. The system facilitates the management of import and export operations, including tracking shipments, managing inventory, and handling customer information.
@@ -13,51 +11,13 @@ Visit This - [Proof](https://importexport.udhyog4.co.in/api)
 ## Features
 
 - **Deployment**: Easily deployable with configurations for HTTPS, Nginx, and PM2.
+- **CI/CD Pipeline**: Automated deployment using GitHub Actions.
+- **Telegram Bot**: Notifies deployment success or failure.
 - **Backend**: Built with Node.js, Express, and Prisma for database management.
 - **Frontend**: Developed using React and Recoil for state management.
 - **WebSocket**: Real-time updates and notifications.
 - **SSL Certificates**: Secure communication with SSL.
 - **MySQL**: Robust database handling.
-
-## Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/KishanVyas308/management-sheet.git
-   cd management-sheet
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   # For backend
-   cd Backend
-   npm install
-   docker run -d --name mysql-container -e MYSQL_ROOT_PASSWORD=rootpassword -e MYSQL_USER=myuser -e MYSQL_PASSWORD=mypassword -e MYSQL_DATABASE=mydatabase -p 3306:3306 mysql:latest
-
-
-   # For frontend
-   cd Frontend
-   npm install
-   ```
-
-3. **Environment setup:**
-   - Copy the `.env.example` to `.env` and fill in the required environment variables.
-
-4. **Database setup:**
-   ```bash
-   npx prisma db push
-   npx prisma generate
-   ```
-
-5. **Run the development server:**
-   ```bash
-   # For backend
-   tsc -b
-   node dist/index.js
-
-   # For frontend
-   npm run dev
-   ```
 
 ## Usage
 
@@ -67,6 +27,43 @@ Visit This - [Proof](https://importexport.udhyog4.co.in/api)
 2. **API Documentation:**
    Visit the [API Section](https://importexport.udhyog4.co.in/api).
 
+## Screenshots
+
+### Other Pages
+- **Login Page**
+  ![image](https://github.com/user-attachments/assets/74cf5c65-82c4-4a5b-93b1-37110a212f5e)
+
+
+### Home Page
+  ![WhatsApp Image 2025-02-25 at 18 36 39_8588cb86](https://github.com/user-attachments/assets/424d969d-df99-4f11-b6bb-b90095885e9c)
+
+  - **Manage User**
+    ![image](https://github.com/user-attachments/assets/542690a8-47ba-480d-8af6-cb7da327c98c)
+    
+    - **Create New Client**
+      ![image](https://github.com/user-attachments/assets/e9f0d927-451b-445d-8920-5f7cd20d0be3)
+
+    
+    - **Register Client**
+      ![image](https://github.com/user-attachments/assets/a12405d4-ee2b-43d0-bce0-d655927c7da2)
+
+
+  - **Process Management**
+    ![Process Management](screenshots/process_management.png)
+  
+  - **Data Management**
+    ![WhatsApp Image 2025-02-25 at 18 36 50_9907dc4d](https://github.com/user-attachments/assets/0cb1dec2-7640-42f4-a8d5-6bda0dbc18a0)
+
+    
+    - **Inventory Management**
+      ![Inventory Management](screenshots/inventory.png)
+    
+    - **Customer Management**
+      ![Customer Management](screenshots/customers.png)
+
+
+
+*(Make sure to place the images in the `screenshots/` directory of your repository.)*
 
 ## License
 
