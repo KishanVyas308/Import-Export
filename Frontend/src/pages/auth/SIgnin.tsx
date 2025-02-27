@@ -19,144 +19,219 @@ const Signin: React.FC = () => {
   const [password, setPassword] = useState("");
   const [auth, setAuth] = useRecoilState(authAtom);
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
-
   const [cookies, setCookie] = useCookies(["token"]);
 
   const validation = () => {
     if (username === "" || password === "") {
       alert("Please fill all the fields");
       return false;
-    } else {
-      return true;
     }
+    return true;
   };
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validation()) {
-      return;
-    }
+    if (!validation()) return;
 
     setLoading(true);
-
-    const res = await axios.post(`${BACKEND_URL}/auth/login`, {
-      email: username,
-      password: password,
-    });
-    if (res.data.token) {
-      const user = jwtDecode<User>(res.data.token);
-      user.name = user.name.charAt(0).toUpperCase() + user.name.slice(1);
-    
-      setAuth({
-        isAuthenticated: true,
-        user: user,
+    try {
+      const res = await axios.post(`${BACKEND_URL}/auth/login`, {
+        email: username,
+        password: password,
       });
-      setCookie("token", res.data.token);
+      
+      if (res.data.token) {
+        const user : any = jwtDecode<User>(res.data.token);
+        user.name = user.name.charAt(0).toUpperCase() + user.name.slice(1);
+        
+        setAuth({
+          isAuthenticated: true,
+          user: user,
+        });
+        setCookie("token", res.data.token, { 
+          path: "/",
+          maxAge: rememberMe ? 30 * 24 * 60 * 60 : undefined // 30 days if remember me is checked
+        });
+        navigate("/");
+      } else {
+        alert(res.data.message);
+      }
+    } catch (error) {
+      alert("Login failed. Please check your credentials.");
+    } finally {
       setLoading(false);
-      navigate("/");
-    } else {
-      setLoading(false);
-      alert(res.data.message);
     }
   };
 
-  async function setUp() {
-    if (cookies.token && auth.isAuthenticated == false) {
-      const user = jwtDecode<User>(cookies.token);
+  useEffect(() => {
+    if (cookies.token && !auth.isAuthenticated) {
+      const user : any= jwtDecode<User>(cookies.token);
       setAuth({
         isAuthenticated: true,
         user: user,
       });
       navigate("/");
     }
-  }
-
-  useEffect(() => {
-    setUp();
   }, []);
 
   return (
-    <div className=" min-h-screen p-8 bg-gray-200">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex relative overflow-hidden">
       {loading && <Loading />}
-      <div className="w-full  border-2  p-3 h-40 flex items-center justify-between bg-white">
-        <div className="px-8">
-          <img
-            src="https://udhyog4.co.in/Images/logo.png"
-            className="h-[100px]"
-            alt="logo"
-          />
-        </div>
-        <div className="px-8">
-          <img
-            src="../src/images/mani_header_logo_2.png"
-            className="h-[100px]"
-            alt="logo"
-          />
-        </div>
+      
+      {/* Decorative background elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-green-400 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
+        <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000"></div>
+        
+        {/* Curved lines */}
+        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,100 Q300,150 600,100 T1200,100" fill="none" stroke="rgba(34, 197, 94, 0.1)" strokeWidth="3" />
+          <path d="M0,200 Q300,250 600,200 T1200,200" fill="none" stroke="rgba(34, 197, 94, 0.07)" strokeWidth="2" />
+          <path d="M0,300 Q300,350 600,300 T1200,300" fill="none" stroke="rgba(34, 197, 94, 0.05)" strokeWidth="1" />
+        </svg>
       </div>
-
-      <div className="flex flex-row  p-10 my-4 justify-center w-full h-full ">
-        <div className="flex-1 text-xl max-w-[50%] p-5">
-          Udhyog 4.0 (U4) is a start-up initiation by professionals in 2019, and
-          mainly provides technological solutions related to emerging
-          technologies such as Industry 4.0. This in turn transform existing
-          industrial setup into SMART and sustainable manufacturing setup.
+      
+      {/* Left Section */}
+      <div className="flex-1 flex flex-col justify-center items-center p-12 z-10">
+        <div className="mb-8 relative">
+          <div className="absolute inset-0 bg-green-200 filter blur-md rounded-full opacity-30"></div>
+          <img
+            src="http://www.udhyog4.in/images/new/logo.png"
+            alt="Udhyog 4.0"
+            className="w-52 h-52 object-contain relative z-10"
+          />
         </div>
-        <div className="flex-1 p-5 max-w-[500px]">
-          <div className="mb-4">
-            <div className="flex items-center mb-3 bg-green-50 border border-black rounded-full px-4 py-2">
-              <span className="text-green-600 mr-2">&#128100;</span>
-              <input
-                type="email"
-                placeholder="Email"
-                className="bg-transparent flex-1 focus:outline-none text-sm"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
+        
+        <h1 className="text-5xl font-bold mb-4 text-gray-800">
+          Welcome to Udhyog 
+          <span className="text-[#22c55e] ml-2">4.0</span>
+        </h1>
+        
+        <p className="text-gray-700 text-center max-w-md mb-8 leading-relaxed">
+          Transform your industrial setup into SMART and sustainable manufacturing
+          with our Industry 4.0 solutions. Join the future of manufacturing today.
+        </p>
+        
+        <div className="flex space-x-4">
+          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-lg flex items-center border border-gray-100">
+            <div className="p-2 bg-green-100 rounded-full mr-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
             </div>
-            <div className="flex items-center bg-green-50 border border-black rounded-full px-4 py-2">
-              <span className="text-green-600 mr-2">&#128274;</span>
-              <input
-                type="password"
-                placeholder="Password"
-                className="bg-transparent flex-1 focus:outline-none text-sm"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            <div>
+              <h3 className="font-medium text-gray-800">Efficient</h3>
+              <p className="text-xs text-gray-500">Streamlined operations</p>
             </div>
-
-            <div className="flex justify-between items-center mb-6 mt-2 text-sm">
-              <label className="flex items-center">
-                <input type="checkbox" className="mr-1" />
-                Remember Me
-              </label>
-              <a href="#" className="text-gray-600 hover:text-gray-800">
-                Forgot Password
-              </a>
+          </div>
+          
+          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-lg flex items-center border border-gray-100">
+            <div className="p-2 bg-blue-100 rounded-full mr-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
             </div>
-
-            <div className="flex flex-col space-y-4">
-              <button
-                className="w-full py-2 text-white bg-green-500 rounded-full hover:bg-green-600"
-                onClick={handleLogin}
-              >
-                Sign In
-              </button>
-              {/* <button
-                className="w-full py-2 text-white bg-green-500 rounded-full hover:bg-green-600"
-                onClick={() => navigate("/register")}
-              >
-                Register
-              </button> */}
+            <div>
+              <h3 className="font-medium text-gray-800">Secure</h3>
+              <p className="text-xs text-gray-500">Enterprise-grade security</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col items-center p-4 my-4 justify-center text-xs w-full h-full">
-        <div>Copyright © 2020 </div> <div> Udhyog 4.0 LLP</div>
+      {/* Right Section - Login Form */}
+      <div className="w-[520px] bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a] p-16 flex flex-col justify-center relative z-10 shadow-2xl">
+        <div className="absolute top-0 right-0 bottom-0 left-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDIpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')]"></div>
+        
+        <div className="mb-10">
+          <h2 className="text-3xl font-bold text-white mb-2">Sign In</h2>
+          <p className="text-gray-400">Welcome back! Please enter your details</p>
+        </div>
+        
+        <form onSubmit={handleLogin} className="space-y-6 relative z-10">
+          <div>
+            <label className="block text-sm font-medium mb-2 text-white">Email</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                </svg>
+              </div>
+              <input
+                type="email"
+                className="block w-full pl-10 pr-3 py-3 border border-gray-700 bg-gray-800/50 backdrop-blur-sm rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-500 text-gray-100 focus:outline-none transition-colors"
+                placeholder="Enter your email"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-medium text-white">Password</label>
+              <button 
+                type="button" 
+                className="text-sm text-green-500 hover:text-green-400 transition-colors"
+              >
+                Forgot password?
+              </button>
+            </div>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <input
+                type="password"
+                className="block w-full pl-10 pr-3 py-3 border border-gray-700 bg-gray-800/50 backdrop-blur-sm rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-500 text-gray-100 focus:outline-none transition-colors"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center">
+            <label className="flex items-center cursor-pointer">
+              <input 
+                type="checkbox" 
+                className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-green-500 focus:ring-green-500 focus:ring-offset-gray-800"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <span className="ml-2 text-sm text-gray-400">Remember me for 30 days</span>
+            </label>
+          </div>
+
+          <button 
+            type="submit" 
+            className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 text-white font-medium rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+          >
+            Sign In
+          </button>
+        </form>
+        
+        <div className="mt-8 text-center">
+          <p className="text-gray-400 text-sm">
+            Don't have an account?{" "}
+            <a href="#" className="text-green-500 hover:text-green-400 font-medium">
+              Request Access
+            </a>
+          </p>
+        </div>
+
+        <footer className="mt-12 text-center text-sm text-gray-500">
+          © {new Date().getFullYear()} Udhyog 4.0 LLP. All rights reserved.
+        </footer>
+        
+        {/* Animated accent element */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 via-green-500 to-green-600"></div>
       </div>
     </div>
   );
