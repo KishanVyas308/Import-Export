@@ -687,7 +687,7 @@ const Exporter = ({ handleGoback }: { handleGoback: () => void }) => {
                 type="text"
                 placeholder="IEM / Udyam Registration"
                 className="pl-10 p-3 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
-                value={iemUdyam}
+                value={iemUdyam}  
                 onChange={(e) => setIemUdyam(e.target.value)}
               />
             </div>

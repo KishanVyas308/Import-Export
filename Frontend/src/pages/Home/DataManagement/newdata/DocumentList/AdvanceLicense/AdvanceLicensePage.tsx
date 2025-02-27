@@ -157,14 +157,14 @@ const AdvanceLicensePage = () => {
     };
 
     return (
-        <div className="bg-[#e6e7e9] w-full h-full min-h-screen">
-            <div className="container mx-auto px-4 py-8">
-                {loading && <Loading />}
-                
-                <div className="container mx-auto px-4 py-8">
-                    <div className="container text-center text-green-700 font-sans font-semibold text-[24px]">
-                        Advance License
-                    </div>
+        <div className="min-h-screen bg-gradient-to-b from-gray-200 to-gray-200">
+        {loading && <Loading />}
+        
+        <div className="container mx-auto px-4 py-8">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-center text-green-700 mb-2">Advance License</h1>
+            
+          </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 mt-2 gap-4">
                         <div className="bg-white p-4 rounded-md">
                             <div className="container text-center text-green-700 font-sans font-semibold text-lg">
@@ -467,7 +467,7 @@ const AdvanceLicensePage = () => {
                     />
                 </div>
             </div>
-        </div>
+       
     );
 };
 
