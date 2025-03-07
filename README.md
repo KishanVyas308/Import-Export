@@ -49,7 +49,14 @@ Visit This - [Proof](https://importexport.udhyog4.co.in/api)
 
 
   - **Process Management**
-    ![Process Management](screenshots/process_management.png)
+    ![image](https://github.com/user-attachments/assets/ab8e0d03-d2ea-4ccc-9b95-438bc35770d5)
+
+    - **User Done Tasks**
+      ![image](https://github.com/user-attachments/assets/5ba2a5be-edc2-4be9-a612-9491e98d84d0)
+
+    - **Deataild Data**
+      ![image](https://github.com/user-attachments/assets/2c72afe3-0e03-453e-83f3-5729394e5025)
+
   
   - **Data Management**
     ![WhatsApp Image 2025-02-25 at 18 36 50_9907dc4d](https://github.com/user-attachments/assets/0cb1dec2-7640-42f4-a8d5-6bda0dbc18a0)
