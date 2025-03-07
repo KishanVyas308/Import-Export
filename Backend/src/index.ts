@@ -6,7 +6,6 @@ import cors from "cors";
 import { PrismaClient } from "@prisma/client";
 import { myData } from "./controller/authControler";
 import { isAdmin, verifyToken } from "./middleWare";
-import { exec } from "child_process";
 
 import authRoute from "./router/authRoute";
 import existingDataRoute from "./router/existingDataRoute";
@@ -17,6 +16,7 @@ import manageAddByAdminRoute from "./router/manageAddByAdminRoute";
 import getDataForUserRoute from "./router/getDataForUserRoute";
 import documentsListRoute from "./router/documentList/documentsListRoute"
 import formsRoute from "./router/forms/formsRoute"
+
 
 const app = express();
 const httpServer = createServer(app);
@@ -38,24 +38,6 @@ app.get("/api", myData);
 
 //? auth api
 app.use("/api/v1/auth", authRoute);
-
-//? Webhook Endpoint
-app.post("/api/webhook", express.json(), (req, res) => {
-  if (req.body.ref === "refs/heads/main") {
-    console.log("Received webhook for main branch. Deploying...");
-
-    exec("/home/udhyog/ImportExport/management-sheet/deploy.sh", (err, stdout, stderr) => {
-      if (err) {
-        console.error(`Deployment error: ${stderr}`);
-        return res.status(500).send("Deployment failed");
-      }
-      console.log(`Deployment output: ${stdout}`);
-      res.status(200).send("Deployment successful");
-    });
-  } else {
-    res.status(200).send("Not main branch, ignoring.");
-  }
-});
 
 app.use(verifyToken);
 
@@ -188,9 +170,6 @@ wss.on("connection", async (ws: any, req: any) => {
     }
   );
 });
-
-
-
 
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
