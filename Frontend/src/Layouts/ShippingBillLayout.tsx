@@ -5,7 +5,7 @@ const ShippingBillLayout = () => {
   return (
     <div>
 
-    <div className="flex lg:px-6 lg:py-2 px-4 py-1 flex-col text-white font-semibold text-[22px] my-4 justify-between items-center bg-[#63d478]">
+    <div className="flex lg:px-6 lg:py-2 px-4 py-1 flex-col text-white font-semibold text-[22px] my-4 justify-between items-center rounded-xl bg-[#63d478]">
       <div className="flex gap-8">
         <NavLink
           to={"part1"}

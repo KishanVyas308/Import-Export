@@ -323,20 +323,19 @@ const ShippingBillPage = () => {
 
   }, [])
   return (
-    <div className="bg-[#e6e7e9] w-full h-full min-h-screen">
-      <div className="container mx-auto px-4 py-8 ">
-        {loading && <Loading />}
-
-        
-
-        <div className="container text-center text-green-700 font-sans font-semibold text-[24px]">
-          Direct Export
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    {loading && <Loading />}
+    
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-center text-green-700 mb-2">Direct Export</h1>
+        <div className="flex justify-center items-center space-x-2">
+          <div className="px-4 py-2 bg-white rounded-lg shadow text-green-700 font-medium">
+            {usdPrice ? `USD Price: ${usdPrice}` : "USD Price: Loading..."}
+          </div>
+         
         </div>
-
-        <div>{
-          usdPrice && <div className="text-center text-green-700 font-sans font-semibold text-[px]">USD Price: {usdPrice}</div>
-        }</div>
-
+      </div>
         <div className="grid grid-cols-1 md:grid-cols-3 mt-2 gap-4">
           <div className="bg-white p-4 rounded-md">
             <div className="container text-center text-green-700 font-sans font-semibold text-xl">
