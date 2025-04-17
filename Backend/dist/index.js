@@ -44,7 +44,6 @@ const cors_1 = __importDefault(require("cors"));
 const client_1 = require("@prisma/client");
 const authControler_1 = require("./controller/authControler");
 const middleWare_1 = require("./middleWare");
-const child_process_1 = require("child_process");
 const authRoute_1 = __importDefault(require("./router/authRoute"));
 const existingDataRoute_1 = __importDefault(require("./router/existingDataRoute"));
 const manageUser_1 = __importDefault(require("./router/manageUser"));
@@ -66,23 +65,6 @@ app.use(express_1.default.json());
 app.get("/api", authControler_1.myData);
 //? auth api
 app.use("/api/v1/auth", authRoute_1.default);
-//? Webhook Endpoint
-app.post("/api/webhook", express_1.default.json(), (req, res) => {
-    if (req.body.ref === "refs/heads/main") {
-        console.log("Received webhook for main branch. Deploying...");
-        (0, child_process_1.exec)("/home/udhyog/ImportExport/management-sheet/deploy.sh", (err, stdout, stderr) => {
-            if (err) {
-                console.error(`Deployment error: ${stderr}`);
-                return res.status(500).send("Deployment failed");
-            }
-            console.log(`Deployment output: ${stdout}`);
-            res.status(200).send("Deployment successful");
-        });
-    }
-    else {
-        res.status(200).send("Not main branch, ignoring.");
-    }
-});
 app.use(middleWare_1.verifyToken);
 //? existing data api
 app.use("/api/v1/ex", existingDataRoute_1.default);

@@ -138,9 +138,10 @@ const NewDataLayout = () => {
 
           {/* Main content area */}
           <div className="bg-white rounded-xl shadow-md p-6">
-            <Outlet />
+            <Outlet  />
           </div>
         </div>
+
       </div>
     </div>
   );
