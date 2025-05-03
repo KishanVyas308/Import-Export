@@ -4,6 +4,12 @@
 
 This project aims to create a simple import and export management system using modern web technologies. The system facilitates the management of import and export operations, including tracking shipments, managing inventory, and handling customer information.
 
+## Frontend
+
+https://test.prikriti.co.in
+
+old - https://importexport.udhyog4.co.in
+
 ## Bacend Api
 
 https://api.prikriti.co.in/
