@@ -10,7 +10,7 @@ https://test.prikriti.co.in
 
 old - https://importexport.udhyog4.co.in
 
-## Bacend Api
+## Backend Api
 
 https://api.prikriti.co.in/
 
