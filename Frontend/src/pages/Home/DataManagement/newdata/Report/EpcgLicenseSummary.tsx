@@ -38,10 +38,11 @@ const EpcgLicenseSummary = () => {
         bankGuaranteeValidityTo: '', // I.2 // no calculation // Date
         bankGuaranteeSubmittedTo: '', // J // no calculation // text
         dutySavedValueAmountInr: '', // K // no calculation // Number
+
         hsCodeAsPerLicenseEoInr: '', // L // no calculation // Number
         descriptionAsPerLicenseEoUsd: '', // M // no calculation // Number
         dutySavedValueDutyUtilizedValue: '', // N // no calculation // Number
-        
+
         hsCodeAsPerEoFullfillmentSummaryEoInr: '', // O // (L * N) / K // Number 
         descriptionAsPerEoFullfillmentSummaryEoUsd: '', // P // (M * N) / K // Number
         installationDate: '', // Q // no calculation // Date  // manualy
@@ -73,7 +74,7 @@ const EpcgLicenseSummary = () => {
         block1stIndirectExportNoOfShippingBills: '', // AM // no calculation // Number 
         block1stIndirectExportPercent: '', // AN // (AL / P) // Number
         block1stIndirectExportPropDutySaved: '', // AO // (N * AN) // Number
- 
+
         block1stTotalExportEoInr: '', // AP // (AF + AK) // Number
         block1stTotalExportEoUsd: '', // AQ // (AG + AL) // Number
         block1stTotalExportNoOfShippingBills: '', // AR // (AH + AM) // Number
@@ -171,6 +172,119 @@ const EpcgLicenseSummary = () => {
         setLoading(false);
     }
         , []);
+
+
+
+
+
+    // Predefined data based on srNo
+    useEffect(() => {
+        
+        if (epcgLicenseDetails.srNo && epcgLicenseDetails.srNo !== '') {
+            const srNo = parseInt(epcgLicenseDetails.srNo);
+
+            let predefinedData = {};
+
+            if (srNo == 1) {
+                predefinedData = {
+                    licenseNo: '123456',
+                    licenseDate: '2022-06-15',
+                    fileNo: '78901',
+                    bankGuaranteeAmountRs: '500000',
+                    bankGuaranteeValidityFrom: '2022-01-01',
+                    bankGuaranteeValidityTo: '2025-12-31',
+                    bankGuaranteeSubmittedTo: 'State Bank of India',
+                    dutySavedValueAmountInr: '1000000',
+                    hsCodeAsPerLicenseEoInr: '2000000',
+                    descriptionAsPerLicenseEoUsd: '150000',
+                    dutySavedValueDutyUtilizedValue: '800000',
+                    averageExportImposedAsPerLicenseInr: '500000',
+                    averageExportNoOfYears: '3',
+                    averageExportFulfilledInr: '300000',
+                    averageExportNoOfShippingBills: '25',
+                    block1stDirectExportEoInr: '200000',
+                    block1stDirectExportEoUsd: '75000',
+                    block1stDirectExportNoOfShippingBills: '15',
+                    block1stIndirectExportEoInr: '100000',
+                    block1stIndirectExportEoUsd: '50000',
+                    block1stIndirectExportNoOfShippingBills: '10',
+                    block2ndDirectExportEoInr: '150000',
+                    block2ndDirectExportEoUsd: '60000',
+                    block2ndDirectExportNoOfShippingBills: '12',
+                    block2ndIndirectExportEoInr: '80000',
+                    block2ndIndirectExportEoUsd: '40000',
+                    block2ndIndirectExportNoOfShippingBills: '8',
+                };
+            } else if (srNo === 2) {
+                predefinedData = {
+                    licenseNo: '654321',
+                    licenseDate: '2021-03-20',
+                    fileNo: '10987',
+                    bankGuaranteeAmountRs: '750000',
+                    bankGuaranteeValidityFrom: '2021-01-01',
+                    bankGuaranteeValidityTo: '2026-12-31',
+                    bankGuaranteeSubmittedTo: 'HDFC Bank',
+                    dutySavedValueAmountInr: '1500000',
+                    hsCodeAsPerLicenseEoInr: '3000000',
+                    descriptionAsPerLicenseEoUsd: '200000',
+                    dutySavedValueDutyUtilizedValue: '1200000',
+                    averageExportImposedAsPerLicenseInr: '750000',
+                    averageExportNoOfYears: '4',
+                    averageExportFulfilledInr: '500000',
+                    averageExportNoOfShippingBills: '35',
+                    block1stDirectExportEoInr: '300000',
+                    block1stDirectExportEoUsd: '100000',
+                    block1stDirectExportNoOfShippingBills: '20',
+                    block1stIndirectExportEoInr: '150000',
+                    block1stIndirectExportEoUsd: '75000',
+                    block1stIndirectExportNoOfShippingBills: '15',
+                    block2ndDirectExportEoInr: '250000',
+                    block2ndDirectExportEoUsd: '90000',
+                    block2ndDirectExportNoOfShippingBills: '18',
+                    block2ndIndirectExportEoInr: '120000',
+                    block2ndIndirectExportEoUsd: '60000',
+                    block2ndIndirectExportNoOfShippingBills: '12',
+                };
+            } else {
+                // For any other srNo, clear all non-manual fields
+                predefinedData = {
+                    licenseNo: '',
+                    licenseDate: '',
+                    fileNo: '',
+                    bankGuaranteeAmountRs: '',
+                    bankGuaranteeValidityFrom: '',
+                    bankGuaranteeValidityTo: '',
+                    bankGuaranteeSubmittedTo: '',
+                    dutySavedValueAmountInr: '',
+                    hsCodeAsPerLicenseEoInr: '',
+                    descriptionAsPerLicenseEoUsd: '',
+                    dutySavedValueDutyUtilizedValue: '',
+                    averageExportImposedAsPerLicenseInr: '',
+                    averageExportNoOfYears: '',
+                    averageExportFulfilledInr: '',
+                    averageExportNoOfShippingBills: '',
+                    block1stDirectExportEoInr: '',
+                    block1stDirectExportEoUsd: '',
+                    block1stDirectExportNoOfShippingBills: '',
+                    block1stIndirectExportEoInr: '',
+                    block1stIndirectExportEoUsd: '',
+                    block1stIndirectExportNoOfShippingBills: '',
+                    block2ndDirectExportEoInr: '',
+                    block2ndDirectExportEoUsd: '',
+                    block2ndDirectExportNoOfShippingBills: '',
+                    block2ndIndirectExportEoInr: '',
+                    block2ndIndirectExportEoUsd: '',
+                    block2ndIndirectExportNoOfShippingBills: '',
+                };
+            }
+
+            setEpcgLicenseDetails(prev => ({
+                ...prev,
+                ...predefinedData
+            }));
+        }
+    }, [epcgLicenseDetails.srNo]);
+
 
     const calculatedEpcgLicenseDetails = useMemo(() => {
         const {
@@ -507,15 +621,15 @@ const EpcgLicenseSummary = () => {
         calculatedEpcgLicenseDetails.EarlyEoFullfillmentEoPeriodWithin3yearsOrNot,
         calculatedEpcgLicenseDetails.EarlyEoFullfillmentEarlyEoFullfillment,
     ]);
-    
+
     return (
-        <div className="bg-[#e6e7e9] w-full h-full min-h-screen">
+        <div className="bg-[#f5f5f5] w-full h-full min-h-screen">
             <div className="container mx-auto px-4 py-8">
                 {loading && <Loading />}
-               
+
                 <div className="container mx-auto px-4 py-4">
                     <div className="container text-center text-green-700 font-sans font-semibold text-[24px]">
-                        EPCG License
+                        EPCG License Summary
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 mt-2 gap-4">
                         <div className="bg-white p-4 rounded-md">
@@ -531,7 +645,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                             <InputField
-                                label="Customer Name"
+                                label="Party Name"
                                 type="select"
                                 options={
                                     customerNames.map((customer) => customer.customerName)
@@ -811,7 +925,7 @@ const EpcgLicenseSummary = () => {
                                 type="number"
                             />
                         </div>
-                        <div className="bg-white p-4 rounded-md">
+                        {/* <div className="bg-white p-4 rounded-md">
                             <div className="container text-center text-green-700 font-sans font-semibold text-lg">
                                 Block 1st Direct Export
                             </div>
@@ -1544,15 +1658,20 @@ const EpcgLicenseSummary = () => {
                                 }
                                 type="text"
                             />
-                        </div>
+                        </div> */}
                     </div>
                     <NewDataButtons
                         backLink=""
                         nextLink=""
                         handleSubmit={() => {
-                            navigate('analytics')
+                            setTimeout(() => {
+                                alert('EPCG License Summary Submitted Successfully');
+                            }, 300);
+
+                            // navigate('analytics')
                         }}
-                        buttonText='Go to Analytics'
+                        // buttonText='Go to Analytics'
+                        buttonText='Submit'
                     />
                 </div>
             </div>
