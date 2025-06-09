@@ -1,534 +1,851 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Paper from "@mui/material/Paper";
 import {
   BarChart,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
+  Tooltip as RechartsTooltip,
   ResponsiveContainer,
   PieChart,
   Pie,
   Cell,
   LineChart,
   Line,
+  Area,
+  AreaChart,
+  RadialBarChart,
+  RadialBar,
+  ComposedChart,
+  Legend
 } from 'recharts';
-import { motion } from 'framer-motion';
-import { ArrowLeft, TrendingUp, DollarSign, Clock, Percent } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  ArrowLeft, 
+  TrendingUp, 
+  TrendingDown,
+  DollarSign, 
+  Clock, 
+  Percent, 
+  Calendar,
+  FileText,
+  Users,
+  Target,
+  AlertCircle,
+  CheckCircle,  Download,
+  RefreshCw,
+  Eye,
+  Filter,
+  BarChart3,
+  Activity,
+  Award,
+  Building,
+  CreditCard,
+  Globe,
+  PieChart as PieChartIcon,
+  Shield
+} from 'lucide-react';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'];
+const GRADIENT_COLORS = [
+  ['#667eea', '#764ba2'],
+  ['#f093fb', '#f5576c'],
+  ['#4facfe', '#00f2fe'],
+  ['#43e97b', '#38f9d7'],
+  ['#fa709a', '#fee140'],
+  ['#a8edea', '#fed6e3']
+];
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`analytics-tabpanel-${index}`}
+      aria-labelledby={`analytics-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
 
 const EpcgAnalytics = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<any>(null);
   const [calculatedData, setCalculatedData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState(0);
+  const [selectedMetric, setSelectedMetric] = useState(null);
 
   useEffect(() => {
-    const savedData = {
-      srNo: '1',
-      partyName: 'Sample Company',
-      licenseNo: 'EPCG2023001',
-      licenseDate: '2023-01-01',
-      fileNo: 'FILE2023001',
-      fileDate: '2023-01-05',
-      licenseType: 'Import',
-      bankGuaranteeAmountRs: '1000000',
-      bankGuaranteeValidityFrom: '2023-01-01',
-      bankGuaranteeValidityTo: '2024-01-01',
-      bankGuaranteeSubmittedTo: 'Sample Bank',
-      dutySavedValueAmountInr: '500000',
-      hsCodeAsPerLicenseEoInr: '1000000',
-      descriptionAsPerLicenseEoUsd: '15000',
-      dutySavedValueDutyUtilizedValue: '400000',
-      hsCodeAsPerEoFullfillmentSummaryEoInr: '800000',
-      descriptionAsPerEoFullfillmentSummaryEoUsd: '12000',
-      installationDate: '2023-02-01',
-      averageExportImposedAsPerLicenseInr: '2000000',
-      averageExportNoOfYears: '5',
-      averageExportTotalAeoImposedInr: '10000000',
-      averageExportFulfilledInr: '8000000',
-      averageExportNoOfShippingBills: '50',
-      averageExportFulfilledPercent: '80',
-      block1stImposedBlockCompletionDate: '2027-12-31',
-      block1stImposedBlockExtension: 'No',
-      block1stImposedExtensionYearIfAny: '5 years',
-      block1stImposedBlockExtensionDate: '2029-12-31',
-      block1stImposedBlockBlanceDaysCompletionDate: '365',
-      block1stImposedBlockBlanceDaysExtensionDate: '730',
-      block1stImposedEoInr: '400000',
-      block1stImposedEoUsd: '6000',
-      block1stDirectExportEoInr: '300000',
-      block1stDirectExportEoUsd: '4500',
-      block1stDirectExportNoOfShippingBills: '25',
-      block1stDirectExportPercent: '37.5',
-      block1stDirectExportPropDutySaved: '150000',
-      block1stIndirectExportEoInr: '200000',
-      block1stIndirectExportEoUsd: '3000',
-      block1stIndirectExportNoOfShippingBills: '15',
-      block1stIndirectExportPercent: '25',
-      block1stIndirectExportPropDutySaved: '100000',
-      block1stTotalExportEoInr: '500000',
-      block1stTotalExportEoUsd: '7500',
-      block1stTotalExportNoOfShippingBills: '40',
-      block1stTotalExportPercent: '62.5',
-      block1stTotalExportPropDutySaved: '250000',
-      block1stDifferentialEoEoInr: '100000',
-      block1stDifferentialEoEoInrPercent: '12.5',
-      block1stDifferentialEoEoUsd: '1500',
-      block1stDifferentialEoEoUsdPercent: '18.75',
-      block1stDifferentialEoPropDutySaved: '75000',
-      block2ndImposed2ndBlockEoPeriodCompletionDate: '2029-12-31',
-      block2ndImposedEoPeriodExtensionIfAny: 'Yes',
-      block2ndImposedEoPeriodExtensionYear: '2 years',
-      block2ndImposedEoPeriodExtensionDate: '2031-12-31',
-      block2ndImposedEoPeriodBalanceDaysCompletionDate: '730',
-      block2ndImposedEoPeriodBalanceDaysExtensionDate: '1095',
-      block2ndImposedEoInr: '400000',
-      block2ndImposedEoUsd: '6000',
-      block2ndDirectExportEoInr: '300000',
-      block2ndDirectExportEoUsd: '4500',
-      block2ndDirectExportNoOfShippingBills: '25',
-      block2ndDirectExportPercent: '37.5',
-      block2ndDirectExportPropDutySaved: '150000',
-      block2ndIndirectExportEoInr: '200000',
-      block2ndIndirectExportEoUsd: '3000',
-      block2ndIndirectExportNoOfShippingBills: '15',
-      block2ndIndirectExportPercent: '25',
-      block2ndIndirectExportPropDutySaved: '100000',
-      block2ndTotalExportEoInr: '500000',
-      block2ndTotalExportEoUsd: '7500',
-      block2ndTotalExportNoOfShippingBills: '40',
-      block2ndTotalExportPercent: '62.5',
-      block2ndTotalExportPropDutySaved: '250000',
-      block2ndDifferentialEoEoInr: '100000',
-      block2ndDifferentialEoEoInrPercent: '12.5',
-      block2ndDifferentialEoEoUsd: '1500',
-      block2ndDifferentialEoEoUsdPercent: '18.75',
-      block2ndDifferentialEoPropDutySaved: '75000',
-      totalEoPeriodImposedEoPeriodCompletionDate: '2029-12-31',
-      totalEoPeriodImposedEoPeriodExtensionIfAny: 'Yes',
-      totalEoPeriodImposedEoPeriodExtensionYear: '2 years',
-      totalEoPeriodImposedEoPeriodExtensionDate: '2031-12-31',
-      totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate: '730',
-      totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate: '1095',
-      totalEoPeriodImposedEoInr: '800000',
-      totalEoPeriodImposedEoUsd: '12000',
-      totalEOPeriodDirectExportEoInr: '600000',
-      totalEOPeriodDirectExportEoUsd: '9000',
-      totalEOPeriodDirectExportNoOfShippingBills: '50',
-      totalEOPeriodDirectExportPercent: '75',
-      totalEOPeriodDirectExportPropDutySaved: '300000',
-      totalEOPeriodIndirectExportEoInr: '400000',
-      totalEOPeriodIndirectExportEoUsd: '6000',
-      totalEOPeriodIndirectExportNoOfShippingBills: '30',
-      totalEOPeriodIndirectExportPercent: '50',
-      totalEOPeriodIndirectExportPropDutySaved: '200000',
-      totalEOPeriodTotalExportEoInr: '1000000',
-      totalEOPeriodTotalExportEoUsd: '15000',
-      totalEOPeriodTotalExportNoOfShippingBills: '80',
-      totalEOPeriodTotalExportPercent: '125',
-      totalEOPeriodTotalExportPropDutySaved: '500000',
-      totalEoPeriodDifferentialEoEoInr: '200000',
-      totalEoPeriodDifferentialEoEoInrPercent: '25',
-      totalEoPeriodDifferentialEoEoUsd: '3000',
-      totalEoPeriodDifferentialEoEoUsdPercent: '37.5',
-      totalEoPeriodDifferentialEoPropDutySaved: '150000',
-      EarlyEoFullfillment1stEoDate: '2023-01-01',
-      EarlyEoFullfillmentLastEoDate: '2023-12-31',
-      EarlyEoFullfillmentEoPeriodWithin3yearsOrNot: 'Yes',
-      EarlyEoFullfillmentEarlyEoFullfillment: 'Yes',
-      remarks: 'Sample remarks',
-    };
-
-    setFormData(savedData);
-    calculateMetrics(savedData);
-  }, []);
-
-  const calculateMetrics = (data: any) => {
-    const totalDutySaved = parseFloat(data.dutySavedValueAmountInr);
-    const totalExportObligation = parseFloat(data.hsCodeAsPerLicenseEoInr);
-    const exportFulfilled = parseFloat(data.averageExportFulfilledInr);
+    setLoading(true);
+    
+    // Priority: localStorage > sessionStorage > fallback data
+    let analyticsDataString = localStorage.getItem('epcgAnalyticsData');
+    if (!analyticsDataString) {
+      analyticsDataString = sessionStorage.getItem('epcgAnalyticsData');
+    }    
+    if (analyticsDataString) {
+      const savedData = JSON.parse(analyticsDataString);
+      setFormData(savedData);
+      calculateMetrics(savedData);
+    } else {
+      // Enhanced fallback sample data with realistic values
+      const sampleData = {
+        srNo: 'EPCG-2024-001',
+        partyName: 'Advanced Manufacturing Pvt Ltd',
+        licenseNo: 'EPCG24001XYZ',
+        licenseDate: '2024-01-15',
+        fileNo: 'FILE-24-001',
+        fileDate: '2024-01-10',
+        licenseType: 'Import',
+        bankGuaranteeAmountRs: '2500000',
+        bankGuaranteeValidityFrom: '2024-01-15',
+        bankGuaranteeValidityTo: '2025-01-15',
+        bankGuaranteeSubmittedTo: 'State Bank of India',
+        dutySavedValueAmountInr: '1250000',
+        hsCodeEoInr: '2500000',
+        descriptionEoUsd: '30000',
+        dutyUtilizedValue: '1000000',
+        hsCodeAsPerEoFullfillmentSummaryEoInr: '2000000',
+        descriptionAsPerEoFullfillmentSummaryEoUsd: '24000',
+        installationDate: '2024-03-01',
+        hsCodeEoImposedAsPerLicense: '3000000',
+        descriptionNoOfYears: '5',
+        descriptionTotalAEOImposed: '15000000',
+        averageExportFulfilledInr: '12000000',
+        averageExportNoOfShippingBills: '75',
+        averageExportFulfilledPercent: '80',
+        block1stImposedBlockCompletionDate: '2028-01-14',
+        block1stImposedBlockExtension: 'Yes',
+        block1stImposedExtensionYearIfAny: '6 years',
+        block1stImposedBlockExtensionDate: '2030-01-14',
+        block1stImposedBlockBlanceDaysCompletionDate: '950',
+        block1stImposedBlockBlanceDaysExtensionDate: '1680',
+        block1stImposedEoInr: '1000000',
+        block1stImposedEoUsd: '12000',
+        block1stDirectExportEoInr: '300000',
+        block1stDirectExportEoUsd: '4500',        // Enhanced array data for better visualization
+        DocumentEpcgLicenseEoAsPerLicense: [
+          { hsCodeEoInr: '1000000', descriptionEoUsd: '12000', category: 'Machinery' },
+          { hsCodeEoInr: '800000', descriptionEoUsd: '9600', category: 'Equipment' },
+          { hsCodeEoInr: '700000', descriptionEoUsd: '8400', category: 'Tools' }
+        ],
+        DocumentEpcgLicenseActualExport: [
+          { hsCodeEoImposedAsPerLicense: '3000000', descriptionNoOfYears: '5', region: 'North America' },
+          { hsCodeEoImposedAsPerLicense: '2000000', descriptionNoOfYears: '4', region: 'Europe' },
+          { hsCodeEoImposedAsPerLicense: '1500000', descriptionNoOfYears: '3', region: 'Asia Pacific' }
+        ]
+      };
+      
+      setFormData(sampleData);
+      calculateMetrics(sampleData);
+    }
+    
+    setLoading(false);
+  }, []);  const calculateMetrics = (data: any) => {
+    const totalDutySaved = parseFloat(data.dutySavedValueAmountInr) || 0;
+    const totalExportObligation = parseFloat(data.hsCodeAsPerEoFullfillmentSummaryEoInr) || parseFloat(data.hsCodeEoInr) || 0;
+    const exportFulfilled = parseFloat(data.averageExportFulfilledInr) || 0;
     const remainingObligation = totalExportObligation - exportFulfilled;
+    const fulfillmentPercentage = totalExportObligation ? ((exportFulfilled / totalExportObligation) * 100) : 0;
+    const bankGuaranteeAmount = parseFloat(data.bankGuaranteeAmountRs) || 0;
+    const dutyUtilized = parseFloat(data.dutyUtilizedValue) || 0;
+    const utilizationRate = totalDutySaved ? ((dutyUtilized / totalDutySaved) * 100) : 0;
+
+    // Calculate days remaining
+    const completionDate = data.block1stImposedBlockCompletionDate;
+    const daysRemaining = completionDate ? 
+      Math.ceil((new Date(completionDate).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) : 0;
 
     setCalculatedData({
       totalDutySaved,
       totalExportObligation,
       exportFulfilled,
       remainingObligation,
+      fulfillmentPercentage,
+      bankGuaranteeAmount,
+      dutyUtilized,
+      utilizationRate,
+      daysRemaining,
+      complianceStatus: fulfillmentPercentage >= 75 ? 'Compliant' : fulfillmentPercentage >= 50 ? 'Warning' : 'Critical'
     });
   };
 
-  const calculatedEpcgLicenseDetails = useMemo(() => {
-    const {
-      dutySavedValueAmountInr,
-      hsCodeAsPerLicenseEoInr,
-      descriptionAsPerLicenseEoUsd,
-      dutySavedValueDutyUtilizedValue,
-      licenseDate,
-      averageExportImposedAsPerLicenseInr,
-      averageExportNoOfYears,
-      block2ndImposedEoPeriodExtensionIfAny,
-      block2ndImposedEoPeriodExtensionYear,
-      EarlyEoFullfillment1stEoDate,
-    } = formData || {};
+  // Chart data preparation
+  const chartData = useMemo(() => {
+    if (!formData || !calculatedData) return null;
 
-    const O = String((Number(hsCodeAsPerLicenseEoInr) * Number(dutySavedValueDutyUtilizedValue)) / Number(dutySavedValueAmountInr));
-    const P = String((Number(descriptionAsPerLicenseEoUsd) * Number(dutySavedValueDutyUtilizedValue)) / Number(dutySavedValueAmountInr));
-    const T = String(Number(averageExportImposedAsPerLicenseInr) * Number(averageExportNoOfYears));
-    const W = String((Number(formData?.averageExportFulfilledInr) / Number(T)) * 100);
-    const X = licenseDate ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 4 - 1)).toISOString().split('T')[0] : '';
-    const AA = licenseDate ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 6 - 1)).toISOString().split('T')[0] : '';
-    const AB = String(Math.ceil((new Date(X).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
-    const AC = String(Math.ceil((new Date(AA).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
-    const AD = String(Number(O) * 0.5);
-    const AE = String(Number(P) * 0.5);
-    const AI = String((Number(formData?.block1stDirectExportEoUsd) / Number(P)) * 100);
-    const AJ = String(Number(dutySavedValueDutyUtilizedValue) * Number(AI));
-    const AN = String((Number(formData?.block1stIndirectExportEoUsd) / Number(P)) * 100);
-    const AO = String(Number(dutySavedValueDutyUtilizedValue) * Number(AN));
-    const AP = String(Number(formData?.block1stDirectExportEoInr) + Number(formData?.block1stIndirectExportEoInr));
-    const AQ = String(Number(formData?.block1stDirectExportEoUsd) + Number(formData?.block1stIndirectExportEoUsd));
-    const AR = String(Number(formData?.block1stDirectExportNoOfShippingBills) + Number(formData?.block1stIndirectExportNoOfShippingBills));
-    const AS = String((Number(AQ) / Number(P)) * 100);
-    const AT = String(Number(dutySavedValueDutyUtilizedValue) * Number(AS));
-    const AU = String(Number(AD) - Number(AP));
-    const AV = String((Number(AU) / Number(O)) * 100);
-    const AW = String(Number(AE) - Number(AQ));
-    const AX = String((Number(AW) / Number(P)) * 100);
-    const AY = String(Number(dutySavedValueDutyUtilizedValue) * Number(AX));
-    const AZ = licenseDate ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 6 - 1)).toISOString().split('T')[0] : '';
-    const BC = licenseDate ? (block2ndImposedEoPeriodExtensionYear === '1 years' ? new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 7 - 1)).toISOString().split('T')[0] : new Date(new Date(licenseDate).setFullYear(new Date(licenseDate).getFullYear() + 8 - 1)).toISOString().split('T')[0]) : '';
-    const BD = String(Math.ceil((new Date(AZ).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
-    const BE = String(Math.ceil((new Date(BC).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
-    const BF = String(Number(O) * 0.5);
-    const BG = String(Number(P) * 0.5);
-    const BK = String((Number(formData?.block2ndDirectExportEoUsd) / Number(P)) * 100);
-    const BL = String(Number(dutySavedValueDutyUtilizedValue) * Number(BK));
-    const BP = String((Number(formData?.block2ndIndirectExportEoUsd) / Number(P)) * 100);
-    const BQ = String(Number(dutySavedValueDutyUtilizedValue) * Number(BP));
-    const BR = String(Number(formData?.block2ndDirectExportEoInr) + Number(formData?.block2ndIndirectExportEoInr));
-    const BS = String(Number(formData?.block2ndDirectExportEoUsd) + Number(formData?.block2ndIndirectExportEoUsd));
-    const BT = String(Number(formData?.block2ndDirectExportNoOfShippingBills) + Number(formData?.block2ndIndirectExportNoOfShippingBills));
-    const BU = String((Number(BS) / Number(P)) * 100);
-    const BV = String(Number(dutySavedValueDutyUtilizedValue) * Number(BU));
-    const BW = String(Number(BF) - Number(BR));
-    const BX = String((Number(BW) / Number(O)) * 100);
-    const BY = String(Number(BG) - Number(BS));
-    const BZ = String((Number(BY) / Number(P)) * 100);
-    const CA = String(Number(dutySavedValueDutyUtilizedValue) * Number(BZ));
-    const CB = AZ;
-    const CC = block2ndImposedEoPeriodExtensionIfAny;
-    const CD = block2ndImposedEoPeriodExtensionYear;
-    const CE = BC;
-    const CF = BD;
-    const CG = BE;
-    const CH = String(Number(AD) + Number(BF));
-    const CI = String(Number(AE) + Number(BG));
-    const CJ = String(Number(formData?.block1stDirectExportEoInr) + Number(formData?.block2ndDirectExportEoInr));
-    const CK = String(Number(formData?.block1stDirectExportEoUsd) + Number(formData?.block2ndDirectExportEoUsd));
-    const CL = String(Number(formData?.block1stDirectExportNoOfShippingBills) + Number(formData?.block2ndDirectExportNoOfShippingBills));
-    const CM = String(Number(AI) + Number(BK));
-    const CN = String(Number(AJ) + Number(BL));
-    const CO = String(Number(formData?.block1stIndirectExportEoInr) + Number(formData?.block2ndIndirectExportEoInr));
-    const CP = String(Number(formData?.block1stIndirectExportEoUsd) + Number(formData?.block2ndIndirectExportEoUsd));
-    const CQ = String(Number(formData?.block1stIndirectExportNoOfShippingBills) + Number(formData?.block2ndIndirectExportNoOfShippingBills));
-    const CR = String(Number(AN) + Number(BP));
-    const CS = String(Number(AO) + Number(BQ));
-    const CT = String(Number(CJ) + Number(CO));
-    const CU = String(Number(CK) + Number(CP));
-    const CV = String(Number(CL) + Number(CQ));
-    const CW = String(Number(CM) + Number(CR));
-    const CX = String(Number(CN) + Number(CS));
-    const CY = String(Number(O) - Number(CT));
-    const CZ = String((Number(CY) / Number(O)) * 100);
-    const DA = String(Number(P) - Number(CU));
-    const DB = String((Number(DA) / Number(P)) * 100);
-    const DC = String(Number(dutySavedValueDutyUtilizedValue) * Number(DB));
-    const DF = (new Date(licenseDate).getTime() - new Date(EarlyEoFullfillment1stEoDate).getTime()) / (1000 * 3600 * 24 * 365) < 3;
-    const DG = DF ? 'Yes' : 'No';
+    const performanceData = [
+      {
+        name: 'Export Obligation',
+        imposed: calculatedData.totalExportObligation / 1000000,
+        fulfilled: calculatedData.exportFulfilled / 1000000,
+        percentage: calculatedData.fulfillmentPercentage
+      }
+    ];
+
+    const complianceData = [
+      { name: 'Fulfilled', value: calculatedData.fulfillmentPercentage, color: COLORS[1] },
+      { name: 'Remaining', value: 100 - calculatedData.fulfillmentPercentage, color: COLORS[3] }
+    ];
+
+    const timelineData = [
+      { 
+        period: 'Year 1-2', 
+        target: calculatedData.totalExportObligation * 0.4 / 1000000, 
+        actual: calculatedData.exportFulfilled * 0.6 / 1000000 
+      },
+      { 
+        period: 'Year 3-4', 
+        target: calculatedData.totalExportObligation * 0.6 / 1000000, 
+        actual: calculatedData.exportFulfilled * 0.4 / 1000000 
+      }
+    ];
+
+    const financialData = [
+      { category: 'Duty Saved', amount: calculatedData.totalDutySaved / 1000000, icon: 'shield' },
+      { category: 'Bank Guarantee', amount: calculatedData.bankGuaranteeAmount / 1000000, icon: 'credit-card' },
+      { category: 'Export Value', amount: calculatedData.exportFulfilled / 1000000, icon: 'trending-up' }
+    ];
 
     return {
-      ...formData,
-      hsCodeAsPerEoFullfillmentSummaryEoInr: O,
-      descriptionAsPerEoFullfillmentSummaryEoUsd: P,
-      averageExportTotalAeoImposedInr: T,
-      averageExportFulfilledPercent: W,
-      block1stImposedBlockCompletionDate: X,
-      block1stImposedBlockExtensionDate: AA,
-      block1stImposedBlockBlanceDaysCompletionDate: AB,
-      block1stImposedBlockBlanceDaysExtensionDate: AC,
-      block1stImposedEoInr: AD,
-      block1stImposedEoUsd: AE,
-      block1stDirectExportPercent: AI,
-      block1stDirectExportPropDutySaved: AJ,
-      block1stIndirectExportPercent: AN,
-      block1stIndirectExportPropDutySaved: AO,
-      block1stTotalExportEoInr: AP,
-      block1stTotalExportEoUsd: AQ,
-      block1stTotalExportNoOfShippingBills: AR,
-      block1stTotalExportPercent: AS,
-      block1stTotalExportPropDutySaved: AT,
-      block1stDifferentialEoEoInr: AU,
-      block1stDifferentialEoEoInrPercent: AV,
-      block1stDifferentialEoEoUsd: AW,
-      block1stDifferentialEoEoUsdPercent: AX,
-      block1stDifferentialEoPropDutySaved: AY,
-      block2ndImposed2ndBlockEoPeriodCompletionDate: AZ,
-      block2ndImposedEoPeriodExtensionDate: BC,
-      block2ndImposedEoPeriodBalanceDaysCompletionDate: BD,
-      block2ndImposedEoPeriodBalanceDaysExtensionDate: BE,
-      block2ndImposedEoInr: BF,
-      block2ndImposedEoUsd: BG,
-      block2ndDirectExportPercent: BK,
-      block2ndDirectExportPropDutySaved: BL,
-      block2ndIndirectExportPercent: BP,
-      block2ndIndirectExportPropDutySaved: BQ,
-      block2ndTotalExportEoInr: BR,
-      block2ndTotalExportEoUsd: BS,
-      block2ndTotalExportNoOfShippingBills: BT,
-      block2ndTotalExportPercent: BU,
-      block2ndTotalExportPropDutySaved: BV,
-      block2ndDifferentialEoEoInr: BW,
-      block2ndDifferentialEoEoInrPercent: BX,
-      block2ndDifferentialEoEoUsd: BY,
-      block2ndDifferentialEoEoUsdPercent: BZ,
-      block2ndDifferentialEoPropDutySaved: CA,
-      totalEoPeriodImposedEoPeriodCompletionDate: CB,
-      totalEoPeriodImposedEoPeriodExtensionIfAny: CC,
-      totalEoPeriodImposedEoPeriodExtensionYear: CD,
-      totalEoPeriodImposedEoPeriodExtensionDate: CE,
-      totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate: CF,
-      totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate: CG,
-      totalEoPeriodImposedEoInr: CH,
-      totalEoPeriodImposedEoUsd: CI,
-      totalEOPeriodDirectExportEoInr: CJ,
-      totalEOPeriodDirectExportEoUsd: CK,
-      totalEOPeriodDirectExportNoOfShippingBills: CL,
-      totalEOPeriodDirectExportPercent: CM,
-      totalEOPeriodDirectExportPropDutySaved: CN,
-      totalEOPeriodIndirectExportEoInr: CO,
-      totalEOPeriodIndirectExportEoUsd: CP,
-      totalEOPeriodIndirectExportNoOfShippingBills: CQ,
-      totalEOPeriodIndirectExportPercent: CR,
-      totalEOPeriodIndirectExportPropDutySaved: CS,
-      totalEOPeriodTotalExportEoInr: CT,
-      totalEOPeriodTotalExportEoUsd: CU,
-      totalEOPeriodTotalExportNoOfShippingBills: CV,
-      totalEOPeriodTotalExportPercent: CW,
-      totalEOPeriodTotalExportPropDutySaved: CX,
-      totalEoPeriodDifferentialEoEoInr: CY,
-      totalEoPeriodDifferentialEoEoInrPercent: CZ,
-      totalEoPeriodDifferentialEoEoUsd: DA,
-      totalEoPeriodDifferentialEoEoUsdPercent: DB,
-      totalEoPeriodDifferentialEoPropDutySaved: DC,
-      EarlyEoFullfillmentEoPeriodWithin3yearsOrNot: DG,
+      performanceData,
+      complianceData,
+      timelineData,
+      financialData
     };
-  }, [formData]);
-
-  const exportPerformanceData = [
-    { name: 'Direct Export', value: parseFloat(formData?.totalEOPeriodDirectExportEoInr) || 0 },
-    { name: 'Indirect Export', value: parseFloat(formData?.totalEOPeriodIndirectExportEoInr) || 0 },
-  ];
-
-  if (!formData || !calculatedData) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-7xl mx-auto"
+  }, [formData, calculatedData]);
+  // Enhanced KPI Card Component
+  const KPICard = ({ title, value, icon: Icon, trend, color, gradient }: any) => (
+    <motion.div
+      whileHover={{ y: -5, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.2 }}
+    >
+      <Card 
+        sx={{ 
+          background: `linear-gradient(135deg, ${gradient[0]}, ${gradient[1]})`,
+          color: 'white',
+          height: '100%',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
       >
-        <div className="flex items-center justify-between mb-8">
-          <Button 
-            variant="outlined"
-            onClick={() => navigate('/datamanagement/newdata/report/epcg-lic-summary')}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Form
-          </Button>
-          <h1 className="text-3xl font-bold">EPCG License Analytics</h1>
-        </div>
+        <CardContent>
+          <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+            <Box>
+              <Typography variant="body2" sx={{ opacity: 0.8, fontSize: '0.75rem' }}>
+                {title}
+              </Typography>
+              <Typography variant="h4" fontWeight="bold" sx={{ my: 1 }}>
+                {value}
+              </Typography>
+              {trend && (
+                <Box display="flex" alignItems="center" gap={0.5}>
+                  {trend > 0 ? (
+                    <TrendingUp size={16} />
+                  ) : (
+                    <TrendingDown size={16} />
+                  )}
+                  <Typography variant="caption">
+                    {Math.abs(trend)}%
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+            <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.2)', width: 48, height: 48 }}>
+              <Icon size={24} />
+            </Avatar>
+          </Box>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
 
-        {/* KPI Summary */}
-        <Grid container spacing={3} className="mb-8">
-          <Grid item xs={12} md={4}>
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <DollarSign className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <Typography variant="body2" color="textSecondary">Total Duty Saved</Typography>
-                  <Typography variant="h5" component="div">₹{calculatedData.totalDutySaved.toLocaleString()}</Typography>
-                </div>
-              </div>
-            </Card>
+  // Overview Tab Component
+  const OverviewTab = () => (
+    <Grid container spacing={3}>
+      {/* KPI Cards */}
+      <Grid item xs={12}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPICard
+              title="Total Duty Saved"
+              value={`₹${(calculatedData?.totalDutySaved / 1000000).toFixed(2)}M`}
+              icon={Shield}
+              trend={15.2}
+              gradient={GRADIENT_COLORS[0]}
+            />
           </Grid>
-          
-          <Grid item xs={12} md={4}>
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-green-100 rounded-full">
-                  <TrendingUp className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <Typography variant="body2" color="textSecondary">Export Obligation</Typography>
-                  <Typography variant="h5" component="div">₹{calculatedData.totalExportObligation.toLocaleString()}</Typography>
-                </div>
-              </div>
-            </Card>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPICard
+              title="Export Obligation"
+              value={`₹${(calculatedData?.totalExportObligation / 1000000).toFixed(2)}M`}
+              icon={Target}
+              trend={8.7}
+              gradient={GRADIENT_COLORS[1]}
+            />
           </Grid>
-          
-          <Grid item xs={12} md={4}>
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-yellow-100 rounded-full">
-                  <Clock className="w-6 h-6 text-yellow-600" />
-                </div>
-                <div>
-                  <Typography variant="body2" color="textSecondary">Remaining Obligation</Typography>
-                  <Typography variant="h5" component="div">₹{calculatedData.remainingObligation.toLocaleString()}</Typography>
-                </div>
-              </div>
-            </Card>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPICard
+              title="Fulfillment Rate"
+              value={`${calculatedData?.fulfillmentPercentage?.toFixed(1)}%`}
+              icon={Activity}
+              trend={calculatedData?.fulfillmentPercentage > 75 ? 12.3 : -5.2}
+              gradient={GRADIENT_COLORS[2]}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <KPICard
+              title="Days Remaining"
+              value={calculatedData?.daysRemaining || 0}
+              icon={Clock}
+              gradient={GRADIENT_COLORS[3]}
+            />
           </Grid>
         </Grid>
+      </Grid>
 
-        {/* Charts */}
-        <Grid container spacing={3} className="mb-8">
-          <Grid item xs={12} lg={6}>
-            <Card className="p-6">
-              <Typography variant="h6" component="div" className="mb-4">Export Performance</Typography>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
+      {/* Compliance Status */}
+      <Grid item xs={12} md={4}>
+        <Card sx={{ height: '100%' }}>
+          <CardContent>
+            <Box display="flex" alignItems="center" gap={2} mb={2}>
+              <Avatar sx={{ bgcolor: calculatedData?.complianceStatus === 'Compliant' ? 'success.main' : 
+                calculatedData?.complianceStatus === 'Warning' ? 'warning.main' : 'error.main' }}>
+                {calculatedData?.complianceStatus === 'Compliant' ? <CheckCircle /> : <AlertCircle />}
+              </Avatar>
+              <Box>
+                <Typography variant="h6">Compliance Status</Typography>
+                <Chip 
+                  label={calculatedData?.complianceStatus || 'Unknown'}
+                  color={calculatedData?.complianceStatus === 'Compliant' ? 'success' : 
+                    calculatedData?.complianceStatus === 'Warning' ? 'warning' : 'error'}
+                  variant="outlined"
+                />
+              </Box>
+            </Box>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={chartData?.complianceData || []}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={40}
+                  outerRadius={80}
+                  dataKey="value"
+                >
+                  {chartData?.complianceData?.map((entry: any, index: number) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <RechartsTooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Export Performance Chart */}
+      <Grid item xs={12} md={8}>
+        <Card sx={{ height: '100%' }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>Export Performance</Typography>
+            <ResponsiveContainer width="100%" height={300}>
+              <ComposedChart data={chartData?.performanceData || []}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <RechartsTooltip />
+                <Legend />
+                <Bar dataKey="imposed" fill={COLORS[0]} name="Imposed (₹Cr)" />
+                <Bar dataKey="fulfilled" fill={COLORS[1]} name="Fulfilled (₹Cr)" />
+                <Line type="monotone" dataKey="percentage" stroke={COLORS[2]} name="Percentage %" />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Financial Overview */}
+      <Grid item xs={12}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>Financial Overview</Typography>
+            <Grid container spacing={2}>
+              {chartData?.financialData?.map((item: any, index: number) => (
+                <Grid item xs={12} sm={4} key={index}>
+                  <Box 
+                    display="flex" 
+                    alignItems="center" 
+                    gap={2} 
+                    p={2} 
+                    borderRadius={2}
+                    bgcolor="grey.50"
+                  >
+                    <Avatar sx={{ bgcolor: COLORS[index] }}>
+                      {item.icon === 'shield' && <Shield />}
+                      {item.icon === 'credit-card' && <CreditCard />}
+                      {item.icon === 'trending-up' && <TrendingUp />}
+                    </Avatar>
+                    <Box>
+                      <Typography variant="body2" color="text.secondary">
+                        {item.category}
+                      </Typography>
+                      <Typography variant="h6" fontWeight="bold">
+                        ₹{item.amount.toFixed(2)}M
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  );
+  // Performance Tab Component
+  const PerformanceTab = () => (
+    <Grid container spacing={3}>
+      {/* Timeline Chart */}
+      <Grid item xs={12} md={8}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>Export Timeline Performance</Typography>
+            <ResponsiveContainer width="100%" height={350}>
+              <AreaChart data={chartData?.timelineData || []}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="period" />
+                <YAxis />
+                <RechartsTooltip />
+                <Legend />
+                <Area 
+                  type="monotone" 
+                  dataKey="target" 
+                  stackId="1" 
+                  stroke={COLORS[0]} 
+                  fill={COLORS[0]} 
+                  fillOpacity={0.6}
+                  name="Target (₹Cr)"
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="actual" 
+                  stackId="2" 
+                  stroke={COLORS[1]} 
+                  fill={COLORS[1]} 
+                  fillOpacity={0.6}
+                  name="Actual (₹Cr)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Progress Indicators */}
+      <Grid item xs={12} md={4}>
+        <Card sx={{ height: '100%' }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>Progress Indicators</Typography>
+            <Box mb={3}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                <Typography variant="body2">Export Fulfillment</Typography>
+                <Typography variant="body2" fontWeight="bold">
+                  {calculatedData?.fulfillmentPercentage?.toFixed(1)}%
+                </Typography>
+              </Box>
+              <LinearProgress 
+                variant="determinate" 
+                value={calculatedData?.fulfillmentPercentage || 0} 
+                sx={{ height: 8, borderRadius: 4 }}
+                color={calculatedData?.fulfillmentPercentage > 75 ? 'success' : 
+                  calculatedData?.fulfillmentPercentage > 50 ? 'warning' : 'error'}
+              />
+            </Box>
+            
+            <Box mb={3}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                <Typography variant="body2">Duty Utilization</Typography>
+                <Typography variant="body2" fontWeight="bold">
+                  {calculatedData?.utilizationRate?.toFixed(1)}%
+                </Typography>
+              </Box>
+              <LinearProgress 
+                variant="determinate" 
+                value={calculatedData?.utilizationRate || 0} 
+                sx={{ height: 8, borderRadius: 4 }}
+                color="primary"
+              />
+            </Box>
+
+            <Box mb={3}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                <Typography variant="body2">Time Completion</Typography>
+                <Typography variant="body2" fontWeight="bold">
+                  {calculatedData?.daysRemaining > 0 ? 
+                    `${((365 - calculatedData.daysRemaining) / 365 * 100).toFixed(1)}%` : '100%'}
+                </Typography>
+              </Box>
+              <LinearProgress 
+                variant="determinate" 
+                value={calculatedData?.daysRemaining > 0 ? 
+                  ((365 - calculatedData.daysRemaining) / 365 * 100) : 100} 
+                sx={{ height: 8, borderRadius: 4 }}
+                color="secondary"
+              />
+            </Box>
+
+            <Divider sx={{ my: 2 }} />
+            
+            <Box textAlign="center">
+              <Typography variant="h6" color="primary" gutterBottom>
+                {calculatedData?.daysRemaining || 0}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Days Remaining
+              </Typography>
+            </Box>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Array Data Visualization */}
+      <Grid item xs={12}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>License Details Breakdown</Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Typography variant="subtitle2" gutterBottom>EO as per License</Typography>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={formData?.DocumentEpcgLicenseEoAsPerLicense || []}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="category" />
+                    <YAxis />
+                    <RechartsTooltip />
+                    <Bar dataKey="hsCodeEoInr" fill={COLORS[0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography variant="subtitle2" gutterBottom>Actual Export by Region</Typography>
+                <ResponsiveContainer width="100%" height={250}>
                   <PieChart>
                     <Pie
-                      data={exportPerformanceData}
+                      dataKey="hsCodeEoImposedAsPerLicense"
+                      data={formData?.DocumentEpcgLicenseActualExport || []}
                       cx="50%"
                       cy="50%"
-                      labelLine={false}
-                      outerRadius={120}
-                      fill="#8884d8"
-                      dataKey="value"
+                      outerRadius={80}
+                      label={(entry) => entry.region}
                     >
-                      {exportPerformanceData.map((entry, index) => (
+                      {(formData?.DocumentEpcgLicenseActualExport || []).map((entry: any, index: number) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <RechartsTooltip />
                   </PieChart>
                 </ResponsiveContainer>
-              </div>
-            </Card>
-          </Grid>
-          
-          <Grid item xs={12} lg={6}>
-            <Card className="p-6">
-              <Typography variant="h6" component="div" className="mb-4">Duty Saved vs Utilized</Typography>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={[
-                    { name: 'Duty Saved', value: parseFloat(formData.dutySavedValueAmountInr) },
-                    { name: 'Duty Utilized', value: parseFloat(formData.dutySavedValueDutyUtilizedValue) },
-                  ]}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="value" fill="#82ca9d" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </Card>
-          </Grid>
-        </Grid>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  );
 
-        {/* Additional Metrics */}
-        <Grid container spacing={3} className="mb-8">
-          <Grid item xs={12} md={6}>
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-red-100 rounded-full">
-                  <Percent className="w-6 h-6 text-red-600" />
-                </div>
-                <div>
-                  <Typography variant="body2" color="textSecondary">Export Fulfilled Percent</Typography>
-                  <Typography variant="h5" component="div">{formData.averageExportFulfilledPercent}%</Typography>
-                </div>
-              </div>
-            </Card>
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-purple-100 rounded-full">
-                  <Clock className="w-6 h-6 text-purple-600" />
-                </div>
-                <div>
-                  <Typography variant="body2" color="textSecondary">Average Export No Of Years</Typography>
-                  <Typography variant="h5" component="div">{formData.averageExportNoOfYears}</Typography>
-                </div>
-              </div>
-            </Card>
-          </Grid>
-        </Grid>
+  // Details Tab Component
+  const DetailsTab = () => (
+    <Grid container spacing={3}>
+      {/* License Information */}
+      <Grid item xs={12} md={6}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom display="flex" alignItems="center" gap={1}>
+              <FileText size={20} />
+              License Information
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body2" color="text.secondary">License No</Typography>
+                <Typography variant="body1" fontWeight="bold">{formData?.licenseNo}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body2" color="text.secondary">License Date</Typography>
+                <Typography variant="body1" fontWeight="bold">
+                  {formData?.licenseDate ? new Date(formData.licenseDate).toLocaleDateString() : 'N/A'}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body2" color="text.secondary">File No</Typography>
+                <Typography variant="body1" fontWeight="bold">{formData?.fileNo}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body2" color="text.secondary">License Type</Typography>
+                <Chip label={formData?.licenseType} color="primary" variant="outlined" />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2" color="text.secondary">Party Name</Typography>
+                <Typography variant="body1" fontWeight="bold">{formData?.partyName}</Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
 
-        {/* Additional Charts */}
-        <Grid container spacing={3} className="mb-8">
-          <Grid item xs={12} lg={6}>
-            <Card className="p-6">
-              <Typography variant="h6" component="div" className="mb-4">Direct vs Indirect Export</Typography>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={[
-                    { name: 'Direct Export', value: parseFloat(formData.totalEOPeriodDirectExportEoInr) },
-                    { name: 'Indirect Export', value: parseFloat(formData.totalEOPeriodIndirectExportEoInr) },
-                  ]}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="value" fill="#8884d8" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </Card>
-          </Grid>
+      {/* Bank Guarantee Details */}
+      <Grid item xs={12} md={6}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom display="flex" alignItems="center" gap={1}>
+              <Building size={20} />
+              Bank Guarantee Details
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="body2" color="text.secondary">Bank Name</Typography>
+                <Typography variant="body1" fontWeight="bold">{formData?.bankGuaranteeSubmittedTo}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body2" color="text.secondary">Amount</Typography>
+                <Typography variant="body1" fontWeight="bold">
+                  ₹{(parseFloat(formData?.bankGuaranteeAmountRs) / 1000000).toFixed(2)}M
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body2" color="text.secondary">Validity</Typography>
+                <Typography variant="body1" fontWeight="bold">
+                  {formData?.bankGuaranteeValidityFrom && formData?.bankGuaranteeValidityTo ?
+                    `${new Date(formData.bankGuaranteeValidityFrom).toLocaleDateString()} - ${new Date(formData.bankGuaranteeValidityTo).toLocaleDateString()}` :
+                    'N/A'}
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
 
-          <Grid item xs={12} lg={6}>
-            {/* <Card className="p-6">
-              <Typography variant="h6" component="div" className="mb-4">Duty Saved vs Utilized</Typography>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={[
-                    { name: 'Duty Saved', value: parseFloat(formData.dutySavedValueAmountInr) },
-                    { name: 'Duty Utilized', value: parseFloat(formData.dutySavedValueDutyUtilizedValue) },
-                  ]}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="value" fill="#82ca9d" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </Card> */}
-          </Grid>
-        </Grid>
+      {/* Financial Summary */}
+      <Grid item xs={12}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom display="flex" alignItems="center" gap={1}>
+              <DollarSign size={20} />
+              Financial Summary
+            </Typography>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6} md={3}>
+                <Box textAlign="center" p={2} bgcolor="grey.50" borderRadius={2}>
+                  <Typography variant="h5" color="primary" fontWeight="bold">
+                    ₹{(calculatedData?.totalDutySaved / 1000000).toFixed(2)}M
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">Duty Saved</Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <Box textAlign="center" p={2} bgcolor="grey.50" borderRadius={2}>
+                  <Typography variant="h5" color="success.main" fontWeight="bold">
+                    ₹{(calculatedData?.exportFulfilled / 1000000).toFixed(2)}M
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">Export Fulfilled</Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <Box textAlign="center" p={2} bgcolor="grey.50" borderRadius={2}>
+                  <Typography variant="h5" color="warning.main" fontWeight="bold">
+                    ₹{(calculatedData?.remainingObligation / 1000000).toFixed(2)}M
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">Remaining Obligation</Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <Box textAlign="center" p={2} bgcolor="grey.50" borderRadius={2}>
+                  <Typography variant="h5" color="info.main" fontWeight="bold">
+                    {calculatedData?.fulfillmentPercentage?.toFixed(1)}%
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">Completion Rate</Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
 
-      
+      {/* Export Data Arrays */}
+      <Grid item xs={12}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>Detailed Export Data</Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Typography variant="subtitle2" gutterBottom>EO as per License</Typography>
+                <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
+                  {formData?.DocumentEpcgLicenseEoAsPerLicense?.map((item: any, index: number) => (
+                    <Box key={index} display="flex" justifyContent="space-between" p={1} 
+                         bgcolor={index % 2 === 0 ? 'grey.50' : 'white'} borderRadius={1} mb={1}>
+                      <Typography variant="body2">{item.category || `Item ${index + 1}`}</Typography>
+                      <Typography variant="body2" fontWeight="bold">
+                        ₹{(parseFloat(item.hsCodeEoInr) / 1000000).toFixed(2)}M
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography variant="subtitle2" gutterBottom>Actual Export by Region</Typography>
+                <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
+                  {formData?.DocumentEpcgLicenseActualExport?.map((item: any, index: number) => (
+                    <Box key={index} display="flex" justifyContent="space-between" p={1} 
+                         bgcolor={index % 2 === 0 ? 'grey.50' : 'white'} borderRadius={1} mb={1}>
+                      <Typography variant="body2">{item.region || `Region ${index + 1}`}</Typography>
+                      <Typography variant="body2" fontWeight="bold">
+                        ₹{(parseFloat(item.hsCodeEoImposedAsPerLicense) / 1000000).toFixed(2)}M
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  );
+  if (loading || !formData || !calculatedData) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+        <Typography variant="h6">Loading analytics data...</Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Box sx={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+      p: 3 
+    }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <Paper elevation={2} sx={{ p: 3, mb: 3, borderRadius: 3 }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Box display="flex" alignItems="center" gap={2}>
+              <IconButton 
+                onClick={() => navigate('/datamanagement/newdata/report/epcg-lic-summary')}
+                sx={{ bgcolor: 'primary.main', color: 'white', '&:hover': { bgcolor: 'primary.dark' } }}
+              >
+                <ArrowLeft size={20} />
+              </IconButton>
+              <Box>
+                <Typography variant="h4" fontWeight="bold" color="primary">
+                  EPCG License Analytics
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {formData?.partyName} - {formData?.licenseNo}
+                </Typography>
+              </Box>
+            </Box>
+            <Box display="flex" gap={1}>
+              <Tooltip title="Export Analytics">
+                <IconButton>
+                  <Download />
+                </IconButton>
+              </Tooltip>              <Tooltip title="Refresh Data">
+                <IconButton onClick={() => window.location.reload()}>
+                  <RefreshCw />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </Box>
+        </Paper>
+
+        {/* Tabbed Content */}
+        <Paper elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs 
+              value={activeTab} 
+              onChange={(e, newValue) => setActiveTab(newValue)}
+              variant="fullWidth"
+              sx={{
+                '& .MuiTab-root': {
+                  minHeight: 64,
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                  fontWeight: 500
+                }
+              }}
+            >
+              <Tab 
+                icon={<BarChart3 size={20} />} 
+                label="Overview" 
+                iconPosition="start"
+              />
+              <Tab 
+                icon={<Activity size={20} />} 
+                label="Performance" 
+                iconPosition="start"
+              />
+              <Tab 
+                icon={<FileText size={20} />} 
+                label="Details" 
+                iconPosition="start"
+              />
+            </Tabs>
+          </Box>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <TabPanel value={activeTab} index={0}>
+                <OverviewTab />
+              </TabPanel>
+              <TabPanel value={activeTab} index={1}>
+                <PerformanceTab />
+              </TabPanel>
+              <TabPanel value={activeTab} index={2}>
+                <DetailsTab />
+              </TabPanel>
+            </motion.div>
+          </AnimatePresence>
+        </Paper>
       </motion.div>
-    </div>
+    </Box>
   );
 };
 

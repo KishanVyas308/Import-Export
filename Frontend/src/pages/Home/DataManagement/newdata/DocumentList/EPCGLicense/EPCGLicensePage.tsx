@@ -93,6 +93,9 @@ const EPCGLicensePage = () => {
         console.log('jsonData', jsonData);
 
         try {
+
+            console.log('Submitting EPCG License data:', jsonData);
+            
             const res = await axios.post(
                 `${BACKEND_URL}/documentslist/epcglicense`,
                 jsonData,
