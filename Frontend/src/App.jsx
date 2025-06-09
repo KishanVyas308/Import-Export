@@ -99,10 +99,9 @@ function App() {
             <Route path="e-brc" element={<ProtectedRoute element={<EBRCPage />} />} />
             <Route path="e-way-bill" element={<ProtectedRoute element={<EWayBillDetails />} />} />
             <Route path="subsidy" />
-          </Route>
-          <Route path="report">
+          </Route>          <Route path="report">
             <Route path="epcg-lic-summary" element={<ProtectedRoute element={<EpcgLicenseSummary />} />} />
-            <Route path="epcg-lic-summary/analytics" element={<ProtectedRoute element={<EpcgAnalytics />} />} />
+            <Route path="epcg-analytics" element={<ProtectedRoute element={<EpcgAnalytics />} />} />
             <Route path="advance-lic-summary" />
             <Route path="party-wise-epcg-lic-summary" />
             <Route path="party-wise-advance-lic-summary" />
