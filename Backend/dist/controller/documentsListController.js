@@ -23,9 +23,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.addInvoice = addInvoice;
 exports.addEWayBill = addEWayBill;
 exports.addEpcgLicense = addEpcgLicense;
+exports.getEpcgLicense = getEpcgLicense;
 exports.addEbrc = addEbrc;
 exports.addAdvanceLicense = addAdvanceLicense;
 exports.addEInvoice = addEInvoice;
+exports.updateEpcgLicense = updateEpcgLicense;
 const __1 = require("..");
 function addInvoice(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -60,19 +62,57 @@ function addEWayBill(req, res) {
 function addEpcgLicense(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const _a = req.body, { hsCodeEoList, averageExportList } = _a, epcgLicenseDetails = __rest(_a, ["hsCodeEoList", "averageExportList"]);
+            const _a = req.body, { DocumentEpcgLicenseEoAsPerLicense, DocumentEpcgLicenseActualExport } = _a, epcgLicenseDetails = __rest(_a, ["DocumentEpcgLicenseEoAsPerLicense", "DocumentEpcgLicenseActualExport"]);
             const response = yield __1.prisma.documentEpcgLicense.create({
                 data: Object.assign(Object.assign({}, epcgLicenseDetails), { DocumentEpcgLicenseEoAsPerLicense: {
-                        create: hsCodeEoList,
+                        create: DocumentEpcgLicenseEoAsPerLicense,
                     }, DocumentEpcgLicenseActualExport: {
-                        create: averageExportList,
+                        create: DocumentEpcgLicenseActualExport,
                     } }),
             });
+            console.log("Response from EPCG License creation:", response);
             return res.json({ message: "Added successfully", response });
         }
         catch (e) {
             console.log(e);
             return res.json({ message: e });
+        }
+    });
+}
+function getEpcgLicense(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { srNo } = req.query;
+            if (!srNo) {
+                return res.status(400).json({ message: "Sr No is required" });
+            }
+            const epcgLicense = yield __1.prisma.documentEpcgLicense.findFirst({
+                where: {
+                    srNo: srNo
+                },
+                include: {
+                    DocumentEpcgLicenseEoAsPerLicense: true,
+                    DocumentEpcgLicenseActualExport: true,
+                    user: {
+                        select: {
+                            id: true,
+                            email: true,
+                            contactPersonName: true
+                        }
+                    }
+                }
+            });
+            if (!epcgLicense) {
+                return res.status(404).json({ message: "EPCG License not found" });
+            }
+            return res.json({
+                message: "EPCG License found successfully",
+                data: epcgLicense
+            });
+        }
+        catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: "Internal server error", error });
         }
     });
 }
@@ -118,6 +158,55 @@ function addEInvoice(req, res) {
         catch (e) {
             console.log(e);
             return res.json({ message: e });
+        }
+    });
+}
+function updateEpcgLicense(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const _a = req.body, { DocumentEpcgLicenseEoAsPerLicense, DocumentEpcgLicenseActualExport, srNo } = _a, epcgLicenseDetails = __rest(_a, ["DocumentEpcgLicenseEoAsPerLicense", "DocumentEpcgLicenseActualExport", "srNo"]);
+            if (!srNo) {
+                return res.status(400).json({ message: "Sr No is required for update" });
+            }
+            // Check if the record exists
+            const existingLicense = yield __1.prisma.documentEpcgLicense.findFirst({
+                where: { srNo: srNo }
+            });
+            if (!existingLicense) {
+                return res.status(404).json({ message: "EPCG License not found" });
+            }
+            // First, delete existing related records
+            yield __1.prisma.documentEpcgLicenseEoAsPerLicense.deleteMany({
+                where: { epcgLicenseId: existingLicense.id }
+            });
+            yield __1.prisma.documentEpcgLicenseActualExport.deleteMany({
+                where: { epcgLicenseId: existingLicense.id }
+            });
+            // Update the main record and create new related records
+            const response = yield __1.prisma.documentEpcgLicense.update({
+                where: { id: existingLicense.id },
+                data: Object.assign(Object.assign({}, epcgLicenseDetails), { srNo: srNo, DocumentEpcgLicenseEoAsPerLicense: {
+                        create: DocumentEpcgLicenseEoAsPerLicense || []
+                    }, DocumentEpcgLicenseActualExport: {
+                        create: DocumentEpcgLicenseActualExport || []
+                    } }),
+                include: {
+                    DocumentEpcgLicenseEoAsPerLicense: true,
+                    DocumentEpcgLicenseActualExport: true,
+                }
+            });
+            console.log("Response from EPCG License update:", response);
+            return res.json({
+                message: "Updated successfully",
+                data: response
+            });
+        }
+        catch (e) {
+            console.log("Error updating EPCG License:", e);
+            return res.status(500).json({
+                message: "Error updating EPCG License",
+                error: e
+            });
         }
     });
 }
