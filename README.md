@@ -6,7 +6,7 @@ This project aims to create a simple import and export management system using m
 
 ## Frontend
 
-https://test.prikriti.co.in
+https://prikriti.co.in
 
 old - https://importexport.udhyog4.co.in
 
