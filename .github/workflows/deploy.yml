@@ -33,13 +33,13 @@ jobs:
         run: |
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-          -d text="✅ *Deployment successful* on \`main\` branch.\n🖥️ Project: Import-Export\n🔁 PM2 restarted.\n👨‍💻 By: GitHub Actions" \
-          -d parse_mode=Markdown
-
+          -d parse_mode=Markdown \
+          -d text=$'✅ *Deployment Successful!*\n\n*🔁 Branch:* `main`\n🛠 *Project:* Import-Export\n🚀 *Status:* Code Pulled & PM2 Restarted\n🧑‍💻 *Triggered by:* GitHub Actions\n\n🕒 Time: '"$(date '+%d %b %Y, %I:%M %p')"'\n\n🟢 Everything looks good!'
       - name: Send Telegram Notification on Failure
         if: failure()
         run: |
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-          -d text="❌ *Deployment failed* on \`main\` branch!\nPlease check GitHub Actions logs." \
-          -d parse_mode=Markdown
+          -d parse_mode=Markdown \
+          -d text=$'❌ *Deployment Failed!*\n\n*🔁 Branch:* `main`\n🛠 *Project:* Import-Export\n💣 *Status:* CI/CD Failed!\n\n📄 *Check logs:* [GitHub Actions](https://github.com/KishanVyas308/Import-Export/actions)\n\n🕒 Time: '"$(date '+%d %b %Y, %I:%M %p')"'\n\n🔴 Please investigate immediately!'
+
