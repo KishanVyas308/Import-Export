@@ -185,10 +185,10 @@ const EpcgLicenseSummary = () => {
                 setLoading(true);
                 try {
                     const response = await fetchEpcgLicenseBySrNo(cookies.token, epcgLicenseDetails.srNo);
-                    
+
                     if (response.data) {
                         const data = response.data;
-                        
+
                         // Map the fetched data to the form fields
                         setEpcgLicenseDetails(prev => ({
                             ...prev,
@@ -199,30 +199,30 @@ const EpcgLicenseSummary = () => {
                             fileNo: data.fileNo || '',
                             fileDate: data.fileDate || '',
                             licenseType: data.licenseType || '',
-                            
+
                             // Bank Guarantee Details
                             bankGuaranteeAmountRs: data.bankGuaranteeAmountRs || '',
                             bankGuaranteeValidityFrom: data.bankGuaranteeValidityFrom || '',
                             bankGuaranteeValidityTo: data.bankGuaranteeValidityTo || '',
                             bankGuaranteeSubmittedTo: data.bankGuaranteeSubmittedTo || '',
-                            
+
                             // Duty Saved Value
                             dutySavedValueAmountInr: data.dutySavedValueAmountInr || '',
                             dutySavedValueDutyUtilizedValue: data.dutyUtilizedValue || '', // same as dutyUtilizedValue
-                            
+
                             // EO As Per License data - mapped according to "same as" comments
                             hsCodeAsPerLicenseEoInr: data.DocumentEpcgLicenseEoAsPerLicense?.[0]?.hsCodeEoInr || '', // same as DocumentEpcgLicenseEoAsPerLicense[0].hsCodeEoInr
                             descriptionAsPerLicenseEoUsd: data.DocumentEpcgLicenseEoAsPerLicense?.[0]?.descriptionEoUsd || '', // same as DocumentEpcgLicenseEoAsPerLicense[0].descriptionEoUsd
-                            
+
                             // Actual Export data - from DocumentEpcgLicenseActualExport[0]
                             averageExportImposedAsPerLicenseInr: data.DocumentEpcgLicenseActualExport?.[0]?.hsCodeEoImposedAsPerLicense || '',
                             averageExportNoOfYears: data.DocumentEpcgLicenseActualExport?.[0]?.descriptionNoOfYears || '',
-                            
+
                             // Additional fields from DocumentEpcgLicenseActualExport[0] if available
                             ...(data.DocumentEpcgLicenseActualExport?.[0]?.descriptionTotalAEOImposed && {
                                 averageExportTotalAeoImposedInr: data.DocumentEpcgLicenseActualExport[0].descriptionTotalAEOImposed
                             }),
-                            
+
                             // Other fields
                             remarks: data.remarks || '',
                         }));
@@ -597,6 +597,33 @@ const EpcgLicenseSummary = () => {
         calculatedEpcgLicenseDetails.EarlyEoFullfillmentEarlyEoFullfillment,
     ]);
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const jsonData = {
+                ...epcgLicenseDetails,
+                addedByUserId: user.id,
+            };
+            const res = await axios.post(
+                `${BACKEND_URL}/documentslist/epcglicensesummary`,
+                jsonData,
+                {
+                    headers: {
+                        Authorization: cookies.token,
+                    },
+                }
+
+            );      
+            alert(res.data.message);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error submitting EPCG License Summary:', error);
+            alert('Failed to submit EPCG License Summary. Please try again later.');
+            setLoading(false);
+        }
+    }
+
     return (
         <div className="bg-[#f5f5f5] w-full h-full min-h-screen">
             <div className="container mx-auto px-4 py-8">
@@ -612,8 +639,8 @@ const EpcgLicenseSummary = () => {
                             </div>
                             <div className="ml-3">
                                 <p className="text-sm">
-                                    <strong>Note:</strong> Right now EPCG EO wise fulfillment auto fetch is not added. 
-                                    The form submission is disabled until this feature is implemented.
+                                    <strong>Note:</strong> Right now EPCG EO wise fulfillment auto fetch is not added.
+                                   
                                 </p>
                             </div>
                         </div>
@@ -1651,19 +1678,16 @@ const EpcgLicenseSummary = () => {
                             />
                         </div>
                     </div>
-                    {/* <NewDataButtons
+                    <NewDataButtons
                         backLink=""
                         nextLink=""
-                        handleSubmit={() => {
-                            setTimeout(() => {
-                                alert('EPCG License ');
-                            }, 300);
-
+                        handleSubmit={(e) => {
+                            handleSubmit(e)
                             // navigate('analytics')
                         }}
                         // buttonText='Go to Analytics'
                         buttonText='Submit'
-                    /> */}
+                    />
                 </div>
             </div>
         </div>
