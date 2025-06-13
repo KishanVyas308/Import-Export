@@ -70,6 +70,7 @@ model user {
   EInvoice                       EInvoice[]
   AdvanceLicense                 AdvanceLicense[]
   DocumentEpcgLicense            DocumentEpcgLicense[]
+  EpcgLicenseSummary             EpcgLicenseSummary[]
 }
 
 model ExcelDataFinal {
@@ -883,7 +884,7 @@ model EWayBillDetails {
   ewaybillSupplyType                   String?
   ewaybillSubType                      String?
   ewaybillTransactionType              String?
-  ewaybillIrnNo                    String?
+  ewaybillIrnNo                        String?
   supplierGstin                        String?
   supplierName                         String?
   supplierState                        String?
@@ -1118,7 +1119,6 @@ model DocumentEpcgLicenseActualExport {
   @@index([epcgLicenseId], name: "epcgLicenseId")
 }
 
-
 model HSCode2Bit {
   id        String @id @default(cuid())
   HSCode    String
@@ -1141,6 +1141,128 @@ model HSCode8Bit {
   id        String @id @default(cuid())
   HSCode    String
   Commodity String
+}
+
+model EpcgLicenseSummary {
+  id                                                    String   @id @default(cuid())
+  srNo                                                  String   @default("")
+  partyName                                             String   @default("")
+  licenseNo                                             String   @default("")
+  licenseDate                                           String   @default("")
+  fileNo                                                String   @default("")
+  fileDate                                              String   @default("")
+  licenseType                                           String   @default("")
+  bankGuaranteeAmountRs                                 String   @default("")
+  bankGuaranteeValidityFrom                             String   @default("")
+  bankGuaranteeValidityTo                               String   @default("")
+  bankGuaranteeSubmittedTo                              String   @default("")
+  dutySavedValueAmountInr                               String   @default("")
+  hsCodeAsPerLicenseEoInr                               String   @default("")
+  descriptionAsPerLicenseEoUsd                          String   @default("")
+  dutySavedValueDutyUtilizedValue                       String   @default("")
+  hsCodeAsPerEoFullfillmentSummaryEoInr                 String   @default("")
+  descriptionAsPerEoFullfillmentSummaryEoUsd            String   @default("")
+  installationDate                                      String   @default("")
+  averageExportImposedAsPerLicenseInr                   String   @default("")
+  averageExportNoOfYears                                String   @default("")
+  averageExportTotalAeoImposedInr                       String   @default("")
+  averageExportFulfilledInr                             String   @default("")
+  averageExportNoOfShippingBills                        String   @default("")
+  averageExportFulfilledPercent                         String   @default("")
+  block1stImposedBlockCompletionDate                    String   @default("")
+  block1stImposedBlockExtension                         String   @default("")
+  block1stImposedExtensionYearIfAny                     String   @default("")
+  block1stImposedBlockExtensionDate                     String   @default("")
+  block1stImposedBlockBlanceDaysCompletionDate          String   @default("")
+  block1stImposedBlockBlanceDaysExtensionDate           String   @default("")
+  block1stImposedEoInr                                  String   @default("")
+  block1stImposedEoUsd                                  String   @default("")
+  block1stDirectExportEoInr                             String   @default("")
+  block1stDirectExportEoUsd                             String   @default("")
+  block1stDirectExportNoOfShippingBills                 String   @default("")
+  block1stDirectExportPercent                           String   @default("")
+  block1stDirectExportPropDutySaved                     String   @default("")
+  block1stIndirectExportEoInr                           String   @default("")
+  block1stIndirectExportEoUsd                           String   @default("")
+  block1stIndirectExportNoOfShippingBills               String   @default("")
+  block1stIndirectExportPercent                         String   @default("")
+  block1stIndirectExportPropDutySaved                   String   @default("")
+  block1stTotalExportEoInr                              String   @default("")
+  block1stTotalExportEoUsd                              String   @default("")
+  block1stTotalExportNoOfShippingBills                  String   @default("")
+  block1stTotalExportPercent                            String   @default("")
+  block1stTotalExportPropDutySaved                      String   @default("")
+  block1stDifferentialEoEoInr                           String   @default("")
+  block1stDifferentialEoEoInrPercent                    String   @default("")
+  block1stDifferentialEoEoUsd                           String   @default("")
+  block1stDifferentialEoEoUsdPercent                    String   @default("")
+  block1stDifferentialEoPropDutySaved                   String   @default("")
+  block2ndImposed2ndBlockEoPeriodCompletionDate         String   @default("")
+  block2ndImposedEoPeriodExtensionIfAny                 String   @default("")
+  block2ndImposedEoPeriodExtensionYear                  String   @default("")
+  block2ndImposedEoPeriodExtensionDate                  String   @default("")
+  block2ndImposedEoPeriodBalanceDaysCompletionDate      String   @default("")
+  block2ndImposedEoPeriodBalanceDaysExtensionDate       String   @default("")
+  block2ndImposedEoInr                                  String   @default("")
+  block2ndImposedEoUsd                                  String   @default("")
+  block2ndDirectExportEoInr                             String   @default("")
+  block2ndDirectExportEoUsd                             String   @default("")
+  block2ndDirectExportNoOfShippingBills                 String   @default("")
+  block2ndDirectExportPercent                           String   @default("")
+  block2ndDirectExportPropDutySaved                     String   @default("")
+  block2ndIndirectExportEoInr                           String   @default("")
+  block2ndIndirectExportEoUsd                           String   @default("")
+  block2ndIndirectExportNoOfShippingBills               String   @default("")
+  block2ndIndirectExportPercent                         String   @default("")
+  block2ndIndirectExportPropDutySaved                   String   @default("")
+  block2ndTotalExportEoInr                              String   @default("")
+  block2ndTotalExportEoUsd                              String   @default("")
+  block2ndTotalExportNoOfShippingBills                  String   @default("")
+  block2ndTotalExportPercent                            String   @default("")
+  block2ndTotalExportPropDutySaved                      String   @default("")
+  block2ndDifferentialEoEoInr                           String   @default("")
+  block2ndDifferentialEoEoInrPercent                    String   @default("")
+  block2ndDifferentialEoEoUsd                           String   @default("")
+  block2ndDifferentialEoEoUsdPercent                    String   @default("")
+  block2ndDifferentialEoPropDutySaved                   String   @default("")
+  totalEoPeriodImposedEoPeriodCompletionDate            String   @default("")
+  totalEoPeriodImposedEoPeriodExtensionIfAny            String   @default("")
+  totalEoPeriodImposedEoPeriodExtensionYear             String   @default("")
+  totalEoPeriodImposedEoPeriodExtensionDate             String   @default("")
+  totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate String   @default("")
+  totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate  String   @default("")
+  totalEoPeriodImposedEoInr                             String   @default("")
+  totalEoPeriodImposedEoUsd                             String   @default("")
+  totalEOPeriodDirectExportEoInr                        String   @default("")
+  totalEOPeriodDirectExportEoUsd                        String   @default("")
+  totalEOPeriodDirectExportNoOfShippingBills            String   @default("")
+  totalEOPeriodDirectExportPercent                      String   @default("")
+  totalEOPeriodDirectExportPropDutySaved                String   @default("")
+  totalEOPeriodIndirectExportEoInr                      String   @default("")
+  totalEOPeriodIndirectExportEoUsd                      String   @default("")
+  totalEOPeriodIndirectExportNoOfShippingBills          String   @default("")
+  totalEOPeriodIndirectExportPercent                    String   @default("")
+  totalEOPeriodIndirectExportPropDutySaved              String   @default("")
+  totalEOPeriodTotalExportEoInr                         String   @default("")
+  totalEOPeriodTotalExportEoUsd                         String   @default("")
+  totalEOPeriodTotalExportNoOfShippingBills             String   @default("")
+  totalEOPeriodTotalExportPercent                       String   @default("")
+  totalEOPeriodTotalExportPropDutySaved                 String   @default("")
+  totalEoPeriodDifferentialEoEoInr                      String   @default("")
+  totalEoPeriodDifferentialEoEoInrPercent               String   @default("")
+  totalEoPeriodDifferentialEoEoUsd                      String   @default("")
+  totalEoPeriodDifferentialEoEoUsdPercent               String   @default("")
+  totalEoPeriodDifferentialEoPropDutySaved              String   @default("")
+  EarlyEoFullfillment1stEoDate                          String   @default("")
+  EarlyEoFullfillmentLastEoDate                         String   @default("")
+  EarlyEoFullfillmentEoPeriodWithin3yearsOrNot          String   @default("")
+  EarlyEoFullfillmentEarlyEoFullfillment                String   @default("")
+  remarks                                               String   @default("")
+  user                                                  user     @relation(fields: [addedByUserId], references: [id])
+  addedByUserId                                         String
+  uploadedDate                                          DateTime @default(now())
+
+  @@index([addedByUserId], name: "userId")
 }
 
 // // Report
@@ -1242,7 +1364,6 @@ model HSCode8Bit {
 //   user                                          user                                            @relation(fields: [addedByUserId], references: [id])
 //   addedByUserId                                 String
 //   uploadedDate                                  DateTime                                        @default(now())
- 
 
 //   @@index([addedByUserId], name: "userId")
 // }
