@@ -147,3 +147,16 @@ export async function addEInvoice(req: any, res: any) {
   }
 }
 
+export async function addEpcgLicenseSummary(req: any, res: any) {
+  try {
+
+    const responce = await prisma.epcgLicenseSummary.create({
+      data: req.body,
+    })
+
+    return res.json({ message: "Added successfully", responce });
+  } catch (e) {
+    console.log(e);
+    return res.json({ message: e });
+  }
+}
