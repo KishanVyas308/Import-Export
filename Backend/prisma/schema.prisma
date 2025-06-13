@@ -70,6 +70,7 @@ model user {
   EInvoice                       EInvoice[]
   AdvanceLicense                 AdvanceLicense[]
   DocumentEpcgLicense            DocumentEpcgLicense[]
+  EpcgLicenseSummary             EpcgLicenseSummary[]
 }
 
 model ExcelDataFinal {
@@ -883,7 +884,7 @@ model EWayBillDetails {
   ewaybillSupplyType                   String?
   ewaybillSubType                      String?
   ewaybillTransactionType              String?
-  ewaybillIrnNo                    String?
+  ewaybillIrnNo                        String?
   supplierGstin                        String?
   supplierName                         String?
   supplierState                        String?
@@ -1118,7 +1119,6 @@ model DocumentEpcgLicenseActualExport {
   @@index([epcgLicenseId], name: "epcgLicenseId")
 }
 
-
 model HSCode2Bit {
   id        String @id @default(cuid())
   HSCode    String
@@ -1141,6 +1141,128 @@ model HSCode8Bit {
   id        String @id @default(cuid())
   HSCode    String
   Commodity String
+}
+
+model EpcgLicenseSummary {
+  id                                                    String   @id @default(cuid())
+  srNo                                                  String?   @db.Text
+  partyName                                             String?   @db.Text
+  licenseNo                                             String? @db.Text
+  licenseDate                                           String? @db.Text
+  fileNo                                                String? @db.Text
+  fileDate                                              String? @db.Text
+  licenseType                                           String? @db.Text
+  bankGuaranteeAmountRs                                 String? @db.Text
+  bankGuaranteeValidityFrom                             String? @db.Text
+  bankGuaranteeValidityTo                               String? @db.Text
+  bankGuaranteeSubmittedTo                              String? @db.Text
+  dutySavedValueAmountInr                               String? @db.Text
+  hsCodeAsPerLicenseEoInr                               String? @db.Text
+  descriptionAsPerLicenseEoUsd                          String?@db.Text
+  dutySavedValueDutyUtilizedValue                       String? @db.Text
+  hsCodeAsPerEoFullfillmentSummaryEoInr                 String?  @db.Text
+  descriptionAsPerEoFullfillmentSummaryEoUsd            String?  @db.Text
+  installationDate                                      String? @db.Text
+  averageExportImposedAsPerLicenseInr                   String? @db.Text
+  averageExportNoOfYears                                String? @db.Text
+  averageExportTotalAeoImposedInr                       String? @db.Text
+  averageExportFulfilledInr                             String? @db.Text
+  averageExportNoOfShippingBills                        String? @db.Text
+  averageExportFulfilledPercent                         String? @db.Text
+  block1stImposedBlockCompletionDate                    String? @db.Text
+  block1stImposedBlockExtension                         String? @db.Text
+  block1stImposedExtensionYearIfAny                     String? @db.Text
+  block1stImposedBlockExtensionDate                     String?@db.Text
+  block1stImposedBlockBlanceDaysCompletionDate          String? @db.Text
+  block1stImposedBlockBlanceDaysExtensionDate           String? @db.Text
+  block1stImposedEoInr                                  String? @db.Text
+  block1stImposedEoUsd                                  String? @db.Text
+  block1stDirectExportEoInr                             String?@db.Text
+  block1stDirectExportEoUsd                             String? @db.Text
+  block1stDirectExportNoOfShippingBills                 String? @db.Text
+  block1stDirectExportPercent                           String? @db.Text
+  block1stDirectExportPropDutySaved                     String?@db.Text
+  block1stIndirectExportEoInr                           String? @db.Text
+  block1stIndirectExportEoUsd                           String? @db.Text
+  block1stIndirectExportNoOfShippingBills               String? @db.Text
+  block1stIndirectExportPercent                         String? @db.Text
+  block1stIndirectExportPropDutySaved                   String? @db.Text
+  block1stTotalExportEoInr                              String? @db.Text
+  block1stTotalExportEoUsd                              String? @db.Text
+  block1stTotalExportNoOfShippingBills                  String? @db.Text
+  block1stTotalExportPercent                            String? @db.Text
+  block1stTotalExportPropDutySaved                      String? @db.Text
+  block1stDifferentialEoEoInr                           String? @db.Text
+  block1stDifferentialEoEoInrPercent                    String? @db.Text
+  block1stDifferentialEoEoUsd                           String? @db.Text
+  block1stDifferentialEoEoUsdPercent                    String? @db.Text
+  block1stDifferentialEoPropDutySaved                   String? @db.Text
+  block2ndImposed2ndBlockEoPeriodCompletionDate         String? @db.Text
+  block2ndImposedEoPeriodExtensionIfAny                 String? @db.Text
+  block2ndImposedEoPeriodExtensionYear                  String? @db.Text
+  block2ndImposedEoPeriodExtensionDate                  String? @db.Text
+  block2ndImposedEoPeriodBalanceDaysCompletionDate      String? @db.Text
+  block2ndImposedEoPeriodBalanceDaysExtensionDate       String? @db.Text
+  block2ndImposedEoInr                                  String?@db.Text
+  block2ndImposedEoUsd                                  String? @db.Text
+  block2ndDirectExportEoInr                             String? @db.Text
+  block2ndDirectExportEoUsd                             String? @db.Text
+  block2ndDirectExportNoOfShippingBills                 String? @db.Text
+  block2ndDirectExportPercent                           String? @db.Text
+  block2ndDirectExportPropDutySaved                     String? @db.Text
+  block2ndIndirectExportEoInr                           String? @db.Text
+  block2ndIndirectExportEoUsd                           String? @db.Text
+  block2ndIndirectExportNoOfShippingBills               String? @db.Text
+  block2ndIndirectExportPercent                         String? @db.Text
+  block2ndIndirectExportPropDutySaved                   String? @db.Text
+  block2ndTotalExportEoInr                              String? @db.Text
+  block2ndTotalExportEoUsd                              String? @db.Text
+  block2ndTotalExportNoOfShippingBills                  String? @db.Text
+  block2ndTotalExportPercent                            String? @db.Text
+  block2ndTotalExportPropDutySaved                      String? @db.Text
+  block2ndDifferentialEoEoInr                           String? @db.Text
+  block2ndDifferentialEoEoInrPercent                    String? @db.Text
+  block2ndDifferentialEoEoUsd                           String? @db.Text
+  block2ndDifferentialEoEoUsdPercent                    String? @db.Text
+  block2ndDifferentialEoPropDutySaved                   String? @db.Text
+  totalEoPeriodImposedEoPeriodCompletionDate            String? @db.Text
+  totalEoPeriodImposedEoPeriodExtensionIfAny            String? @db.Text
+  totalEoPeriodImposedEoPeriodExtensionYear             String? @db.Text
+  totalEoPeriodImposedEoPeriodExtensionDate             String? @db.Text
+  totalEoPeriodImposedEoPeriodBalanceDaysCompletionDate String? @db.Text
+  totalEoPeriodImposedEoPeriodBalanceDaysExtensionDate  String? @db.Text
+  totalEoPeriodImposedEoInr                             String? @db.Text
+  totalEoPeriodImposedEoUsd                             String? @db.Text
+  totalEOPeriodDirectExportEoInr                        String? @db.Text
+  totalEOPeriodDirectExportEoUsd                        String? @db.Text
+  totalEOPeriodDirectExportNoOfShippingBills            String? @db.Text
+  totalEOPeriodDirectExportPercent                      String? @db.Text
+  totalEOPeriodDirectExportPropDutySaved                String? @db.Text
+  totalEOPeriodIndirectExportEoInr                      String? @db.Text
+  totalEOPeriodIndirectExportEoUsd                      String? @db.Text
+  totalEOPeriodIndirectExportNoOfShippingBills          String? @db.Text
+  totalEOPeriodIndirectExportPercent                    String? @db.Text
+  totalEOPeriodIndirectExportPropDutySaved              String? @db.Text
+  totalEOPeriodTotalExportEoInr                         String? @db.Text
+  totalEOPeriodTotalExportEoUsd                         String? @db.Text
+  totalEOPeriodTotalExportNoOfShippingBills             String? @db.Text
+  totalEOPeriodTotalExportPercent                       String? @db.Text
+  totalEOPeriodTotalExportPropDutySaved                 String? @db.Text
+  totalEoPeriodDifferentialEoEoInr                      String? @db.Text
+  totalEoPeriodDifferentialEoEoInrPercent               String? @db.Text
+  totalEoPeriodDifferentialEoEoUsd                      String? @db.Text
+  totalEoPeriodDifferentialEoEoUsdPercent               String? @db.Text
+  totalEoPeriodDifferentialEoPropDutySaved              String? @db.Text
+  EarlyEoFullfillment1stEoDate                          String? @db.Text
+  EarlyEoFullfillmentLastEoDate                         String? @db.Text
+  EarlyEoFullfillmentEoPeriodWithin3yearsOrNot          String? @db.Text
+  EarlyEoFullfillmentEarlyEoFullfillment                String? @db.Text
+  remarks                                               String?  @db.Text
+  user                                                  user     @relation(fields: [addedByUserId], references: [id])
+  addedByUserId                                         String
+  uploadedDate                                          DateTime @default(now())
+
+  @@index([addedByUserId], name: "userId")
 }
 
 // // Report
@@ -1242,7 +1364,6 @@ model HSCode8Bit {
 //   user                                          user                                            @relation(fields: [addedByUserId], references: [id])
 //   addedByUserId                                 String
 //   uploadedDate                                  DateTime                                        @default(now())
- 
 
 //   @@index([addedByUserId], name: "userId")
 // }

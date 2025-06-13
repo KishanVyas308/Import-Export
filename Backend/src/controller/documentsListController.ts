@@ -147,62 +147,16 @@ export async function addEInvoice(req: any, res: any) {
   }
 }
 
-export async function updateEpcgLicense(req: any, res: any) {
+export async function addEpcgLicenseSummary(req: any, res: any) {
   try {
-    const { DocumentEpcgLicenseEoAsPerLicense, DocumentEpcgLicenseActualExport, srNo, ...epcgLicenseDetails } = req.body;
 
-    if (!srNo) {
-      return res.status(400).json({ message: "Sr No is required for update" });
-    }
+    const responce = await prisma.epcgLicenseSummary.create({
+      data: req.body,
+    })
 
-    // Check if the record exists
-    const existingLicense = await prisma.documentEpcgLicense.findFirst({
-      where: { srNo: srNo }
-    });
-
-    if (!existingLicense) {
-      return res.status(404).json({ message: "EPCG License not found" });
-    }
-
-    // First, delete existing related records
-    await prisma.documentEpcgLicenseEoAsPerLicense.deleteMany({
-      where: { epcgLicenseId: existingLicense.id }
-    });
-
-    await prisma.documentEpcgLicenseActualExport.deleteMany({
-      where: { epcgLicenseId: existingLicense.id }
-    });
-
-    // Update the main record and create new related records
-    const response = await prisma.documentEpcgLicense.update({
-      where: { id: existingLicense.id },
-      data: {
-        ...epcgLicenseDetails,
-        srNo: srNo,
-        DocumentEpcgLicenseEoAsPerLicense: {
-          create: DocumentEpcgLicenseEoAsPerLicense || []
-        },
-        DocumentEpcgLicenseActualExport: {
-          create: DocumentEpcgLicenseActualExport || []
-        },
-      },
-      include: {
-        DocumentEpcgLicenseEoAsPerLicense: true,
-        DocumentEpcgLicenseActualExport: true,
-      }
-    });
-
-    console.log("Response from EPCG License update:", response);
-    
-    return res.json({ 
-      message: "Updated successfully", 
-      data: response 
-    });
+    return res.json({ message: "Added successfully", responce });
   } catch (e) {
-    console.log("Error updating EPCG License:", e);
-    return res.status(500).json({ 
-      message: "Error updating EPCG License", 
-      error: e 
-    });
+    console.log(e);
+    return res.json({ message: e });
   }
 }
