@@ -34,6 +34,7 @@ import NewDataLayout from "./Layouts/NewDataLayout";
 import EpcgLicenseSummary from "./pages/Home/GST/DataManagement/newdata/Report/EpcgLicenseSummary";
 import EpcgAnalytics from "./pages/Home/GST/DataManagement/newdata/Report/EPCGLicenceSummary/EpcgAnalytics";
 import GstHomePage from "./pages/Home/GST/GstHomePage";
+import ManageClient from "./pages/Home/ManageClient";
 
 function App() {
   return (
@@ -47,8 +48,10 @@ function App() {
 
         <Route path="/" element={<ProtectedRoute element={<HomePage />} />} />
 
+        <Route path="/manage-client" element={<ProtectedRoute element={<ManageClient />} />} />
+
         <Route path="/gst" element={<ProtectedRoute element={<GstHomePage />} />} />
-        <Route path="/dgft" element={<ProtectedRoute element={<> under construction </>} />} />
+        <Route path="/dgft" element={<ProtectedRoute element={<UnderDevelopment />} />} />
 
         <Route
           path="/gst/datamanagement"

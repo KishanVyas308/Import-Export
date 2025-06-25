@@ -8,16 +8,7 @@ import UserAndExpoersEnterPopUp from "../../components/UserAndExpoersEnterPopUp"
 
 const GstHomePage: React.FC = () => {
   const user = useRecoilValue(authAtom);
-  const [open, setOpen] = useState(false);
   const [greeting, setGreeting] = useState("");
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   useEffect(() => {
     const getGreeting = () => {
@@ -43,8 +34,6 @@ const GstHomePage: React.FC = () => {
           <path d="M0,500 Q300,550 600,500 T1200,500" fill="none" stroke="rgba(34, 197, 94, 0.02)" strokeWidth="1" />
         </svg>
       </div>
-
-      <UserAndExpoersEnterPopUp open={open} handleClose={handleClose} />
       
       <div className="relative z-10">
         {/* Header component */}
@@ -67,23 +56,13 @@ const GstHomePage: React.FC = () => {
 
               <div className="flex flex-wrap justify-between items-center p-6">
                 <div className="flex items-center space-x-2">
-                  <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+                  <h1 className="text-3xl font-bold text-white">GST Dashboard</h1>
                   <div className="h-8 w-1 bg-white/20 rounded-full mx-4"></div>
                   <span className="text-white/90 text-xl">{greeting}, <span className="font-semibold">{user.user.name.split(" ")[0]}</span></span>
                 </div>
                 
                 <div className="flex items-center space-x-6">
-                  <button 
-                    onClick={() => {
-                      user.user.role === Role.ADMIN ? handleClickOpen() : alert("You are not authorized")
-                    }}
-                    className="flex items-center space-x-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 z-50 rounded-lg  transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <span>Manage Users</span>
-                  </button>
+                
                   
                   <div>
                     <SignOut />

@@ -75,7 +75,7 @@ app.use("/api/v1/dataAnalytics", dataAnalyticsRoute_1.default);
 //? manage user shipping bill api
 app.use("/api/v1/manageUserShippingBill", middleWare_1.isAdmin, manageUserShippingBillRoute_1.default);
 //? add user and expoter api
-app.use("/api/v1/add", middleWare_1.isAdmin, manageAddByAdminRoute_1.default);
+app.use("/api/v1/admin", manageAddByAdminRoute_1.default);
 //? routes for documentslist
 app.use("/api/v1/documentslist", documentsListRoute_1.default);
 //? routed for froms
