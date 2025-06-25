@@ -37,7 +37,7 @@ const HomePage: React.FC = () => {
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-green-400 rounded-full mix-blend-multiply filter blur-3xl opacity-5 animate-blob"></div>
         <div className="absolute bottom-1/3 left-1/3 w-96 h-96 bg-orange-400 rounded-full mix-blend-multiply filter blur-3xl opacity-5 animate-blob animation-delay-4000"></div>
-        
+
         {/* Curved lines */}
         <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <path d="M0,100 Q300,150 600,100 T1200,100" fill="none" stroke="rgba(34, 197, 94, 0.05)" strokeWidth="3" />
@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
       </div>
 
       <UserAndExpoersEnterPopUp open={open} handleClose={handleClose} />
-      
+
       <div className="relative z-10">
         {/* Header component */}
         <Header />
@@ -60,7 +60,7 @@ const HomePage: React.FC = () => {
                 <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="white" strokeWidth="1"/>
+                      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="white" strokeWidth="1" />
                     </pattern>
                   </defs>
                   <rect width="100%" height="100%" fill="url(#grid)" />
@@ -73,9 +73,9 @@ const HomePage: React.FC = () => {
                   <div className="h-8 w-1 bg-white/20 rounded-full mx-4"></div>
                   <span className="text-white/90 text-xl">{greeting}, <span className="font-semibold">{user.user.name.split(" ")[0]}</span></span>
                 </div>
-                
+
                 <div className="flex items-center space-x-6">
-                  <button 
+                  <button
                     onClick={() => {
                       user.user.role === Role.ADMIN ? navigate("/manage-client") : alert("You are not authorized")
                     }}
@@ -86,8 +86,8 @@ const HomePage: React.FC = () => {
                     </svg>
                     <span>Manage Clients</span>
                   </button>
-              
-                  <button 
+
+                  <button
                     onClick={() => {
                       user.user.role === Role.ADMIN ? handleClickOpen() : alert("You are not authorized")
                     }}
@@ -98,7 +98,7 @@ const HomePage: React.FC = () => {
                     </svg>
                     <span>Manage Users</span>
                   </button>
-                  
+
                   <div>
                     <SignOut />
                   </div>
@@ -107,27 +107,29 @@ const HomePage: React.FC = () => {
             </div>
           </div>
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-  <DetailCard
-    link="/dgft"
-    title="DGFT Portal"
-    color="from-indigo-500 to-blue-600"
-    description="Streamline foreign trade operations with digital export-import documentation, licensing, and compliance management for seamless international business."
-    imageSrc="../src/images/new_data.png"
-    icon="chart"
-  />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            
 
-  <DetailCard
-    link="/gst"
-    title="GST Management"
-    color="from-emerald-500 to-green-600"
-    description="Simplify tax compliance with automated GST filing, invoice management, return processing, and real-time tax calculation for your business."
-    imageSrc="../src/images/mani_header_logo_2.png"
-    icon="database"
-  />
-</div>
+            <DetailCard
+              link="/dgft"
+              title="DGFT Management"
+              color="from-emerald-500 to-green-600"
+              description="Streamline foreign trade operations with digital export-import documentation, licensing, and compliance management for seamless international business."
+              imageSrc="../src/images/mani_header_logo_2.png"
+              icon="database"
+            />
 
-          
+            <DetailCard
+              link="/gst"
+              title="GST Portal"
+              color="from-indigo-500 to-blue-600"
+              description="Simplify tax compliance with automated GST filing, invoice management, return processing, and real-time tax calculation for your business."
+              imageSrc="../src/images/new_data.png"
+              icon="chart"
+            />
+          </div>
+
+
         </div>
       </div>
     </div>

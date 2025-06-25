@@ -778,33 +778,60 @@ model IndirectExportAnneuxureA {
 
 model Client {
   id                 String @id @default(cuid())
-  customerName       String
-  resource           String
-  dgftCategory       String
-  gstCategory        String
-  mainCategory       String
-  industry           String
-  subIndustry        String
-  department         String
-  freshService       String
-  eodcService        String
-  basicService       String
-  otherDgftService   String
-  gstService         String
-  mobileNumber1      String
-  contactPersonName1 String
-  mobileNumber2      String
-  contactPersonName2 String
-  mailId1            String
-  mailId2            String
-  address            String
+  customerName       String @default("")
+  resource           String?  @default("")
+  dgftCategory       String? @default("")
+  gstCategory        String? @default("")
+  mainCategory       String? @default("")
+  industry           String? @default("")
+  subIndustry        String? @default("")
+  department         String? @default("")
+  freshService       String? @default("")
+  eodcService        String? @default("")
+  basicService       String? @default("")
+  otherDgftService   String? @default("")
+  gstService         String? @default("")
+  mobileNumber1      String? @default("")
+  contactPersonName1 String? @default("")
+  mobileNumber2      String? @default("")
+  contactPersonName2 String? @default("")
+  mailId1            String? @default("")
+  mailId2            String? @default("")
+  address            String? @default("")
+  clientJoiningDate  DateTime? @default(now())
+  ReferanceClient    Boolean @default(false)
+  ReferanceClientId  String? 
 
   user          user     @relation(fields: [addedByUserId], references: [id])
   addedByUserId String
   uploadedDate  DateTime @default(now())
+  
+  // Add relation to ClientTurnover
+  turnover ClientTurnover[]
 
   @@index([addedByUserId], name: "userId")
 }
+
+model ClientTurnover {
+  id String @id @default(cuid())
+
+  financialYear String @default("00-00") // Format: "22-23", "23-24", etc.
+
+  // Turnover fields
+  domesticTurnover String @default("0.00")
+  directExportTurnover String @default("0.00")
+  merchantExportTurnover String @default("0.00")
+  
+  // Relation to Client
+  client Client @relation(fields: [clientId], references: [id])
+  clientId String
+  
+  uploadedDate DateTime @default(now())
+  
+  @@index([clientId], name: "clientId")
+}
+
+
 
 model EpcgList {
   id                   String   @id @default(cuid())

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteExpoter = exports.updateExpoter = exports.addNewExpoter = exports.getAllExporters = exports.addNewUser = void 0;
+exports.manageClientTurnover = exports.deleteExpoter = exports.updateExpoter = exports.addNewExpoter = exports.getAllExporters = exports.addNewUser = void 0;
 const __1 = require("..");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const addNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -50,7 +50,11 @@ exports.addNewUser = addNewUser;
 // Get all exporters
 const getAllExporters = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const exporters = yield __1.prisma.client.findMany({});
+        const exporters = yield __1.prisma.client.findMany({
+            include: {
+                turnover: true
+            }
+        });
         return res.status(200).json(exporters);
     }
     catch (error) {
@@ -60,7 +64,7 @@ const getAllExporters = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.getAllExporters = getAllExporters;
 // Add a new exporter
 const addNewExpoter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { customerName, resource, dgftCategory, gstCategory, mainCategory, industry, subIndustry, department, freshService, eodcService, basicService, otherDgftService, gstService, mobileNumber1, contactPersonName1, mobileNumber2, contactPersonName2, mailId1, mailId2, address, addedByUserId, } = req.body;
+    const { customerName, resource, dgftCategory, gstCategory, mainCategory, industry, subIndustry, department, freshService, eodcService, basicService, otherDgftService, gstService, mobileNumber1, contactPersonName1, mobileNumber2, contactPersonName2, mailId1, mailId2, address, addedByUserId, turnoverData, clientJoiningDate, ReferanceClient, ReferanceClientId } = req.body;
     try {
         const exporter = yield __1.prisma.client.create({
             data: {
@@ -84,11 +88,23 @@ const addNewExpoter = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 mailId1: mailId1 || "",
                 mailId2: mailId2 || "",
                 address: address || "",
-                addedByUserId: addedByUserId || "",
+                clientJoiningDate: clientJoiningDate ? new Date(clientJoiningDate) : new Date(),
+                ReferanceClient: ReferanceClient || false,
+                ReferanceClientId: ReferanceClientId || null,
+                addedByUserId,
+                turnover: turnoverData ? {
+                    create: turnoverData.map((data) => ({
+                        financialYear: data.financialYear,
+                        domesticTurnover: data.domesticTurnover,
+                        directExportTurnover: data.directExportTurnover,
+                        merchantExportTurnover: data.merchantExportTurnover,
+                    }))
+                } : undefined,
             },
         });
         return res.status(200).json({
             message: "Exporter added successfully",
+            exporter,
         });
     }
     catch (error) {
@@ -99,10 +115,10 @@ exports.addNewExpoter = addNewExpoter;
 // Update an existing exporter
 const updateExpoter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { customerName, resource, dgftCategory, gstCategory, mainCategory, industry, subIndustry, department, freshService, eodcService, basicService, otherDgftService, gstService, mobileNumber1, contactPersonName1, mobileNumber2, contactPersonName2, mailId1, mailId2, address, } = req.body;
+    const { customerName, resource, dgftCategory, gstCategory, mainCategory, industry, subIndustry, department, freshService, eodcService, basicService, otherDgftService, gstService, mobileNumber1, contactPersonName1, mobileNumber2, contactPersonName2, mailId1, mailId2, address, turnoverData, clientJoiningDate, ReferanceClient, ReferanceClientId } = req.body;
     try {
         const exporter = yield __1.prisma.client.update({
-            where: { id: id },
+            where: { id },
             data: {
                 customerName: customerName || "",
                 resource: resource || "",
@@ -124,8 +140,68 @@ const updateExpoter = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 mailId1: mailId1 || "",
                 mailId2: mailId2 || "",
                 address: address || "",
+                clientJoiningDate: clientJoiningDate ? new Date(clientJoiningDate) : undefined,
+                ReferanceClient: ReferanceClient !== undefined ? ReferanceClient : undefined,
+                ReferanceClientId: ReferanceClientId !== undefined ? ReferanceClientId : undefined,
+            },
+            include: {
+                turnover: true,
             },
         });
+        // Handle turnover data - this includes add, update, and delete operations
+        if (turnoverData !== undefined) {
+            // Get existing turnover IDs for this client
+            const existingTurnover = yield __1.prisma.clientTurnover.findMany({
+                where: { clientId: id },
+                select: { id: true }
+            });
+            const existingIds = existingTurnover.map(t => t.id);
+            const incomingIds = turnoverData
+                .filter((data) => data.id)
+                .map((data) => data.id);
+            // Delete turnover entries that are no longer present
+            const idsToDelete = existingIds.filter(id => !incomingIds.includes(id));
+            if (idsToDelete.length > 0) {
+                yield __1.prisma.clientTurnover.deleteMany({
+                    where: {
+                        id: { in: idsToDelete }
+                    }
+                });
+            }
+            // Update or create turnover entries
+            for (const data of turnoverData) {
+                if (data.id) {
+                    // Update existing turnover
+                    yield __1.prisma.clientTurnover.update({
+                        where: { id: data.id },
+                        data: {
+                            financialYear: data.financialYear,
+                            domesticTurnover: data.domesticTurnover,
+                            directExportTurnover: data.directExportTurnover,
+                            merchantExportTurnover: data.merchantExportTurnover,
+                        },
+                    });
+                }
+                else {
+                    // Create new turnover
+                    yield __1.prisma.clientTurnover.create({
+                        data: {
+                            financialYear: data.financialYear,
+                            domesticTurnover: data.domesticTurnover,
+                            directExportTurnover: data.directExportTurnover,
+                            merchantExportTurnover: data.merchantExportTurnover,
+                            clientId: id,
+                        },
+                    });
+                }
+            }
+        }
+        else {
+            // If turnoverData is null/undefined, delete all existing turnover data
+            yield __1.prisma.clientTurnover.deleteMany({
+                where: { clientId: id }
+            });
+        }
         return res.status(200).json({
             message: "Exporter updated successfully",
             exporter,
@@ -139,8 +215,13 @@ exports.updateExpoter = updateExpoter;
 const deleteExpoter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
+        // Delete all related turnover records first
+        yield __1.prisma.clientTurnover.deleteMany({
+            where: { clientId: id },
+        });
+        // Then delete the client
         yield __1.prisma.client.delete({
-            where: { id: id },
+            where: { id },
         });
         return res.status(200).json({
             message: "Exporter deleted successfully",
@@ -151,3 +232,45 @@ const deleteExpoter = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.deleteExpoter = deleteExpoter;
+// Manage client turnover data
+const manageClientTurnover = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { clientId } = req.params;
+    const { turnoverData } = req.body;
+    try {
+        const results = [];
+        for (const data of turnoverData) {
+            if (data.id) {
+                const updated = yield __1.prisma.clientTurnover.update({
+                    where: { id: data.id },
+                    data: {
+                        financialYear: data.financialYear,
+                        domesticTurnover: data.domesticTurnover,
+                        directExportTurnover: data.directExportTurnover,
+                        merchantExportTurnover: data.merchantExportTurnover,
+                    },
+                });
+                results.push(updated);
+            }
+            else {
+                const created = yield __1.prisma.clientTurnover.create({
+                    data: {
+                        financialYear: data.financialYear,
+                        domesticTurnover: data.domesticTurnover,
+                        directExportTurnover: data.directExportTurnover,
+                        merchantExportTurnover: data.merchantExportTurnover,
+                        clientId,
+                    },
+                });
+                results.push(created);
+            }
+        }
+        return res.status(200).json({
+            message: "Turnover data updated successfully",
+            data: results,
+        });
+    }
+    catch (error) {
+        return res.json({ message: "Please try again later" + error });
+    }
+});
+exports.manageClientTurnover = manageClientTurnover;
