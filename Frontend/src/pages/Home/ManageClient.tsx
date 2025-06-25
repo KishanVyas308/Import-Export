@@ -773,7 +773,7 @@ const ManageClient = () => {
                                             {/* mobileNumber1 */}
                                             <FormInput
                                                 icon={faPhone}
-                                                placeholder="mobileNumber1 *"
+                                                placeholder="mobileNumber1"
                                                 value={mobileNumber1}
                                                 onChange={(e) => setMobileNumber1(e.target.value)}
                                              
@@ -807,7 +807,7 @@ const ManageClient = () => {
                                             <FormInput
                                                 icon={faEnvelope}
                                                 type="email"
-                                                placeholder="mailId1 *"
+                                                placeholder="mailId1"
                                                 value={mailId1}
                                                 onChange={(e) => setMailId1(e.target.value)}
                                           
