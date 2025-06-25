@@ -53,7 +53,11 @@ export const addNewUser = async (req: any, res: any) => {
 // Get all exporters
 export const getAllExporters = async (req: any, res: any) => {
   try {
-    const exporters = await prisma.client.findMany();
+    const exporters = await prisma.client.findMany({
+      include: {
+        turnover: true
+      }
+    });
 
     return res.status(200).json(exporters);
   } catch (error) {
@@ -62,7 +66,6 @@ export const getAllExporters = async (req: any, res: any) => {
 };
 
 // Add a new exporter
-
 export const addNewExpoter = async (req: any, res: any) => {
   const {
     customerName,
@@ -86,6 +89,10 @@ export const addNewExpoter = async (req: any, res: any) => {
     mailId2,
     address,
     addedByUserId,
+    turnoverData,
+    clientJoiningDate,
+    ReferanceClient,
+    ReferanceClientId
   } = req.body;
 
   try {
@@ -111,12 +118,24 @@ export const addNewExpoter = async (req: any, res: any) => {
         mailId1: mailId1 || "",
         mailId2: mailId2 || "",
         address: address || "",
-        addedByUserId: addedByUserId || "",
+        clientJoiningDate: clientJoiningDate ? new Date(clientJoiningDate) : new Date(),
+        ReferanceClient: ReferanceClient || false,
+        ReferanceClientId: ReferanceClientId || null,
+        addedByUserId,
+        turnover: turnoverData ? {
+          create: turnoverData.map((data: any) => ({
+            financialYear: data.financialYear,
+            domesticTurnover: data.domesticTurnover,
+            directExportTurnover: data.directExportTurnover,
+            merchantExportTurnover: data.merchantExportTurnover,
+          }))
+        } : undefined,
       },
     });
 
     return res.status(200).json({
       message: "Exporter added successfully",
+      exporter,
     });
   } catch (error) {
     return res.json({ message: "Please try again later" + error });
@@ -147,11 +166,15 @@ export const updateExpoter = async (req: any, res: any) => {
     mailId1,
     mailId2,
     address,
+    turnoverData,
+    clientJoiningDate,
+    ReferanceClient,
+    ReferanceClientId
   } = req.body;
 
   try {
     const exporter = await prisma.client.update({
-      where: { id: id },
+      where: { id },
       data: {
         customerName: customerName || "",
         resource: resource || "",
@@ -173,8 +196,70 @@ export const updateExpoter = async (req: any, res: any) => {
         mailId1: mailId1 || "",
         mailId2: mailId2 || "",
         address: address || "",
+        clientJoiningDate: clientJoiningDate ? new Date(clientJoiningDate) : undefined,
+        ReferanceClient: ReferanceClient !== undefined ? ReferanceClient : undefined,
+        ReferanceClientId: ReferanceClientId !== undefined ? ReferanceClientId : undefined,
+      },
+      include: {
+        turnover: true,
       },
     });
+
+    // Handle turnover data - this includes add, update, and delete operations
+    if (turnoverData !== undefined) {
+      // Get existing turnover IDs for this client
+      const existingTurnover = await prisma.clientTurnover.findMany({
+        where: { clientId: id },
+        select: { id: true }
+      });
+      
+      const existingIds = existingTurnover.map(t => t.id);
+      const incomingIds = turnoverData
+        .filter((data: any) => data.id)
+        .map((data: any) => data.id);
+      
+      // Delete turnover entries that are no longer present
+      const idsToDelete = existingIds.filter(id => !incomingIds.includes(id));
+      if (idsToDelete.length > 0) {
+        await prisma.clientTurnover.deleteMany({
+          where: {
+            id: { in: idsToDelete }
+          }
+        });
+      }
+      
+      // Update or create turnover entries
+      for (const data of turnoverData) {
+        if (data.id) {
+          // Update existing turnover
+          await prisma.clientTurnover.update({
+            where: { id: data.id },
+            data: {
+              financialYear: data.financialYear,
+              domesticTurnover: data.domesticTurnover,
+              directExportTurnover: data.directExportTurnover,
+              merchantExportTurnover: data.merchantExportTurnover,
+            },
+          });
+        } else {
+          // Create new turnover
+          await prisma.clientTurnover.create({
+            data: {
+              financialYear: data.financialYear,
+              domesticTurnover: data.domesticTurnover,
+              directExportTurnover: data.directExportTurnover,
+              merchantExportTurnover: data.merchantExportTurnover,
+              clientId: id,
+            },
+          });
+        }
+      }
+    } else {
+      // If turnoverData is null/undefined, delete all existing turnover data
+      await prisma.clientTurnover.deleteMany({
+        where: { clientId: id }
+      });
+    }
 
     return res.status(200).json({
       message: "Exporter updated successfully",
@@ -185,17 +270,65 @@ export const updateExpoter = async (req: any, res: any) => {
   }
 };
 
-
 export const deleteExpoter = async (req: any, res: any) => {
   const { id } = req.params;
 
   try {
+    // Delete all related turnover records first
+    await prisma.clientTurnover.deleteMany({
+      where: { clientId: id },
+    });
+
+    // Then delete the client
     await prisma.client.delete({
-      where: { id: id },
+      where: { id },
     });
 
     return res.status(200).json({
       message: "Exporter deleted successfully",
+    });
+  } catch (error) {
+    return res.json({ message: "Please try again later" + error });
+  }
+};
+
+// Manage client turnover data
+export const manageClientTurnover = async (req: any, res: any) => {
+  const { clientId } = req.params;
+  const { turnoverData } = req.body;
+
+  try {
+    const results = [];
+    
+    for (const data of turnoverData) {
+      if (data.id) {
+        const updated = await prisma.clientTurnover.update({
+          where: { id: data.id },
+          data: {
+            financialYear: data.financialYear,
+            domesticTurnover: data.domesticTurnover,
+            directExportTurnover: data.directExportTurnover,
+            merchantExportTurnover: data.merchantExportTurnover,
+          },
+        });
+        results.push(updated);
+      } else {
+        const created = await prisma.clientTurnover.create({
+          data: {
+            financialYear: data.financialYear,
+            domesticTurnover: data.domesticTurnover,
+            directExportTurnover: data.directExportTurnover,
+            merchantExportTurnover: data.merchantExportTurnover,
+            clientId,
+          },
+        });
+        results.push(created);
+      }
+    }
+
+    return res.status(200).json({
+      message: "Turnover data updated successfully",
+      data: results,
     });
   } catch (error) {
     return res.json({ message: "Please try again later" + error });
