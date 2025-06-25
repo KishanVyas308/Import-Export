@@ -423,7 +423,7 @@ const ManageClient = () => {
     const handleUpdateClient = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!customerName || !mobileNumber1 || !mailId1) {
+        if (!customerName) {
             alert("Please fill in all required fields");
             return;
         }
@@ -512,7 +512,7 @@ const ManageClient = () => {
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!customerName || !mobileNumber1 || !mailId1) {
+        if (!customerName) {
             alert("Please fill in all required fields");
             return;
         }
@@ -661,7 +661,7 @@ const ManageClient = () => {
 
                                             <FormInput
                                                 icon={faBuilding}
-                                                placeholder="customerName *"
+                                                placeholder="customerName"
                                                 value={customerName}
                                                 onChange={(e) => setCustomerName(e.target.value)}
                                                 required
