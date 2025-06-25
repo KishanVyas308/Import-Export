@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Header from "../components/Header";
-import DetailCard from "../components/DetailCard";
-import SignOut from "../../services/SignOutButton";
+import Header from "../../components/Header";
+import DetailCard from "../../components/DetailCard";
+import SignOut from "../../../services/SignOutButton";
 import { useRecoilValue } from "recoil";
-import { authAtom, Role } from "../../atoms/authAtom";
-import UserAndExpoersEnterPopUp from "../components/UserAndExpoersEnterPopUp";
+import { authAtom, Role } from "../../../atoms/authAtom";
+import UserAndExpoersEnterPopUp from "../../components/UserAndExpoersEnterPopUp";
 
-const HomePage: React.FC = () => {
+const GstHomePage: React.FC = () => {
   const user = useRecoilValue(authAtom);
   const [open, setOpen] = useState(false);
   const [greeting, setGreeting] = useState("");
@@ -93,25 +93,25 @@ const HomePage: React.FC = () => {
             </div>
           </div>
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-  <DetailCard
-    link="/dgft"
-    title="DGFT Portal"
-    color="from-indigo-500 to-blue-600"
-    description="Streamline foreign trade operations with digital export-import documentation, licensing, and compliance management for seamless international business."
-    imageSrc="../src/images/new_data.png"
-    icon="chart"
-  />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <DetailCard
+              link="/gst/admin"
+              title="Monitoring"
+              color="from-amber-400 to-orange-500"
+              description="Track, measure and monitor entire process, purchase to dispatch and from production to management level."
+              imageSrc="../src/images/process_monitoring.png"
+              icon="chart"
+            />
 
-  <DetailCard
-    link="/gst"
-    title="GST Management"
-    color="from-emerald-500 to-green-600"
-    description="Simplify tax compliance with automated GST filing, invoice management, return processing, and real-time tax calculation for your business."
-    imageSrc="../src/images/mani_header_logo_2.png"
-    icon="database"
-  />
-</div>
+            <DetailCard
+              link="/gst/datamanagement"
+              title="Data Management"
+              color="from-orange-400 to-red-500"
+              description="Connect, and manage the data collected from systems, sensors, machines and people like never before."
+              imageSrc="../src/images/data_management.png"
+              icon="database"
+            />
+          </div>
 
           
         </div>
@@ -120,4 +120,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default GstHomePage;
