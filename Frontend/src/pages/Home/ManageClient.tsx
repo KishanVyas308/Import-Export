@@ -6,8 +6,47 @@ import axios from "axios";
 import { BACKEND_URL } from "../../Globle";
 import Loading from "../components/Loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBuilding, faEnvelope, faPhone, faUser, faIndustry, faCogs, faMapMarkerAlt, faTag, faUsers, faPercent, faEdit, faTrash, faTimes, faPlus, faList, faSearch, faEye, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faBuilding, faEnvelope, faPhone, faUser, faIndustry, faCogs, faMapMarkerAlt, faTag, faUsers, faPercent, faEdit, faTrash, faTimes, faPlus, faList, faSearch, faEye, faChevronDown, faIndianRupeeSign, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+
+interface TurnoverData {
+    id: string | null;
+    tempId?: string; // For UI tracking
+    financialYear: string;
+    domesticTurnover: string;
+    directExportTurnover: string;
+    merchantExportTurnover: string;
+}
+
+interface Client {
+    id: string;
+    customerName: string;
+    resource: string;
+    dgftCategory: string;
+    gstCategory: string;
+    mainCategory: string;
+    industry: string;
+    subIndustry: string;
+    department: string;
+    freshService: string;
+    eodcService: string;
+    basicService: string;
+    otherDgftService: string;
+    gstService: string;
+    mobileNumber1: string;
+    contactPersonName1: string;
+    mobileNumber2: string;
+    contactPersonName2: string;
+    mailId1: string;
+    mailId2: string;
+    address: string;
+    addedByUserId: string;
+    uploadedDate: string;
+    clientJoiningDate?: string;
+    ReferanceClient: boolean;
+    ReferanceClientId?: string;
+    turnover?: TurnoverData[];
+}
 
 
 interface FormInputProps {
@@ -34,22 +73,27 @@ const FormInput = ({
     className = ""
 }: FormInputProps) => {
     const baseClasses = "pl-12 pr-4 py-2 w-full border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 text-lg";
+    const hasValue = value !== undefined && value !== "";
 
     if (options) {
         // Dropdown/Select component
         return (
             <div className={`relative ${className}`}>
+                <label className={`absolute text-sm font-medium ${hasValue ? 'text-green-600' : 'text-gray-500'} -top-2.5 left-4 bg-white px-1 transition-all duration-200`}>
+                    {placeholder}{required ? " *" : ""}
+                </label>
                 <FontAwesomeIcon
                     icon={icon}
                     className="absolute left-4 top-4 text-green-500 text-xl"
                 />
                 <select
-                    className={`${baseClasses} appearance-none cursor-pointer`}
+                    className={`${baseClasses} pt-3`}
                     value={value}
                     onChange={onChange}
                     required={required}
+                    
                 >
-                    <option value="">{placeholder}</option>
+                    <option value=""></option>
                     {options.map((option) => (
                         <option key={option.value} value={option.value}>
                             {option.label}
@@ -68,13 +112,15 @@ const FormInput = ({
         // Textarea component
         return (
             <div className={`relative ${className}`}>
+                <label className={`absolute text-sm font-medium ${hasValue ? 'text-green-600' : 'text-gray-500'} -top-2.5 left-4 bg-white px-1 transition-all duration-200`}>
+                    {placeholder}{required ? " *" : ""}
+                </label>
                 <FontAwesomeIcon
                     icon={icon}
                     className="absolute left-4 top-4 text-green-500 text-xl"
                 />
                 <textarea
-                    placeholder={placeholder}
-                    className={`${baseClasses} resize-none`}
+                    className={`${baseClasses} resize-none pt-3`}
                     rows={rows}
                     value={value}
                     onChange={onChange}
@@ -87,14 +133,16 @@ const FormInput = ({
     // Regular input component
     return (
         <div className={`relative ${className}`}>
+            <label className={`absolute text-sm font-medium ${hasValue ? 'text-green-600' : 'text-gray-500'} -top-2.5 left-4 bg-white px-1 transition-all duration-200`}>
+                {placeholder}{required ? " *" : ""}
+            </label>
             <FontAwesomeIcon
                 icon={icon}
                 className="absolute left-4 top-4 text-green-500 text-xl"
             />
             <input
                 type={type}
-                placeholder={placeholder}
-                className={baseClasses}
+                className={`${baseClasses} pt-3`}
                 value={value}
                 onChange={onChange}
                 required={required}
@@ -125,21 +173,124 @@ const ManageClient = () => {
     const [mailId1, setMailId1] = useState("");
     const [mailId2, setMailId2] = useState("");
     const [address, setAddress] = useState("");
+    const [clientJoiningDate, setClientJoiningDate] = useState("");
+
+    // Reference client state
+    const [referenceClient, setReferenceClient] = useState(false);
+    const [referenceClientId, setReferenceClientId] = useState("");
+
+    // Turnover data state
+    const [turnoverData, setTurnoverData] = useState<TurnoverData[]>([
+        {
+            id: null,
+            tempId: Date.now().toString(),
+            financialYear: "",
+            domesticTurnover: "",
+            directExportTurnover: "",
+            merchantExportTurnover: ""
+        }
+    ]);
 
     // Additional state for client management
-    const [clients, setClients] = useState([]);
+    const [clients, setClients] = useState<Client[]>([]);
     const [showClientsList, setShowClientsList] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
-    const [editingClient, setEditingClient] = useState(null);
+    const [editingClient, setEditingClient] = useState<Client | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentView, setCurrentView] = useState("list"); // "add", "list"
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-    const [clientToDelete, setClientToDelete] = useState(null);
+    const [clientToDelete, setClientToDelete] = useState<Client | null>(null);
+    const [showTurnoverSection, setShowTurnoverSection] = useState(false);
 
     const [cookies, setCookie] = useCookies(["token"]);
     const user = useRecoilValue(authAtom);
 
     const navigate = useNavigate();
+
+    // Turnover management functions
+    const addTurnoverRow = () => {
+        setTurnoverData([
+            ...turnoverData,
+            {
+                id: null,
+                tempId: Date.now().toString(),
+                financialYear: "",
+                domesticTurnover: "",
+                directExportTurnover: "",
+                merchantExportTurnover: ""
+            }
+        ]);
+    };
+
+    const removeTurnoverRow = (index: number) => {
+        if (turnoverData.length > 1) {
+            const newData = turnoverData.filter((_, i) => i !== index);
+            setTurnoverData(newData);
+        }
+    };
+
+    const updateTurnoverData = (index: number, field: string, value: string) => {
+        const newData = [...turnoverData];
+        newData[index] = { ...newData[index], [field]: value };
+        setTurnoverData(newData);
+    };
+
+    // Helper function to calculate total turnover for a single entry
+    const calculateTotalTurnover = (data: TurnoverData): number => {
+        const domestic = parseFloat(data.domesticTurnover) || 0;
+        const directExport = parseFloat(data.directExportTurnover) || 0;
+        const merchantExport = parseFloat(data.merchantExportTurnover) || 0;
+        return domestic + directExport + merchantExport;
+    };
+
+    // Helper function to calculate grand total turnover
+    const calculateGrandTotalTurnover = (): number => {
+        return turnoverData.reduce((total, data) => total + calculateTotalTurnover(data), 0);
+    };
+
+    // Helper function to format currency
+    const formatCurrency = (amount: number): string => {
+        return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(amount);
+    };
+
+    // Handle reference client selection
+    const handleReferenceClientChange = (clientId: string) => {
+        setReferenceClientId(clientId);
+        
+        if (clientId) {
+            const selectedClient = clients.find(client => client.id === clientId);
+            if (selectedClient) {
+                // Auto-populate all fields except customerName (and turnover data)
+                setResource(selectedClient.resource || "");
+                setDgftCategory(selectedClient.dgftCategory || "");
+                setGstCategory(selectedClient.gstCategory || "");
+                setMainCategory(selectedClient.mainCategory || "");
+                setIndustry(selectedClient.industry || "");
+                setSubIndustry(selectedClient.subIndustry || "");
+                setDepartment(selectedClient.department || "");
+                setFreshService(selectedClient.freshService || "");
+                setEodcService(selectedClient.eodcService || "");
+                setBasicService(selectedClient.basicService || "");
+                setOtherDgftService(selectedClient.otherDgftService || "");
+                setGstService(selectedClient.gstService || "");
+                setMobileNumber1(selectedClient.mobileNumber1 || "");
+                setContactPersonName1(selectedClient.contactPersonName1 || "");
+                setMobileNumber2(selectedClient.mobileNumber2 || "");
+                setContactPersonName2(selectedClient.contactPersonName2 || "");
+                setMailId1(selectedClient.mailId1 || "");
+                setMailId2(selectedClient.mailId2 || "");
+                setAddress(selectedClient.address || "");
+                setClientJoiningDate(selectedClient.clientJoiningDate ? new Date(selectedClient.clientJoiningDate).toISOString().split('T')[0] : "");
+                
+                // Note: Turnover data is NOT copied - user enters it manually
+            }
+        }
+    };
 
     // Fetch all clients
     const fetchClients = async () => {
@@ -197,10 +348,24 @@ const ManageClient = () => {
         setMailId1("");
         setMailId2("");
         setAddress("");
+        setClientJoiningDate("");
+        setTurnoverData([
+            {
+                id: null,
+                tempId: Date.now().toString(),
+                financialYear: "",
+                domesticTurnover: "",
+                directExportTurnover: "",
+                merchantExportTurnover: ""
+            }
+        ]);
+        setShowTurnoverSection(false);
+        setReferenceClient(false);
+        setReferenceClientId("");
     };
 
     // Handle edit client
-    const handleEditClient = (client) => {
+    const handleEditClient = (client: Client) => {
         setEditingClient(client);
         setCustomerName(client.customerName || "");
         setResource(client.resource || "");
@@ -222,11 +387,40 @@ const ManageClient = () => {
         setMailId1(client.mailId1 || "");
         setMailId2(client.mailId2 || "");
         setAddress(client.address || "");
+        setClientJoiningDate(client.clientJoiningDate ? new Date(client.clientJoiningDate).toISOString().split('T')[0] : "");
+        
+        // Set reference client fields
+        setReferenceClient(client.ReferanceClient || false);
+        setReferenceClientId(client.ReferanceClientId || "");
+        
+        // Set turnover data if available
+        if (client.turnover && client.turnover.length > 0) {
+            // Add tempId to existing turnover data for UI tracking
+            const turnoverWithTempId = client.turnover.map((item, index) => ({
+                ...item,
+                tempId: item.tempId || `existing-${item.id || index}-${Date.now()}`
+            }));
+            setTurnoverData(turnoverWithTempId);
+            setShowTurnoverSection(true);
+        } else {
+            setTurnoverData([
+                {
+                    id: null,
+                    tempId: Date.now().toString(),
+                    financialYear: "",
+                    domesticTurnover: "",
+                    directExportTurnover: "",
+                    merchantExportTurnover: ""
+                }
+            ]);
+            setShowTurnoverSection(false);
+        }
+        
         setCurrentView("add");
     };
 
     // Handle update client
-    const handleUpdateClient = async (e) => {
+    const handleUpdateClient = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!customerName || !mobileNumber1 || !mailId1) {
@@ -234,9 +428,10 @@ const ManageClient = () => {
             return;
         }
 
+        if (!editingClient) return;
+
         setLoading(true);
         try {
-
             const res = await axios.put(
                 `${BACKEND_URL}/admin/exporter/${editingClient.id}`,
                 {
@@ -260,6 +455,10 @@ const ManageClient = () => {
                     mailId1,
                     mailId2,
                     address,
+                    clientJoiningDate: clientJoiningDate || null,
+                    ReferanceClient: referenceClient,
+                    ReferanceClientId: referenceClient ? referenceClientId : null,
+                    turnoverData: showTurnoverSection ? turnoverData.map(({ tempId, ...rest }) => rest) : [],
                 },
                 {
                     headers: {
@@ -310,7 +509,7 @@ const ManageClient = () => {
         client.mobileNumber1?.includes(searchTerm)
     );
 
-    const handleRegister = async (e) => {
+    const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!customerName || !mobileNumber1 || !mailId1) {
@@ -344,6 +543,10 @@ const ManageClient = () => {
                     mailId2,
                     address,
                     addedByUserId: user.user.id,
+                    clientJoiningDate: clientJoiningDate || null,
+                    ReferanceClient: referenceClient,
+                    ReferanceClientId: referenceClient ? referenceClientId : null,
+                    turnoverData: showTurnoverSection ? turnoverData.map(({ tempId, ...rest }) => rest) : [],
                 },
                 {
                     headers: {
@@ -628,19 +831,164 @@ const ManageClient = () => {
                                                 rows={4}
                                                 className="md:col-span-2"
                                             />
+
+                                            {/* clientJoiningDate */}
+                                            <FormInput
+                                                icon={faCalendarAlt}
+                                                type="date"
+                                                placeholder="Client Joining Date"
+                                                value={clientJoiningDate}
+                                                onChange={(e) => setClientJoiningDate(e.target.value)}
+                                            />
+                                        </div>
+
+                                        {/* Reference Client Section */}
+                                        <div className="mt-8 pt-6 border-t border-gray-200">
+                                            <h3 className="text-lg font-semibold text-gray-700 mb-4">Reference Client (Optional)</h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                {/* Reference Client Yes/No */}
+                                                <FormInput
+                                                    icon={faUser}
+                                                    placeholder="Is this a reference client?"
+                                                    value={referenceClient ? "yes" : "no"}
+                                                    onChange={(e) => {
+                                                        const isReference = e.target.value === "yes";
+                                                        setReferenceClient(isReference);
+                                                        if (!isReference) {
+                                                            setReferenceClientId("");
+                                                        }
+                                                    }}
+                                                    options={[
+                                                        { label: "No", value: "no" },
+                                                        { label: "Yes", value: "yes" }
+                                                    ]}
+                                                />
+
+                                                {/* Reference Client Dropdown */}
+                                                {referenceClient && (
+                                                    <FormInput
+                                                        icon={faBuilding}
+                                                        placeholder="Select Reference Client"
+                                                        value={referenceClientId}
+                                                        onChange={(e) => handleReferenceClientChange(e.target.value)}
+                                                        options={[
+                                                            ...clients
+                                                                .filter(client => client.id !== editingClient?.id) // Exclude current client when editing
+                                                                .map(client => ({
+                                                                    label: client.customerName || "Unnamed Client",
+                                                                    value: client.id
+                                                                }))
+                                                        ]}
+                                                    />
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Turnover Section */}
+                                        <div className="mt-8 pt-6 border-t border-gray-200">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <h3 className="text-lg font-semibold text-gray-700">Turnover Information (Optional)</h3>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowTurnoverSection(!showTurnoverSection)}
+                                                    className="flex items-center space-x-2 text-green-600 hover:text-green-700 transition-colors"
+                                                >
+                                                    <FontAwesomeIcon icon={faIndianRupeeSign} />
+                                                    <span>{showTurnoverSection ? "Hide" : "Add"} Turnover Data</span>
+                                                </button>
+                                            </div>
+
+                                            {showTurnoverSection && (
+                                                <div className="space-y-4">
+                                                    {turnoverData.map((data, index) => (
+                                                        <div key={data.tempId || data.id || index} className="bg-gray-50 p-4 rounded-lg">
+                                                            <div className="flex items-center justify-between mb-4">
+                                                                <h4 className="font-medium text-gray-700">Turnover Entry {index + 1}</h4>
+                                                                {turnoverData.length > 1 && (
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => removeTurnoverRow(index)}
+                                                                        className="text-red-600 hover:text-red-700 transition-colors"
+                                                                    >
+                                                                        <FontAwesomeIcon icon={faTrash} />
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                                                <FormInput
+                                                                    icon={faIndianRupeeSign}
+                                                                    placeholder="Financial Year (e.g., 23-24)"
+                                                                    value={data.financialYear}
+                                                                    onChange={(e) => updateTurnoverData(index, 'financialYear', e.target.value)}
+                                                                />
+                                                                <FormInput
+                                                                    icon={faIndianRupeeSign}
+                                                                    placeholder="₹ Domestic Turnover"
+                                                                    value={data.domesticTurnover}
+                                                                    onChange={(e) => updateTurnoverData(index, 'domesticTurnover', e.target.value)}
+                                                                />
+                                                                <FormInput
+                                                                    icon={faIndianRupeeSign}
+                                                                    placeholder="₹ Direct Export Turnover"
+                                                                    value={data.directExportTurnover}
+                                                                    onChange={(e) => updateTurnoverData(index, 'directExportTurnover', e.target.value)}
+                                                                />
+                                                                <FormInput
+                                                                    icon={faIndianRupeeSign}
+                                                                    placeholder="₹ Merchant Export Turnover"
+                                                                    value={data.merchantExportTurnover}
+                                                                    onChange={(e) => updateTurnoverData(index, 'merchantExportTurnover', e.target.value)}
+                                                                />
+                                                            </div>
+                                                            
+                                                            {/* Total Turnover Display for this entry */}
+                                                            <div className="mt-4 pt-3 border-t border-gray-300">
+                                                                <div className="flex justify-between items-center">
+                                                                    <span className="font-medium text-gray-700">Total Turnover ({data.financialYear || 'Current Year'}):</span>
+                                                                    <span className="font-bold text-green-600 text-lg">
+                                                                        {formatCurrency(calculateTotalTurnover(data))}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                    <button
+                                                        type="button"
+                                                        onClick={addTurnoverRow}
+                                                        className="flex items-center space-x-2 text-green-600 hover:text-green-700 transition-colors"
+                                                    >
+                                                        <FontAwesomeIcon icon={faPlus} />
+                                                        <span>Add Another Year</span>
+                                                    </button>
+                                                    
+                                                    {/* Grand Total Turnover Display */}
+                                                    {turnoverData.length > 0 && (
+                                                        <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg border-2 border-green-200">
+                                                            <div className="flex justify-between items-center">
+                                                                <span className="text-xl font-bold text-green-800">Grand Total Turnover:</span>
+                                                                <span className="text-2xl font-bold text-green-600">
+                                                                    {formatCurrency(calculateGrandTotalTurnover())}
+                                                                </span>
+                                                            </div>
+                                                            <div className="text-sm text-green-600 mt-1">
+                                                                Sum of all years' turnover data
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
                                         {/* Action Buttons */}
                                         <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
                                             <button
-                                                type="button"
-                                                onClick={() => {
-                                                    if (editingClient) {
-                                                        setEditingClient(null);
-                                                        clearForm();
-                                                    } else {
-                                                        handleGoback();
-                                                    }
-                                                }}
+                                                type="button"                                                        onClick={() => {
+                                                            if (editingClient) {
+                                                                setEditingClient(null);
+                                                                clearForm();
+                                                            } else {
+                                                                navigate(-1);
+                                                            }
+                                                        }}
                                                 className="flex-1 py-3 px-6 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
                                             >
                                                 {editingClient ? "Cancel Edit" : "Cancel"}
@@ -695,7 +1043,10 @@ const ManageClient = () => {
                                                         Industry
                                                     </th>
                                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Services
+                                                        Joining Date
+                                                    </th>
+                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Reference
                                                     </th>
                                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Actions
@@ -705,7 +1056,7 @@ const ManageClient = () => {
                                             <tbody className="bg-white divide-y divide-gray-200">
                                                 {filteredClients.length === 0 ? (
                                                     <tr>
-                                                        <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+                                                        <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
                                                             {clients.length === 0 ? "No clients found" : "No clients match your search"}
                                                         </td>
                                                     </tr>
@@ -738,23 +1089,30 @@ const ManageClient = () => {
                                                                 <div className="text-sm text-gray-500">{client.subIndustry || "N/A"}</div>
                                                             </td>
                                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="flex flex-wrap gap-1">
-                                                                    {client.freshService && (
-                                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                                            Fresh
-                                                                        </span>
-                                                                    )}
-                                                                    {client.gstService && (
-                                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                                            GST
-                                                                        </span>
-                                                                    )}
-                                                                    {client.eodcService && (
-                                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                                                                            EODC
-                                                                        </span>
-                                                                    )}
+                                                                <div className="text-sm text-gray-900">
+                                                                    {client.clientJoiningDate 
+                                                                        ? new Date(client.clientJoiningDate).toLocaleDateString('en-IN')
+                                                                        : "N/A"
+                                                                    }
                                                                 </div>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                {client.ReferanceClient ? (
+                                                                    <div>
+                                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                                            Reference Client
+                                                                        </span>
+                                                                        {client.ReferanceClientId && (
+                                                                            <div className="text-xs text-gray-500 mt-1">
+                                                                                Ref: {clients.find(c => c.id === client.ReferanceClientId)?.customerName || "Unknown"}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                ) : (
+                                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                                                        Regular Client
+                                                                    </span>
+                                                                )}
                                                             </td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                                 <div className="flex space-x-2">
@@ -824,7 +1182,7 @@ const ManageClient = () => {
                                             Cancel
                                         </button>
                                         <button
-                                            onClick={() => handleDeleteClient(clientToDelete.id)}
+                                            onClick={() => clientToDelete && handleDeleteClient(clientToDelete.id)}
                                             className="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
                                         >
                                             Delete

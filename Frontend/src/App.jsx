@@ -1,40 +1,41 @@
 import { useState } from "react";
-import FileUpload from "./pages/Home/GST/DataManagement/existingdata/FileUpload";
+import FileUpload from "./pages/Home/DGFT/DataManagement/existingdata/FileUpload";
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Part1 from "./pages/Home/GST/DataManagement/newdata/DocumentList/ShippingBill/Part1";
-import Part2 from "./pages/Home/GST/DataManagement/newdata/DocumentList/ShippingBill/Part2";
-import Part3 from "./pages/Home/GST/DataManagement/newdata/DocumentList/ShippingBill/Part3";
-import Part4 from "./pages/Home/GST/DataManagement/newdata/DocumentList/ShippingBill/Part4";
-import Part5 from "./pages/Home/GST/DataManagement/newdata/DocumentList/ShippingBill/Part5";
+import Part1 from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/ShippingBill/Part1";
+import Part2 from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/ShippingBill/Part2";
+import Part3 from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/ShippingBill/Part3";
+import Part4 from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/ShippingBill/Part4";
+import Part5 from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/ShippingBill/Part5";
 
 import HomePage from "./pages/Home/HomPage";
 import Signin from "./pages/auth/SIgnin";
 import ProtectedRoute from "./pages/components/ProtectedRoute";
 import Register from "./pages/auth/Register";
-import DataManagementPage from "./pages/Home/GST/DataManagement/DataManagementPage";
-import DownloadDataPage from "./pages/Home/GST/DataManagement/DownloadData/DownloadDataPage";
+import DataManagementPage from "./pages/Home/DGFT/DataManagement/DataManagementPage";
+import DownloadDataPage from "./pages/Home/DGFT/DataManagement/DownloadData/DownloadDataPage";
 
-import Admin from "./pages/Home/GST/ProcessMonatring/Admin";
-import NewDataAnalytics from "./pages/Home/GST/DataManagement/newdata/Analytics/NewDataAnalytics";
-import DirectExport from "./pages/Home/GST/DataManagement/newdata/Form/DirectExport/DirectExport";
-import IndirectExport from "./pages/Home/GST/DataManagement/newdata/Form/IndirectExport/IndirectExport";
-import Invoice from "./pages/Home/GST/DataManagement/newdata/DocumentList/Invoice/Invoice";
-import EWayBillDetails from "./pages/Home/GST/DataManagement/newdata/DocumentList/EWayBill/EWayBillDetails";
+import Admin from "./pages/Home/DGFT/ProcessMonatring/Admin";
+import NewDataAnalytics from "./pages/Home/DGFT/DataManagement/newdata/Analytics/NewDataAnalytics";
+import DirectExport from "./pages/Home/DGFT/DataManagement/newdata/Form/DirectExport/DirectExport";
+import IndirectExport from "./pages/Home/DGFT/DataManagement/newdata/Form/IndirectExport/IndirectExport";
+import Invoice from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/Invoice/Invoice";
+import EWayBillDetails from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/EWayBill/EWayBillDetails";
 
 import NotFound from "./pages/NotFound";
 import UnderDevelopment from "./pages/UnderConstruction";
-import EPCGLicensePage from "./pages/Home/GST/DataManagement/newdata/DocumentList/EPCGLicense/EPCGLicensePage";
+import EPCGLicensePage from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/EPCGLicense/EPCGLicensePage";
 
-import EBRCPage from "./pages/Home/GST/DataManagement/newdata/DocumentList/EBRC/EBRCpage";
-import AdvanceLicensePage from "./pages/Home/GST/DataManagement/newdata/DocumentList/AdvanceLicense/AdvanceLicensePage";
-import EInvoicePage from "./pages/Home/GST/DataManagement/newdata/DocumentList/EInvoice/EInvoicePage";
+import EBRCPage from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/EBRC/EBRCpage";
+import AdvanceLicensePage from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/AdvanceLicense/AdvanceLicensePage";
+import EInvoicePage from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/EInvoice/EInvoicePage";
 import ShippingBillLayout from "./Layouts/ShippingBillLayout";
 import NewDataLayout from "./Layouts/NewDataLayout";
-import EpcgLicenseSummary from "./pages/Home/GST/DataManagement/newdata/Report/EpcgLicenseSummary";
-import EpcgAnalytics from "./pages/Home/GST/DataManagement/newdata/Report/EPCGLicenceSummary/EpcgAnalytics";
-import GstHomePage from "./pages/Home/GST/GstHomePage";
+import EpcgLicenseSummary from "./pages/Home/DGFT/DataManagement/newdata/Report/EpcgLicenseSummary";
+import EpcgAnalytics from "./pages/Home/DGFT/DataManagement/newdata/Report/EPCGLicenceSummary/EpcgAnalytics";
+import DGFTHomePage from "./pages/Home/DGFT/DgftHomePage";
 import ManageClient from "./pages/Home/ManageClient";
+import DgftHomePage from "./pages/Home/DGFT/DgftHomePage";
 
 function App() {
   return (
@@ -50,15 +51,15 @@ function App() {
 
         <Route path="/manage-client" element={<ProtectedRoute element={<ManageClient />} />} />
 
-        <Route path="/gst" element={<ProtectedRoute element={<GstHomePage />} />} />
-        <Route path="/dgft" element={<ProtectedRoute element={<UnderDevelopment />} />} />
+        <Route path="/gst" element={<ProtectedRoute element={<UnderDevelopment />} />} />
+        <Route path="/dgft" element={<ProtectedRoute element={<DgftHomePage />} />} />
 
         <Route
-          path="/gst/datamanagement"
+          path="/dgft/datamanagement"
           element={<ProtectedRoute element={<DataManagementPage />} />}
         />
         <Route
-          path="/gst/datamanagement/newdata"
+          path="/DGFT/datamanagement/newdata"
           element={<ProtectedRoute element={<NewDataLayout />} />}
         >
           <Route path="data">
@@ -133,7 +134,7 @@ function App() {
           element={<ProtectedRoute element={<AdvanceLicensePage />} />}
         /> */}
         <Route
-          path="/gst/datamanagement/existingdata"
+          path="/dgft/datamanagement/existingdata"
           element={<ProtectedRoute element={<FileUpload />} />}
         />
 
@@ -161,12 +162,12 @@ function App() {
         {/* //? data management section */}
 
         <Route
-          path="/gst/datamanagement/downloaddata"
+          path="/dgft/datamanagement/downloaddata"
           element={<ProtectedRoute element={<DownloadDataPage />} />}
         />
 
         {/* //? process monitoring section */}
-        <Route path="/gst/admin" element={<ProtectedRoute element={<Admin />} />} />
+        <Route path="/dgft/admin" element={<ProtectedRoute element={<Admin />} />} />
         {/* <Route path="/datamanagement/*" element={<UnderDevelopment />} /> */}
         <Route path="*" element={<NotFound />} />
       </Routes>

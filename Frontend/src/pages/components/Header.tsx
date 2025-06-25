@@ -13,14 +13,13 @@ const Header = () => {
             />
             <div className="ml-6 pl-6 border-l-2 border-gray-200 hidden sm:block">
               <h2 className="text-2xl font-bold text-gray-800">Prikriti GROUP Solutions</h2>
-              <p className="text-gray-600">Smart Manufacturing Platform</p>
+            
             </div>
           </div>
           
           <div className="flex items-center">
             <div className="text-right mr-6 pr-6 border-r-2 border-gray-200 hidden sm:block">
-              <h3 className="text-lg font-semibold text-gray-800">Transform Your Factory</h3>
-              <p className="text-gray-600">Intelligent Manufacturing</p>
+            
             </div>
             <img
               src="../src/images/mani_header_logo_2.png"

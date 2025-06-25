@@ -77,7 +77,7 @@ const DataManagementPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
             <DetailCard
-              link="/gst/datamanagement/newdata"
+              link="/dgft/datamanagement/newdata"
               title="New Data"
               color="from-amber-400 to-orange-500"
               description="Add and upload new data to the system. Integrate new data sources and manage incoming information streams."
@@ -86,7 +86,7 @@ const DataManagementPage: React.FC = () => {
             />
 
             <DetailCard
-              link="/gst/datamanagement/existingdata"
+              link="/dgft/datamanagement/existingdata"
               title="Existing Data"
               color="from-orange-400 to-red-500"
               description="View, edit and manage your existing data. Analyze historical data and generate insights from your database."
