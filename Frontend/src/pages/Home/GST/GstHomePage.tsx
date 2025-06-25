@@ -1,25 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Header from "../components/Header";
-import DetailCard from "../components/DetailCard";
-import SignOut from "../../services/SignOutButton";
+import Header from "../../components/Header";
+import DetailCard from "../../components/DetailCard";
+import SignOut from "../../../services/SignOutButton";
 import { useRecoilValue } from "recoil";
-import { authAtom, Role } from "../../atoms/authAtom";
-import UserAndExpoersEnterPopUp from "../components/UserAndExpoersEnterPopUp";
-import { useNavigate } from "react-router-dom";
+import { authAtom, Role } from "../../../atoms/authAtom";
+import UserAndExpoersEnterPopUp from "../../components/UserAndExpoersEnterPopUp";
 
-const HomePage: React.FC = () => {
+const GstHomePage: React.FC = () => {
   const user = useRecoilValue(authAtom);
-  const [open, setOpen] = useState(false);
   const [greeting, setGreeting] = useState("");
-  const navigate = useNavigate();
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   useEffect(() => {
     const getGreeting = () => {
@@ -45,8 +34,6 @@ const HomePage: React.FC = () => {
           <path d="M0,500 Q300,550 600,500 T1200,500" fill="none" stroke="rgba(34, 197, 94, 0.02)" strokeWidth="1" />
         </svg>
       </div>
-
-      <UserAndExpoersEnterPopUp open={open} handleClose={handleClose} />
       
       <div className="relative z-10">
         {/* Header component */}
@@ -69,35 +56,13 @@ const HomePage: React.FC = () => {
 
               <div className="flex flex-wrap justify-between items-center p-6">
                 <div className="flex items-center space-x-2">
-                  <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+                  <h1 className="text-3xl font-bold text-white">GST Dashboard</h1>
                   <div className="h-8 w-1 bg-white/20 rounded-full mx-4"></div>
                   <span className="text-white/90 text-xl">{greeting}, <span className="font-semibold">{user.user.name.split(" ")[0]}</span></span>
                 </div>
                 
                 <div className="flex items-center space-x-6">
-                  <button 
-                    onClick={() => {
-                      user.user.role === Role.ADMIN ? navigate("/manage-client") : alert("You are not authorized")
-                    }}
-                    className="flex items-center space-x-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 z-50 rounded-lg  transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <span>Manage Clients</span>
-                  </button>
-              
-                  <button 
-                    onClick={() => {
-                      user.user.role === Role.ADMIN ? handleClickOpen() : alert("You are not authorized")
-                    }}
-                    className="flex items-center space-x-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 z-50 rounded-lg  transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <span>Manage Users</span>
-                  </button>
+                
                   
                   <div>
                     <SignOut />
@@ -107,25 +72,25 @@ const HomePage: React.FC = () => {
             </div>
           </div>
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-  <DetailCard
-    link="/dgft"
-    title="DGFT Portal"
-    color="from-indigo-500 to-blue-600"
-    description="Streamline foreign trade operations with digital export-import documentation, licensing, and compliance management for seamless international business."
-    imageSrc="../src/images/new_data.png"
-    icon="chart"
-  />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <DetailCard
+              link="/gst/admin"
+              title="Monitoring"
+              color="from-amber-400 to-orange-500"
+              description="Track, measure and monitor entire process, purchase to dispatch and from production to management level."
+              imageSrc="../src/images/process_monitoring.png"
+              icon="chart"
+            />
 
-  <DetailCard
-    link="/gst"
-    title="GST Management"
-    color="from-emerald-500 to-green-600"
-    description="Simplify tax compliance with automated GST filing, invoice management, return processing, and real-time tax calculation for your business."
-    imageSrc="../src/images/mani_header_logo_2.png"
-    icon="database"
-  />
-</div>
+            <DetailCard
+              link="/gst/datamanagement"
+              title="Data Management"
+              color="from-orange-400 to-red-500"
+              description="Connect, and manage the data collected from systems, sensors, machines and people like never before."
+              imageSrc="../src/images/data_management.png"
+              icon="database"
+            />
+          </div>
 
           
         </div>
@@ -134,4 +99,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default GstHomePage;

@@ -54,7 +54,7 @@ app.use("/api/v1/dataAnalytics", dataAnalyticsRoute);
 app.use("/api/v1/manageUserShippingBill", isAdmin, manageUserShippingBillRoute);
 
 //? add user and expoter api
-app.use("/api/v1/add", isAdmin, manageAddByAdminRoute);
+app.use("/api/v1/admin", manageAddByAdminRoute);
 
 //? routes for documentslist
 app.use("/api/v1/documentslist", documentsListRoute)
