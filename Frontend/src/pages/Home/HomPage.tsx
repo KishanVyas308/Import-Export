@@ -47,6 +47,7 @@ const HomePage: React.FC = () => {
       <UserAndExpoersEnterPopUp open={open} handleClose={handleClose} />
       
       <div className="relative z-10">
+        {/* Header component */}
         <Header />
 
         <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -95,7 +96,7 @@ const HomePage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
             <DetailCard
               link="/admin"
-              title="Process Monitoring"
+              title="Monitoring"
               color="from-amber-400 to-orange-500"
               description="Track, measure and monitor entire process, purchase to dispatch and from production to management level."
               imageSrc="../src/images/process_monitoring.png"
@@ -112,37 +113,7 @@ const HomePage: React.FC = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300">
-              <div className="p-3 bg-green-100 rounded-full mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Real-time Analytics</h3>
-              <p className="text-gray-600">Monitor your industrial processes in real-time with advanced analytics.</p>
-            </div>
-            
-            <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300">
-              <div className="p-3 bg-blue-100 rounded-full mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Increased Efficiency</h3>
-              <p className="text-gray-600">Boost your manufacturing efficiency with smart IoT solutions.</p>
-            </div>
-            
-            <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow duration-300">
-              <div className="p-3 bg-purple-100 rounded-full mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Data-Driven Decisions</h3>
-              <p className="text-gray-600">Make informed decisions with comprehensive data analytics.</p>
-            </div>
-          </div>
+          
         </div>
       </div>
     </div>

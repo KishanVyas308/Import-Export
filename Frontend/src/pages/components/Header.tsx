@@ -7,12 +7,12 @@ const Header = () => {
         <div className="flex justify-between items-center py-6">
           <div className="flex items-center">
             <img
-              src="http://www.udhyog4.in/images/new/logo.png"
+              src="https://prikriti.in/images/logo.png"
               className="h-20 object-contain"
               alt="Udhyog 4.0 Logo"
             />
             <div className="ml-6 pl-6 border-l-2 border-gray-200 hidden sm:block">
-              <h2 className="text-2xl font-bold text-gray-800">Industry 4.0 Solutions</h2>
+              <h2 className="text-2xl font-bold text-gray-800">Prikriti GROUP Solutions</h2>
               <p className="text-gray-600">Smart Manufacturing Platform</p>
             </div>
           </div>

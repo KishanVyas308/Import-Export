@@ -27,7 +27,7 @@ exports.getEpcgLicense = getEpcgLicense;
 exports.addEbrc = addEbrc;
 exports.addAdvanceLicense = addAdvanceLicense;
 exports.addEInvoice = addEInvoice;
-exports.updateEpcgLicense = updateEpcgLicense;
+exports.addEpcgLicenseSummary = addEpcgLicenseSummary;
 const __1 = require("..");
 function addInvoice(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -161,52 +161,17 @@ function addEInvoice(req, res) {
         }
     });
 }
-function updateEpcgLicense(req, res) {
+function addEpcgLicenseSummary(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const _a = req.body, { DocumentEpcgLicenseEoAsPerLicense, DocumentEpcgLicenseActualExport, srNo } = _a, epcgLicenseDetails = __rest(_a, ["DocumentEpcgLicenseEoAsPerLicense", "DocumentEpcgLicenseActualExport", "srNo"]);
-            if (!srNo) {
-                return res.status(400).json({ message: "Sr No is required for update" });
-            }
-            // Check if the record exists
-            const existingLicense = yield __1.prisma.documentEpcgLicense.findFirst({
-                where: { srNo: srNo }
+            const responce = yield __1.prisma.epcgLicenseSummary.create({
+                data: req.body,
             });
-            if (!existingLicense) {
-                return res.status(404).json({ message: "EPCG License not found" });
-            }
-            // First, delete existing related records
-            yield __1.prisma.documentEpcgLicenseEoAsPerLicense.deleteMany({
-                where: { epcgLicenseId: existingLicense.id }
-            });
-            yield __1.prisma.documentEpcgLicenseActualExport.deleteMany({
-                where: { epcgLicenseId: existingLicense.id }
-            });
-            // Update the main record and create new related records
-            const response = yield __1.prisma.documentEpcgLicense.update({
-                where: { id: existingLicense.id },
-                data: Object.assign(Object.assign({}, epcgLicenseDetails), { srNo: srNo, DocumentEpcgLicenseEoAsPerLicense: {
-                        create: DocumentEpcgLicenseEoAsPerLicense || []
-                    }, DocumentEpcgLicenseActualExport: {
-                        create: DocumentEpcgLicenseActualExport || []
-                    } }),
-                include: {
-                    DocumentEpcgLicenseEoAsPerLicense: true,
-                    DocumentEpcgLicenseActualExport: true,
-                }
-            });
-            console.log("Response from EPCG License update:", response);
-            return res.json({
-                message: "Updated successfully",
-                data: response
-            });
+            return res.json({ message: "Added successfully", responce });
         }
         catch (e) {
-            console.log("Error updating EPCG License:", e);
-            return res.status(500).json({
-                message: "Error updating EPCG License",
-                error: e
-            });
+            console.log(e);
+            return res.json({ message: e });
         }
     });
 }

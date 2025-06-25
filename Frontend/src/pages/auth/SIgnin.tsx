@@ -100,47 +100,21 @@ const Signin: React.FC = () => {
         <div className="mb-8 relative">
           <div className="absolute inset-0 bg-green-200 filter blur-md rounded-full opacity-30"></div>
           <img
-            src="http://www.udhyog4.in/images/new/logo.png"
-            alt="Udhyog 4.0"
+            src="https://prikriti.in/images/logo.png"
+            alt="Prikriti GROUP"
             className="w-52 h-52 object-contain relative z-10"
           />
         </div>
         
         <h1 className="text-5xl font-bold mb-4 text-gray-800">
-          Welcome to Udhyog 
-          <span className="text-[#22c55e] ml-2">4.0</span>
+          Welcome!!
         </h1>
         
         <p className="text-gray-700 text-center max-w-md mb-8 leading-relaxed">
-          Transform your industrial setup into SMART and sustainable manufacturing
-          with our Industry 4.0 solutions. Join the future of manufacturing today.
+          Innovating sustainable solutions for a greener tomorrow with Prikriti GROUP. 
+          Our eco-conscious approaches help businesses thrive while preserving our natural environment.
         </p>
-        
-        <div className="flex space-x-4">
-          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-lg flex items-center border border-gray-100">
-            <div className="p-2 bg-green-100 rounded-full mr-3">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="font-medium text-gray-800">Efficient</h3>
-              <p className="text-xs text-gray-500">Streamlined operations</p>
-            </div>
-          </div>
-          
-          <div className="bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-lg flex items-center border border-gray-100">
-            <div className="p-2 bg-blue-100 rounded-full mr-3">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="font-medium text-gray-800">Secure</h3>
-              <p className="text-xs text-gray-500">Enterprise-grade security</p>
-            </div>
-          </div>
-        </div>
+    
       </div>
 
       {/* Right Section - Login Form */}
@@ -163,7 +137,7 @@ const Signin: React.FC = () => {
               </div>
               <input
                 type="email"
-                className="block w-full pl-10 pr-3 py-3 border border-gray-700 bg-gray-800/50 backdrop-blur-sm rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-500 text-gray-100 focus:outline-none transition-colors"
+                className="block w-full pl-10 pr-3 py-3 border border-gray-700 bg-gray-800/50  rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-500 text-gray-100 focus:outline-none transition-colors"
                 placeholder="Enter your email"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -189,7 +163,7 @@ const Signin: React.FC = () => {
               </div>
               <input
                 type="password"
-                className="block w-full pl-10 pr-3 py-3 border border-gray-700 bg-gray-800/50 backdrop-blur-sm rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-500 text-gray-100 focus:outline-none transition-colors"
+                className="block w-full pl-10 pr-3 py-3 border border-gray-700 bg-gray-800/50  rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-500 text-gray-100 focus:outline-none transition-colors"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -227,7 +201,7 @@ const Signin: React.FC = () => {
         </div>
 
         <footer className="mt-12 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} Udhyog 4.0 LLP. All rights reserved.
+          © {new Date().getFullYear()} Prikriti GROUP LLP. All rights reserved.
         </footer>
         
         {/* Animated accent element */}
