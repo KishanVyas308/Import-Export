@@ -258,6 +258,38 @@ const ManageClient = () => {
         }).format(amount);
     };
 
+    // Helper function to get all unique financial years from clients data
+    const getAllFinancialYears = (): string[] => {
+        const years = new Set<string>();
+        clients.forEach(client => {
+            if (client.turnover) {
+                client.turnover.forEach(t => {
+                    if (t.financialYear) {
+                        years.add(t.financialYear);
+                    }
+                });
+            }
+        });
+        return Array.from(years).sort();
+    };
+
+    // Helper function to get turnover data for a specific client and year
+    const getTurnoverForYear = (client: Client, year: string) => {
+        if (!client.turnover) return null;
+        return client.turnover.find(t => t.financialYear === year);
+    };
+
+    // Helper function to calculate grand total for a client
+    const calculateClientGrandTotal = (client: Client): number => {
+        if (!client.turnover) return 0;
+        return client.turnover.reduce((total, turnover) => {
+            const domestic = parseFloat(turnover.domesticTurnover) || 0;
+            const directExport = parseFloat(turnover.directExportTurnover) || 0;
+            const merchantExport = parseFloat(turnover.merchantExportTurnover) || 0;
+            return total + domestic + directExport + merchantExport;
+        }, 0);
+    };
+
     // Handle reference client selection
     const handleReferenceClientChange = (clientId: string) => {
         setReferenceClientId(clientId);
@@ -647,7 +679,7 @@ const ManageClient = () => {
 
                 {/* Main Content */}
                 <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    <div className="max-w-6xl mx-auto">
+                    <div className="mx-auto">
                         {currentView === "add" ? (
                             <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
                                 <div className="p-8">
@@ -1008,47 +1040,228 @@ const ManageClient = () => {
                             <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
                                 <div className="p-8">
                                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                                        <h2 className="text-2xl font-bold text-gray-800">All Clients</h2>
+                                        <div>
+                                            <h2 className="text-2xl font-bold text-gray-800">All Clients - Excel View</h2>
+                                            <p className="text-sm text-gray-600 mt-1">Complete client database in spreadsheet format</p>
+                                        </div>
 
-                                        {/* Search Bar */}
-                                        <div className="relative w-full sm:w-96">
-                                            <FontAwesomeIcon
-                                                icon={faSearch}
-                                                className="absolute left-3 top-4 text-gray-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                placeholder="Search clients..."
-                                                className="pl-10 p-3 w-full border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
-                                                value={searchTerm}
-                                                onChange={(e) => setSearchTerm(e.target.value)}
-                                            />
+                                        <div className="flex items-center space-x-4">
+                                            {/* Export Button */}
+                                            <button
+                                                onClick={() => {
+                                                    const financialYears = getAllFinancialYears();
+                                                    
+                                                    // Build dynamic headers based on financial years
+                                                    const baseHeaders = [
+                                                        'Sr. No.', 'Customer Name', 'Resource', 'DGFT Category', 'GST Category', 
+                                                        'Main Category', 'Industry', 'Sub Industry', 'Department', 
+                                                        'Fresh Services', 'EODC Services', 'Basic Services', 'Other DGFT Services', 
+                                                        'GST Services', 'Mo. No.', 'Contact Person-1', 'Mo. No. 2', 
+                                                        'Contact Person-2', 'Mail id', 'Mail ID 2', 'Address'
+                                                    ];
+                                                    
+                                                    // Add dynamic turnover columns for each financial year
+                                                    const turnoverHeaders: string[] = [];
+                                                    financialYears.forEach(year => {
+                                                        turnoverHeaders.push(`Domestic ${year}`);
+                                                        turnoverHeaders.push(`Direct Export ${year}`);
+                                                        turnoverHeaders.push(`Merchant Export ${year}`);
+                                                        turnoverHeaders.push(`Total Turnover ${year}`);
+                                                    });
+                                                    
+                                                    const endHeaders = ['Grand Total Turnover', 'Client Joining Date', 'Reference Client'];
+                                                    const headers = [...baseHeaders, ...turnoverHeaders, ...endHeaders];
+                                                    
+                                                    const csvContent = [
+                                                        headers.join(','),
+                                                        ...filteredClients.map((client, index) => {
+                                                            const baseData = [
+                                                                index + 1,
+                                                                `"${client.customerName || ''}"`,
+                                                                `"${client.resource || ''}"`,
+                                                                `"${client.dgftCategory || ''}"`,
+                                                                `"${client.gstCategory || ''}"`,
+                                                                `"${client.mainCategory || ''}"`,
+                                                                `"${client.industry || ''}"`,
+                                                                `"${client.subIndustry || ''}"`,
+                                                                `"${client.department || ''}"`,
+                                                                `"${client.freshService || ''}"`,
+                                                                `"${client.eodcService || ''}"`,
+                                                                `"${client.basicService || ''}"`,
+                                                                `"${client.otherDgftService || ''}"`,
+                                                                `"${client.gstService || ''}"`,
+                                                                `"${client.mobileNumber1 || ''}"`,
+                                                                `"${client.contactPersonName1 || ''}"`,
+                                                                `"${client.mobileNumber2 || ''}"`,
+                                                                `"${client.contactPersonName2 || ''}"`,
+                                                                `"${client.mailId1 || ''}"`,
+                                                                `"${client.mailId2 || ''}"`,
+                                                                `"${client.address || ''}"`
+                                                            ];
+                                                            
+                                                            // Add turnover data for each year
+                                                            const turnoverData: string[] = [];
+                                                            financialYears.forEach(year => {
+                                                                const turnover = getTurnoverForYear(client, year);
+                                                                if (turnover) {
+                                                                    const domestic = parseFloat(turnover.domesticTurnover) || 0;
+                                                                    const directExport = parseFloat(turnover.directExportTurnover) || 0;
+                                                                    const merchantExport = parseFloat(turnover.merchantExportTurnover) || 0;
+                                                                    const total = domestic + directExport + merchantExport;
+                                                                    
+                                                                    turnoverData.push(domestic.toString());
+                                                                    turnoverData.push(directExport.toString());
+                                                                    turnoverData.push(merchantExport.toString());
+                                                                    turnoverData.push(total.toString());
+                                                                } else {
+                                                                    turnoverData.push('0', '0', '0', '0');
+                                                                }
+                                                            });
+                                                            
+                                                            const endData = [
+                                                                calculateClientGrandTotal(client).toString(),
+                                                                client.clientJoiningDate ? new Date(client.clientJoiningDate).toLocaleDateString('en-IN') : '',
+                                                                client.ReferanceClient ? 'Yes' : 'No'
+                                                            ];
+                                                            
+                                                            return [...baseData, ...turnoverData, ...endData].join(',');
+                                                        })
+                                                    ].join('\n');
+                                                    
+                                                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                                                    const link = document.createElement('a');
+                                                    const url = URL.createObjectURL(blob);
+                                                    link.setAttribute('href', url);
+                                                    link.setAttribute('download', `clients_export_${new Date().toISOString().split('T')[0]}.csv`);
+                                                    link.style.visibility = 'hidden';
+                                                    document.body.appendChild(link);
+                                                    link.click();
+                                                    document.body.removeChild(link);
+                                                }}
+                                                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                                <span>Export Excel</span>
+                                            </button>
+
+                                            {/* Search Bar */}
+                                            <div className="relative w-full sm:w-96">
+                                                <FontAwesomeIcon
+                                                    icon={faSearch}
+                                                    className="absolute left-3 top-4 text-gray-400"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Search clients..."
+                                                    className="pl-10 p-3 w-full border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                                                    value={searchTerm}
+                                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
 
                                 
 
-                                    {/* Clients Table */}
-                                    <div className="overflow-x-auto">
-                                        <table className="min-w-full divide-y divide-gray-200">
-                                            <thead className="bg-gray-50">
-                                                <tr>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Client Name
+                                    {/* Excel-like Clients Table */}
+                                    <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-200">
+                                        <table className="min-w-full divide-y divide-gray-200 table-fixed" style={{ minWidth: `${3500 + (getAllFinancialYears().length * 512)}px` }}>
+                                            <thead className="bg-gradient-to-r from-gray-50 to-gray-100 sticky top-0 z-10">
+                                                <tr className="divide-x divide-gray-200">
+                                                    <th className="w-16 px-2 py-3 text-center text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Sr. No.
                                                     </th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Contact
+                                                    <th className="w-40 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Customer Name
                                                     </th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th className="w-24 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Resource
+                                                    </th>
+                                                    <th className="w-28 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        DGFT Category
+                                                    </th>
+                                                    <th className="w-24 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        GST Category
+                                                    </th>
+                                                    <th className="w-24 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Main Category
+                                                    </th>
+                                                    <th className="w-32 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
                                                         Industry
                                                     </th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Joining Date
+                                                    <th className="w-32 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Sub Industry
                                                     </th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Reference
+                                                    <th className="w-24 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Department
                                                     </th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th className="w-24 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Fresh Services
+                                                    </th>
+                                                    <th className="w-24 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        EODC Services
+                                                    </th>
+                                                    <th className="w-24 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Basic Services
+                                                    </th>
+                                                    <th className="w-32 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Other DGFT Services
+                                                    </th>
+                                                    <th className="w-24 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        GST Services
+                                                    </th>
+                                                    <th className="w-32 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Mo. No.
+                                                    </th>
+                                                    <th className="w-32 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Contact Person-1
+                                                    </th>
+                                                    <th className="w-32 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Mo. No. 2
+                                                    </th>
+                                                    <th className="w-32 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Contact Person-2
+                                                    </th>
+                                                    <th className="w-48 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Mail id
+                                                    </th>
+                                                    <th className="w-48 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Mail ID 2
+                                                    </th>
+                                                    <th className="w-64 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Address
+                                                    </th>
+                                                    
+                                                    {/* Dynamic Financial Year Columns */}
+                                                    {getAllFinancialYears().map(year => (
+                                                        <>
+                                                            <th key={`domestic-${year}`} className="w-32 px-3 py-3 text-center text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                                Domestic {year}
+                                                            </th>
+                                                            <th key={`direct-${year}`} className="w-32 px-3 py-3 text-center text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                                Direct Export {year}
+                                                            </th>
+                                                            <th key={`merchant-${year}`} className="w-32 px-3 py-3 text-center text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                                Merchant Export {year}
+                                                            </th>
+                                                            <th key={`total-${year}`} className="w-32 px-3 py-3 text-center text-xs font-bold text-gray-700 border-r border-gray-300 bg-green-50">
+                                                                Total Turnover {year}
+                                                            </th>
+                                                        </>
+                                                    ))}
+                                                    
+                                                    <th className="w-36 px-3 py-3 text-center text-xs font-bold text-gray-700 border-r border-gray-300 bg-yellow-50">
+                                                        Grand Total Turnover
+                                                    </th>
+                                                    <th className="w-28 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Client Joining Date
+                                                    </th>
+                                                    <th className="w-28 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Reference Client
+                                                    </th>
+                                                    <th className="w-20 px-3 py-3 text-center text-xs font-bold text-gray-700">
                                                         Actions
                                                     </th>
                                                 </tr>
@@ -1056,82 +1269,247 @@ const ManageClient = () => {
                                             <tbody className="bg-white divide-y divide-gray-200">
                                                 {filteredClients.length === 0 ? (
                                                     <tr>
-                                                        <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
-                                                            {clients.length === 0 ? "No clients found" : "No clients match your search"}
+                                                        <td colSpan={24 + (getAllFinancialYears().length * 4)} className="px-6 py-12 text-center">
+                                                            <div className="flex flex-col items-center space-y-3">
+                                                                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                                                                    <FontAwesomeIcon icon={faSearch} className="text-gray-400 text-2xl" />
+                                                                </div>
+                                                                <div className="text-gray-500 text-lg font-medium">
+                                                                    {clients.length === 0 ? "No clients found" : "No clients match your search"}
+                                                                </div>
+                                                                <div className="text-gray-400 text-sm">
+                                                                    {clients.length === 0 ? "Start by adding your first client" : "Try adjusting your search criteria"}
+                                                                </div>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 ) : (
                                                     filteredClients.map((client, index) => (
-                                                        <tr key={client.id || index} className="hover:bg-gray-50">
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="flex items-center">
-                                                                    <div className="flex-shrink-0 h-10 w-10">
-                                                                        <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-                                                                            <FontAwesomeIcon icon={faBuilding} className="text-green-600" />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="ml-4">
-                                                                        <div className="text-sm font-medium text-gray-900">
-                                                                            {client.customerName || "N/A"}
-                                                                        </div>
-                                                                        <div className="text-sm text-gray-500">
-                                                                            {client.mainCategory || "N/A"}
-                                                                        </div>
-                                                                    </div>
+                                                        <tr key={client.id || index} className="hover:bg-blue-50 transition-colors duration-200 divide-x divide-gray-200">
+                                                            {/* Sr. No. */}
+                                                            <td className="px-2 py-2 text-center text-xs text-gray-900 border-r border-gray-200 bg-gray-50 font-medium">
+                                                                {index + 1}
+                                                            </td>
+                                                            
+                                                            {/* Customer Name */}
+                                                            <td className="px-3 py-2 text-xs text-gray-900 border-r border-gray-200 font-medium">
+                                                                <div className="truncate" title={client.customerName}>
+                                                                    {client.customerName || "-"}
                                                                 </div>
                                                             </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="text-sm text-gray-900">{client.mailId1 || "N/A"}</div>
-                                                                <div className="text-sm text-gray-500">{client.mobileNumber1 || "N/A"}</div>
+                                                            
+                                                            {/* Resource */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.resource}>
+                                                                    {client.resource || "-"}
+                                                                </div>
                                                             </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="text-sm text-gray-900">{client.industry || "N/A"}</div>
-                                                                <div className="text-sm text-gray-500">{client.subIndustry || "N/A"}</div>
+                                                            
+                                                            {/* DGFT Category */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.dgftCategory}>
+                                                                    {client.dgftCategory || "-"}
+                                                                </div>
                                                             </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="text-sm text-gray-900">
+                                                            
+                                                            {/* GST Category */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.gstCategory}>
+                                                                    {client.gstCategory || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Main Category */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="flex justify-center">
+                                                                    {client.mainCategory ? (
+                                                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-800 font-medium">
+                                                                            {client.mainCategory}
+                                                                        </span>
+                                                                    ) : "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Industry */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.industry}>
+                                                                    {client.industry || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Sub Industry */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.subIndustry}>
+                                                                    {client.subIndustry || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Department */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.department}>
+                                                                    {client.department || "-"}
+                                                                </div>
+                                                            </td>
+                                                                             {/* Fresh Services */}
+                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                <div className="truncate" title={client.freshService}>
+                                                    {client.freshService || "-"}
+                                                </div>
+                                            </td>
+                                            
+                                            {/* EODC Services */}
+                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                <div className="truncate" title={client.eodcService}>
+                                                    {client.eodcService || "-"}
+                                                </div>
+                                            </td>
+                                            
+                                            {/* Basic Services */}
+                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                <div className="truncate" title={client.basicService}>
+                                                    {client.basicService || "-"}
+                                                </div>
+                                            </td>
+                                                            
+                                                            {/* Other DGFT Services */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.otherDgftService}>
+                                                                    {client.otherDgftService || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* GST Services */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.gstService}>
+                                                                    {client.gstService || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Mo. No. */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.mobileNumber1}>
+                                                                    {client.mobileNumber1 || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Contact Person-1 */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.contactPersonName1}>
+                                                                    {client.contactPersonName1 || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Mo. No. 2 */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.mobileNumber2}>
+                                                                    {client.mobileNumber2 || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Contact Person-2 */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.contactPersonName2}>
+                                                                    {client.contactPersonName2 || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Mail id */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.mailId1}>
+                                                                    {client.mailId1 || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Mail ID 2 */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.mailId2}>
+                                                                    {client.mailId2 || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Address */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate" title={client.address}>
+                                                                    {client.address || "-"}
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            {/* Dynamic Financial Year Columns */}
+                                                            {getAllFinancialYears().map(year => {
+                                                                const turnover = getTurnoverForYear(client, year);
+                                                                const domestic = turnover ? parseFloat(turnover.domesticTurnover) || 0 : 0;
+                                                                const directExport = turnover ? parseFloat(turnover.directExportTurnover) || 0 : 0;
+                                                                const merchantExport = turnover ? parseFloat(turnover.merchantExportTurnover) || 0 : 0;
+                                                                const total = domestic + directExport + merchantExport;
+                                                                
+                                                                return (
+                                                                    <>
+                                                                        <td key={`domestic-${client.id}-${year}`} className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200 text-right">
+                                                                            {domestic > 0 ? `₹${domestic.toLocaleString('en-IN')}` : "-"}
+                                                                        </td>
+                                                                        <td key={`direct-${client.id}-${year}`} className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200 text-right">
+                                                                            {directExport > 0 ? `₹${directExport.toLocaleString('en-IN')}` : "-"}
+                                                                        </td>
+                                                                        <td key={`merchant-${client.id}-${year}`} className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200 text-right">
+                                                                            {merchantExport > 0 ? `₹${merchantExport.toLocaleString('en-IN')}` : "-"}
+                                                                        </td>
+                                                                        <td key={`total-${client.id}-${year}`} className="px-3 py-2 text-xs text-gray-900 border-r border-gray-200 text-right font-semibold bg-green-50">
+                                                                            {total > 0 ? `₹${total.toLocaleString('en-IN')}` : "-"}
+                                                                        </td>
+                                                                    </>
+                                                                );
+                                                            })}
+                                                            
+                                                            {/* Grand Total Turnover */}
+                                                            <td className="px-3 py-2 text-xs text-gray-900 border-r border-gray-200 text-right font-bold bg-yellow-50">
+                                                                {calculateClientGrandTotal(client) > 0 
+                                                                    ? `₹${calculateClientGrandTotal(client).toLocaleString('en-IN')}` 
+                                                                    : "-"
+                                                                }
+                                                            </td>
+                                                            
+                                                            {/* Client Joining Date */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200">
+                                                                <div className="truncate">
                                                                     {client.clientJoiningDate 
                                                                         ? new Date(client.clientJoiningDate).toLocaleDateString('en-IN')
-                                                                        : "N/A"
+                                                                        : "-"
                                                                     }
                                                                 </div>
                                                             </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                            
+                                                            {/* Reference Client */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200 text-center">
                                                                 {client.ReferanceClient ? (
-                                                                    <div>
-                                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                                            Reference Client
-                                                                        </span>
-                                                                        {client.ReferanceClientId && (
-                                                                            <div className="text-xs text-gray-500 mt-1">
-                                                                                Ref: {clients.find(c => c.id === client.ReferanceClientId)?.customerName || "Unknown"}
-                                                                            </div>
-                                                                        )}
-                                                                    </div>
+                                                                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800 font-medium">
+                                                                        Yes
+                                                                    </span>
                                                                 ) : (
-                                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                                        Regular Client
+                                                                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-800">
+                                                                        No
                                                                     </span>
                                                                 )}
                                                             </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                                <div className="flex space-x-2">
+                                                            
+                                                            {/* Actions */}
+                                                            <td className="px-3 py-2 text-center border-r border-gray-200">
+                                                                <div className="flex justify-center space-x-1">
                                                                     <button
                                                                         onClick={() => handleEditClient(client)}
-                                                                        className="text-indigo-600 hover:text-indigo-900 p-2 rounded-lg hover:bg-indigo-50 transition-all"
+                                                                        className="inline-flex items-center justify-center w-6 h-6 text-indigo-600 hover:text-white hover:bg-indigo-600 rounded transition-all duration-200"
                                                                         title="Edit Client"
                                                                     >
-                                                                        <FontAwesomeIcon icon={faEdit} />
+                                                                        <FontAwesomeIcon icon={faEdit} className="text-xs" />
                                                                     </button>
                                                                     <button
                                                                         onClick={() => {
                                                                             setClientToDelete(client);
                                                                             setDeleteConfirmOpen(true);
                                                                         }}
-                                                                        className="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-all"
+                                                                        className="inline-flex items-center justify-center w-6 h-6 text-red-600 hover:text-white hover:bg-red-600 rounded transition-all duration-200"
                                                                         title="Delete Client"
                                                                     >
-                                                                        <FontAwesomeIcon icon={faTrash} />
+                                                                        <FontAwesomeIcon icon={faTrash} className="text-xs" />
                                                                     </button>
                                                                 </div>
                                                             </td>
@@ -1142,11 +1520,31 @@ const ManageClient = () => {
                                         </table>
                                     </div>
 
-                                    {/* Pagination info */}
+                                    {/* Statistics and Pagination info */}
                                     {filteredClients.length > 0 && (
-                                        <div className="mt-6 flex justify-between items-center">
-                                            <div className="text-sm text-gray-700">
-                                                Showing {filteredClients.length} of {clients.length} clients
+                                        <div className="mt-6 bg-gray-50 rounded-lg p-4">
+                                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                                                <div className="flex flex-wrap gap-6 text-sm text-gray-700">
+                                                    <div className="flex items-center space-x-2">
+                                                        <FontAwesomeIcon icon={faBuilding} className="text-green-600" />
+                                                        <span>Total Clients: <span className="font-semibold">{clients.length}</span></span>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <FontAwesomeIcon icon={faSearch} className="text-blue-600" />
+                                                        <span>Filtered: <span className="font-semibold">{filteredClients.length}</span></span>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <FontAwesomeIcon icon={faUser} className="text-purple-600" />
+                                                        <span>Reference Clients: <span className="font-semibold">{clients.filter(c => c.ReferanceClient).length}</span></span>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <FontAwesomeIcon icon={faIndianRupeeSign} className="text-yellow-600" />
+                                                        <span>With Turnover: <span className="font-semibold">{clients.filter(c => c.turnover && c.turnover.length > 0).length}</span></span>
+                                                    </div>
+                                                </div>
+                                                <div className="text-sm text-gray-500">
+                                                    Last updated: {new Date().toLocaleDateString('en-IN')} {new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                                                </div>
                                             </div>
                                         </div>
                                     )}
