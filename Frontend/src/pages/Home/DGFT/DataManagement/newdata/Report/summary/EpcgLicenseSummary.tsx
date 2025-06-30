@@ -2,15 +2,15 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import { authAtom } from '../../../../../../atoms/authAtom';
-import { CustomerDetail } from '../../../../../utility/types/customerDetail';
-import { fetchCustomers } from '../../../../../utility/dataFetch';
-import { fetchEpcgLicenseBySrNo } from '../../../../../utility/epcgService';
-import { BACKEND_URL } from '../../../../../../Globle';
-import Loading from '../../../../../components/Loading';
-import InputField from '../../../../../components/InputField';
-import Divider from '../../../../../components/Divider';
-import NewDataButtons from '../NewDataButtons';
+import { authAtom } from '../../../../../../../atoms/authAtom';
+import { CustomerDetail } from '../../../../../../utility/types/customerDetail';
+import { fetchCustomers } from '../../../../../../utility/dataFetch';
+import { fetchEpcgLicenseBySrNo } from '../../../../../../utility/epcgService';
+import { BACKEND_URL } from '../../../../../../../Globle';
+import Loading from '../../../../../../components/Loading';
+import InputField from '../../../../../../components/InputField';
+import Divider from '../../../../../../components/Divider';
+import NewDataButtons from '../../NewDataButtons';
 import { useNavigate } from 'react-router-dom';
 
 const EpcgLicenseSummary = () => {

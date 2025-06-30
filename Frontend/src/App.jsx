@@ -31,8 +31,8 @@ import AdvanceLicensePage from "./pages/Home/DGFT/DataManagement/newdata/Documen
 import EInvoicePage from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/EInvoice/EInvoicePage";
 import ShippingBillLayout from "./Layouts/ShippingBillLayout";
 import NewDataLayout from "./Layouts/NewDataLayout";
-import EpcgLicenseSummary from "./pages/Home/DGFT/DataManagement/newdata/Report/EpcgLicenseSummary";
-import EpcgAnalytics from "./pages/Home/DGFT/DataManagement/newdata/Report/EPCGLicenceSummary/EpcgAnalytics";
+import EpcgLicenseSummary from "./pages/Home/DGFT/DataManagement/newdata/Report/summary/EpcgLicenseSummary";
+import EpcgAnalytics from "./pages/Home/DGFT/DataManagement/newdata/Report/summary/EPCGLicenceSummary/EpcgAnalytics";
 import DGFTHomePage from "./pages/Home/DGFT/DgftHomePage";
 import ManageClient from "./pages/Home/ManageClient";
 import DgftHomePage from "./pages/Home/DGFT/DgftHomePage";
@@ -49,10 +49,19 @@ function App() {
 
         <Route path="/" element={<ProtectedRoute element={<HomePage />} />} />
 
-        <Route path="/manage-client" element={<ProtectedRoute element={<ManageClient />} />} />
+        <Route
+          path="/manage-client"
+          element={<ProtectedRoute element={<ManageClient />} />}
+        />
 
-        <Route path="/gst" element={<ProtectedRoute element={<UnderDevelopment />} />} />
-        <Route path="/dgft" element={<ProtectedRoute element={<DgftHomePage />} />} />
+        <Route
+          path="/gst"
+          element={<ProtectedRoute element={<UnderDevelopment />} />}
+        />
+        <Route
+          path="/dgft"
+          element={<ProtectedRoute element={<DgftHomePage />} />}
+        />
 
         <Route
           path="/dgft/datamanagement"
@@ -74,13 +83,28 @@ function App() {
             <Route path="e-way-bill" />
             <Route path="epcg-lic" />
             <Route path="advance-lic" />
-            <Route path="direct-export" element={<ProtectedRoute element={<DirectExport/>} />} />
-            <Route path="indirect-export" element={<ProtectedRoute element={<IndirectExport />} />} />
+            <Route
+              path="direct-export"
+              element={<ProtectedRoute element={<DirectExport />} />}
+            />
+            <Route
+              path="indirect-export"
+              element={<ProtectedRoute element={<IndirectExport />} />}
+            />
           </Route>
           <Route path="documents">
-            <Route path="epcg-lic" element={<ProtectedRoute element={<EPCGLicensePage />} />} />
-            <Route path="advance-lic" element={<ProtectedRoute element={<AdvanceLicensePage />} />} />
-            <Route path="shipping-bill" element={ <ProtectedRoute element={ <ShippingBillLayout />} />}>
+            <Route
+              path="epcg-lic"
+              element={<ProtectedRoute element={<EPCGLicensePage />} />}
+            />
+            <Route
+              path="advance-lic"
+              element={<ProtectedRoute element={<AdvanceLicensePage />} />}
+            />
+            <Route
+              path="shipping-bill"
+              element={<ProtectedRoute element={<ShippingBillLayout />} />}
+            >
               <Route
                 path="part1"
                 element={<ProtectedRoute element={<Part1 />} />}
@@ -102,18 +126,47 @@ function App() {
                 element={<ProtectedRoute element={<Part5 />} />}
               />
             </Route>
-            <Route path="invoice" element={<ProtectedRoute element={<Invoice />} />} />
-            <Route path="e-invoice" element={<ProtectedRoute element={<EInvoicePage />} />} />
-            <Route path="e-brc" element={<ProtectedRoute element={<EBRCPage />} />} />
-            <Route path="e-way-bill" element={<ProtectedRoute element={<EWayBillDetails />} />} />
+            <Route
+              path="invoice"
+              element={<ProtectedRoute element={<Invoice />} />}
+            />
+            <Route
+              path="e-invoice"
+              element={<ProtectedRoute element={<EInvoicePage />} />}
+            />
+            <Route
+              path="e-brc"
+              element={<ProtectedRoute element={<EBRCPage />} />}
+            />
+            <Route
+              path="e-way-bill"
+              element={<ProtectedRoute element={<EWayBillDetails />} />}
+            />
             <Route path="subsidy" />
-          </Route>          <Route path="report">
-            <Route path="epcg-lic-summary" element={<ProtectedRoute element={<EpcgLicenseSummary />} />} />
-            <Route path="epcg-analytics" element={<ProtectedRoute element={<EpcgAnalytics />} />} />
-            <Route path="advance-lic-summary" />
-            <Route path="party-wise-epcg-lic-summary" />
-            <Route path="party-wise-advance-lic-summary" />
           </Route>
+          <Route path="report">
+            <Route path="summary">
+              <Route
+                path="epcg-lic-summary"
+                element={<ProtectedRoute element={<EpcgLicenseSummary />} />}
+              />
+              <Route
+                path="epcg-analytics"
+                element={<ProtectedRoute element={<EpcgAnalytics />} />}
+              />
+              <Route path="advance-lic-summary" />
+              <Route path="party-wise-epcg-lic-summary" />
+              <Route path="party-wise-advance-lic-summary" />
+            </Route>
+            <Route path="form-file">
+              <Route path="direct-export" />
+              <Route path="indirect-export" />
+            </Route>
+            <Route path="documents">
+              <Route path="epcg-lic"/>
+            </Route>
+          </Route>
+
         </Route>
 
         {/* Data analitics */}
@@ -167,7 +220,10 @@ function App() {
         />
 
         {/* //? process monitoring section */}
-        <Route path="/dgft/admin" element={<ProtectedRoute element={<Admin />} />} />
+        <Route
+          path="/dgft/admin"
+          element={<ProtectedRoute element={<Admin />} />}
+        />
         {/* <Route path="/datamanagement/*" element={<UnderDevelopment />} /> */}
         <Route path="*" element={<NotFound />} />
       </Routes>
