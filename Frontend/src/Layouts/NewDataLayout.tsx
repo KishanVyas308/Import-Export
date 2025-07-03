@@ -24,7 +24,7 @@ const NewDataLayout = () => {
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-1/3 right-1/3 w-96 h-96 bg-green-400 rounded-full mix-blend-multiply filter blur-3xl opacity-5 animate-blob"></div>
         <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-green-400 rounded-full mix-blend-multiply filter blur-3xl opacity-5 animate-blob animation-delay-4000"></div>
-        
+
         {/* Curved lines */}
         <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <path d="M0,100 Q300,150 600,100 T1200,100" fill="none" stroke="rgba(99, 212, 120, 0.05)" strokeWidth="3" />
@@ -42,7 +42,7 @@ const NewDataLayout = () => {
                 <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="white" strokeWidth="1"/>
+                      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="white" strokeWidth="1" />
                     </pattern>
                   </defs>
                   <rect width="100%" height="100%" fill="url(#grid)" />
@@ -60,7 +60,7 @@ const NewDataLayout = () => {
                     <span>Dashboard</span>
                   </Link>
                 </div>
-                
+
                 <div className="flex items-center space-x-6">
                   <span className="text-white/90 text-xl">{greeting}, <span className="font-semibold">{user.user.name.split(" ")[0]}</span></span>
                   <div>
@@ -70,7 +70,7 @@ const NewDataLayout = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Navigation Menu */}
           <div className="bg-white rounded-xl shadow-md p-4 mb-8">
             <nav className="flex flex-wrap gap-6 justify-center md:justify-start">
@@ -82,8 +82,8 @@ const NewDataLayout = () => {
                   </svg>
                 </button>
                 <div className="absolute hidden group-hover:block z-50 w-48  bg-white text-gray-700 rounded-lg shadow-xl">
-                  <NavLink to="data/client-master" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Client Master</NavLink>
-                  <NavLink to="data/other-detail" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Other Details</NavLink>
+                  <NavLink to="data/client-master" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Client Master</NavLink>
+                  <NavLink to="data/other-detail" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Other Details</NavLink>
                 </div>
               </div>
 
@@ -95,16 +95,16 @@ const NewDataLayout = () => {
                   </svg>
                 </button>
                 <div className="absolute hidden group-hover:block z-50 w-80 bg-white text-gray-700 rounded-lg shadow-xl">
-                    <NavLink to="form/shipping-bill" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Shipping Bill</NavLink>
-                    <NavLink to="form/invoice" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Invoice</NavLink>
-                    <NavLink to="form/e-invoice" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E-Invoice</NavLink>
-                    <NavLink to="form/e-brc" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E-BRC</NavLink>
-                    <NavLink to="form/e-way-bill" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E-Way Bill</NavLink>
-                    <NavLink to="form/epcg-eo-fulfillment" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG Lic. wise EO fulfillment</NavLink>
-                    <NavLink to="form/advance-eo-fulfillment" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance Lic. wise EO fulfillment</NavLink>
+                  <NavLink to="form/shipping-bill" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Shipping Bill</NavLink>
+                  <NavLink to="form/invoice" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Invoice</NavLink>
+                  <NavLink to="form/e-invoice" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E-Invoice</NavLink>
+                  <NavLink to="form/e-brc" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E-BRC</NavLink>
+                  <NavLink to="form/e-way-bill" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E-Way Bill</NavLink>
+                  <NavLink to="form/epcg-eo-fulfillment" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG Lic. wise EO fulfillment</NavLink>
+                  <NavLink to="form/advance-eo-fulfillment" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance Lic. wise EO fulfillment</NavLink>
 
-                  <NavLink to="form/direct-export" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Direct Export - ANF 5B</NavLink>
-                  <NavLink to="form/indirect-export" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Indirect Export - ANF 5B</NavLink>
+                  <NavLink to="form/direct-export" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Direct Export - ANF 5B</NavLink>
+                  <NavLink to="form/indirect-export" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Indirect Export - ANF 5B</NavLink>
                 </div>
               </div>
 
@@ -116,14 +116,14 @@ const NewDataLayout = () => {
                   </svg>
                 </button>
                 <div className="absolute hidden group-hover:block z-50 w-48 bg-white text-gray-700 rounded-lg shadow-xl">
-                  <NavLink to="documents/epcg-lic" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG License</NavLink>
-                  <NavLink to="documents/advance-lic" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance License</NavLink>
-                  <NavLink to="documents/shipping-bill/part1" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Shipping Bill</NavLink>
-                  <NavLink to="documents/invoice" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Invoice</NavLink>
-                  <NavLink to="documents/e-invoice" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E - Invoice</NavLink>
-                  <NavLink to="documents/e-brc" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E - BRC</NavLink>
-                  <NavLink to="documents/e-way-bill" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E - Way Bill</NavLink>
-                  <NavLink to="documents/subsidy" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Subsidy</NavLink>
+                  <NavLink to="documents/epcg-lic" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG License</NavLink>
+                  <NavLink to="documents/advance-lic" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance License</NavLink>
+                  <NavLink to="documents/shipping-bill/part1" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Shipping Bill</NavLink>
+                  <NavLink to="documents/invoice" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Invoice</NavLink>
+                  <NavLink to="documents/e-invoice" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E - Invoice</NavLink>
+                  <NavLink to="documents/e-brc" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E - BRC</NavLink>
+                  <NavLink to="documents/e-way-bill" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E - Way Bill</NavLink>
+                  <NavLink to="documents/subsidy" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Subsidy</NavLink>
                 </div>
               </div>
 
@@ -134,20 +134,53 @@ const NewDataLayout = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div className="absolute hidden group-hover:block z-50 w-80 bg-white text-gray-700 rounded-lg shadow-xl">
-                  <NavLink to="report/epcg-lic-summary" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG License Summary</NavLink>
-                  <NavLink to="report/advance-lic-summary" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance License Summary</NavLink>
-                  <NavLink to="report/party-wise-epcg-lic-summary" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Party-wise EPCG License Summary</NavLink>
-                  <NavLink to="report/party-wise-advance-lic-summary" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Party-wise Advance License Summary</NavLink>
-                  <NavLink to="report/client-master-report" className={({isActive}) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Client Master Report</NavLink>
+                <div className="absolute hidden group-hover:block z-50 w-64 bg-white text-gray-700 rounded-lg shadow-xl">
+                  {/* Report subsection */}
+                  <div className="relative group/report py-2 px-4 hover:bg-gray-50 flex justify-between items-center">
+                    <span className="font-medium">Summary</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <div className="absolute hidden group-hover/report:block left-full top-0 w-80 bg-white text-gray-700 rounded-lg shadow-xl">
+                      <NavLink to="report/summary/epcg-lic-summary" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG License Summary</NavLink>
+                      <NavLink to="report/summary/advance-lic-summary" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance License Summary</NavLink>
+                      <NavLink to="report/summary/party-wise-epcg-lic-summary" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Party-wise EPCG License Summary</NavLink>
+                      <NavLink to="report/summary/party-wise-advance-lic-summary" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Party-wise Advance License Summary</NavLink>
+                      <NavLink to="report/summary/client-master-report" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Client Master Report</NavLink>
+                    </div>
+                  </div>
+                  
+                  {/* Form/Data subsection */}
+                  <div className="relative group/form py-2 px-4 hover:bg-gray-50 flex justify-between items-center">
+                    <span className="font-medium">Form/Data</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <div className="absolute hidden group-hover/form:block left-full top-0 w-80 bg-white text-gray-700 rounded-lg shadow-xl">
+                      <NavLink to="report/form-file/direct-export" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Direct Export - ANF 5B</NavLink>
+                      <NavLink to="report/form-file/indirect-export" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Indirect Export - ANF 5B</NavLink>
+                    </div>
+                  </div>
+
+                  {/* Document subsection */}
+                  <div className="relative group/doc py-2 px-4 hover:bg-gray-50 flex justify-between items-center">
+                    <span className="font-medium">Document</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <div className="absolute hidden group-hover/doc:block left-full top-0 w-80 bg-white text-gray-700 rounded-lg shadow-xl">
+                      <NavLink to="report/documents/epcg-lic" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG License</NavLink>
+                    </div>
+                  </div>
                 </div>
               </div>
+              
             </nav>
           </div>
 
           {/* Main content area */}
           <div className="bg-white rounded-xl shadow-md p-6">
-            <Outlet  />
+            <Outlet />
           </div>
         </div>
 
