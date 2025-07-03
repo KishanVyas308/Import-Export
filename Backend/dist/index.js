@@ -53,6 +53,7 @@ const manageAddByAdminRoute_1 = __importDefault(require("./router/manageAddByAdm
 const getDataForUserRoute_1 = __importDefault(require("./router/getDataForUserRoute"));
 const documentsListRoute_1 = __importDefault(require("./router/documentList/documentsListRoute"));
 const formsRoute_1 = __importDefault(require("./router/forms/formsRoute"));
+const reportRoute_1 = __importDefault(require("./router/report/reportRoute"));
 const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 app.use((0, cors_1.default)({
@@ -80,6 +81,8 @@ app.use("/api/v1/admin", manageAddByAdminRoute_1.default);
 app.use("/api/v1/documentslist", documentsListRoute_1.default);
 //? routed for froms
 app.use('/api/v1/forms', formsRoute_1.default);
+//? routes for reports
+app.use('/api/v1/reports', reportRoute_1.default);
 //? get data for user 
 app.use("/api/v1/getdata", getDataForUserRoute_1.default);
 // Initialize WebSocket server on the same HTTP server

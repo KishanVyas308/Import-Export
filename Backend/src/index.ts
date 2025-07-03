@@ -16,6 +16,7 @@ import manageAddByAdminRoute from "./router/manageAddByAdminRoute";
 import getDataForUserRoute from "./router/getDataForUserRoute";
 import documentsListRoute from "./router/documentList/documentsListRoute"
 import formsRoute from "./router/forms/formsRoute"
+import reportRoute from "./router/report/reportRoute"
 
 
 const app = express();
@@ -61,6 +62,9 @@ app.use("/api/v1/documentslist", documentsListRoute)
 
 //? routed for froms
 app.use('/api/v1/forms', formsRoute)
+
+//? routes for reports
+app.use('/api/v1/reports', reportRoute)
 
 //? get data for user 
 app.use("/api/v1/getdata", getDataForUserRoute);
