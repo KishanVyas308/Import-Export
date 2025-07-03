@@ -39,6 +39,7 @@ import DgftHomePage from "./pages/Home/DGFT/DgftHomePage";
 
 import DirectExportReport from "./pages/Home/DGFT/DataManagement/newdata/Report/form-file/DirectExportReport";
 import IndirectExportReport from "./pages/Home/DGFT/DataManagement/newdata/Report/form-file/IndirectExportReport";
+import EPCGLicenseReport from "./pages/Home/DGFT/DataManagement/newdata/Report/documents/EPCGLicenseReport";
 
 
 function App() {
@@ -167,7 +168,7 @@ function App() {
               <Route path="indirect-export" element={<ProtectedRoute element={<IndirectExportReport />} />} />
             </Route>
             <Route path="documents">
-              <Route path="epcg-lic"/>
+              <Route path="epcg-lic" element={<ProtectedRoute element={<EPCGLicenseReport />} />} />
             </Route>
           </Route>
 
