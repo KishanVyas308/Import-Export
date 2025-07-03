@@ -11,7 +11,78 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getIndirectExport = getIndirectExport;
 exports.getDirectExport = getDirectExport;
+exports.getEpcgLicense = getEpcgLicense;
 const __1 = require("../..");
+function getEpcgLicense(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { page = 1, limit = 50, search = "" } = req.query;
+            const skip = (parseInt(page) - 1) * parseInt(limit);
+            const take = parseInt(limit);
+            // Create search filter
+            const searchFilter = search ? {
+                OR: [
+                    { customerName: { contains: search } },
+                    { licenseNo: { contains: search } },
+                    { fileNo: { contains: search } },
+                    { licenseType: { contains: search } },
+                    { bankGuaranteeSubmittedTo: { contains: search } },
+                    { remarks: { contains: search } }
+                ]
+            } : {};
+            const data = {};
+            // Retrieve EPCG License data with related tables
+            const [epcgLicenses, epcgLicensesCount] = yield Promise.all([
+                __1.prisma.documentEpcgLicense.findMany({
+                    where: searchFilter,
+                    include: {
+                        user: {
+                            select: {
+                                email: true,
+                                companyName: true,
+                                contactPersonName: true
+                            }
+                        },
+                        DocumentEpcgLicenseEoAsPerLicense: true,
+                        DocumentEpcgLicenseActualExport: true
+                    },
+                    orderBy: {
+                        uploadedDate: 'desc'
+                    },
+                    skip,
+                    take
+                }),
+                __1.prisma.documentEpcgLicense.count({ where: searchFilter })
+            ]);
+            // Organize data in response object
+            data.epcgLicenses = {
+                data: epcgLicenses,
+                count: epcgLicensesCount,
+                hasMore: skip + take < epcgLicensesCount
+            };
+            // Add pagination info
+            data.pagination = {
+                currentPage: parseInt(page),
+                limit: parseInt(limit),
+                totalRecords: epcgLicensesCount,
+                hasMore: skip + take < epcgLicensesCount
+            };
+            res.status(200).json({
+                success: true,
+                message: "EPCG License data retrieved successfully",
+                data: data
+            });
+        }
+        catch (error) {
+            console.error("Error retrieving EPCG License data:", error);
+            res.status(500).json({
+                success: false,
+                message: "Internal Server Error",
+                error: error instanceof Error ? error.message : "Unknown error"
+            });
+        }
+    });
+}
 function getIndirectExport(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

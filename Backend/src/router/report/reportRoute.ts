@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { getIndirectExport, getDirectExport } from "../../controller/report/reportController";
+import { getEpcgLicense , getIndirectExport, getDirectExport } from "../../controller/report/reportController";
+
 
 const router = Router();
 
@@ -7,4 +8,6 @@ const router = Router();
 router.get("/form/indirectexport", getIndirectExport);
 router.get("/form/directexport", getDirectExport);
 
+// Document Routes
+router.get("/document/epcglicense", getEpcgLicense);
 export default router;

@@ -6,4 +6,6 @@ const router = (0, express_1.Router)();
 // Form Routes
 router.get("/form/indirectexport", reportController_1.getIndirectExport);
 router.get("/form/directexport", reportController_1.getDirectExport);
+// Document Routes
+router.get("/document/epcglicense", reportController_1.getEpcgLicense);
 exports.default = router;
