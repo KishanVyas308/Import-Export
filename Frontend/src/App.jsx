@@ -37,6 +37,10 @@ import DGFTHomePage from "./pages/Home/DGFT/DgftHomePage";
 import ManageClient from "./pages/Home/ManageClient";
 import DgftHomePage from "./pages/Home/DGFT/DgftHomePage";
 
+import DirectExportReport from "./pages/Home/DGFT/DataManagement/newdata/Report/form-file/DirectExportReport";
+import IndirectExportReport from "./pages/Home/DGFT/DataManagement/newdata/Report/form-file/IndirectExportReport";
+
+
 function App() {
   return (
     <Router>
@@ -159,8 +163,8 @@ function App() {
               <Route path="party-wise-advance-lic-summary" />
             </Route>
             <Route path="form-file">
-              <Route path="direct-export" />
-              <Route path="indirect-export" />
+              <Route path="direct-export" element={<ProtectedRoute element={<DirectExportReport />} />} />
+              <Route path="indirect-export" element={<ProtectedRoute element={<IndirectExportReport />} />} />
             </Route>
             <Route path="documents">
               <Route path="epcg-lic"/>
