@@ -651,7 +651,7 @@ const DirectExportReport: React.FC = () => {
                 </div>
 
                 {/* Summary Cards */}
-                {pagination && (
+                {/* {pagination && (
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                         <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-green-500 hover:shadow-xl transition-all duration-300">
                             <div className="flex items-center justify-between">
@@ -698,7 +698,7 @@ const DirectExportReport: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                )}
+                )} */}
 
                 {/* Legend */}
                 <div className="bg-white rounded-xl shadow-lg p-6 mb-8 hover:shadow-xl transition-all duration-300">
