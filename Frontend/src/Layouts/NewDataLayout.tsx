@@ -172,6 +172,108 @@ const NewDataLayout = () => {
                       <NavLink to="report/documents/epcg-lic" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG License</NavLink>
                     </div>
                   </div>
+
+                  {/* DGFT Basic subsection */}
+                  <div className="relative group/dgft-basic py-2 px-4 hover:bg-gray-50 flex justify-between items-center">
+                    <span className="font-medium">DGFT - Basic</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <div className="absolute hidden group-hover/dgft-basic:block left-full top-0 w-80 bg-white text-gray-700 rounded-lg shadow-xl max-h-96 overflow-y-auto">
+                      <NavLink to="report/dgft-basic/ad-code" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>AD Code</NavLink>
+                      <NavLink to="report/dgft-basic/bank-incentive" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Bank Incentive</NavLink>
+                      <NavLink to="report/dgft-basic/coo" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>COO</NavLink>
+                      <NavLink to="report/dgft-basic/dsc" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>DSC</NavLink>
+                      <NavLink to="report/dgft-basic/icegate" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Icegate</NavLink>
+                      <NavLink to="report/dgft-basic/iec" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>IEC</NavLink>
+                      <NavLink to="report/dgft-basic/iem-udyam" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>IEM (UDYAM)</NavLink>
+                      <NavLink to="report/dgft-basic/ies" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>IES</NavLink>
+                      <NavLink to="report/dgft-basic/lei" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>LEI</NavLink>
+                      <NavLink to="report/dgft-basic/pmfs" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>PMFS</NavLink>
+                      <NavLink to="report/dgft-basic/rcmc" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>RCMC</NavLink>
+                      <NavLink to="report/dgft-basic/rex-no" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Rex No.</NavLink>
+                      <NavLink to="report/dgft-basic/rodtep-script-generate" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Rodtep - Script Generate</NavLink>
+                      <NavLink to="report/dgft-basic/rodtep-script-transfer" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Rodtep - Script Transfer</NavLink>
+                      <NavLink to="report/dgft-basic/self-sealing-permission" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Self Sealing Permission</NavLink>
+                    </div>
+                  </div>
+
+                  {/* DGFT Closure + AR subsection */}
+                  <div className="relative group/dgft-closure py-2 px-4 hover:bg-gray-50 flex justify-between items-center">
+                    <span className="font-medium">DGFT - Closure + AR</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <div className="absolute hidden group-hover/dgft-closure:block left-full top-0 w-80 bg-white text-gray-700 rounded-lg shadow-xl max-h-96 overflow-y-auto">
+                      <NavLink to="report/dgft-closure/advance-appeal" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - Appeal</NavLink>
+                      <NavLink to="report/dgft-closure/advance-extension" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - Extension</NavLink>
+                      <NavLink to="report/dgft-closure/advance-notice" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - Notice</NavLink>
+                      <NavLink to="report/dgft-closure/advance-redemption" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - Redemption</NavLink>
+                      <NavLink to="report/dgft-closure/advance-revalidation" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - Revalidation</NavLink>
+                      <NavLink to="report/dgft-closure/epcg-annual-report" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG - Annual Report</NavLink>
+                      <NavLink to="report/dgft-closure/epcg-appeal" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG - Appeal</NavLink>
+                      <NavLink to="report/dgft-closure/epcg-extension" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG - Extension</NavLink>
+                      <NavLink to="report/dgft-closure/epcg-notice" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG - Notice</NavLink>
+                      <NavLink to="report/dgft-closure/epcg-redemption" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG - Redemption</NavLink>
+                      <NavLink to="report/dgft-closure/advance-value-enhancement" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - Value Enhancement</NavLink>
+                      <NavLink to="report/dgft-closure/advance-validation" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - Validation</NavLink>
+                    </div>
+                  </div>
+
+                  {/* DGFT Online Lic subsection */}
+                  <div className="relative group/dgft-online py-2 px-4 hover:bg-gray-50 flex justify-between items-center">
+                    <span className="font-medium">DGFT - Online Lic</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <div className="absolute hidden group-hover/dgft-online:block left-full top-0 w-80 bg-white text-gray-700 rounded-lg shadow-xl max-h-96 overflow-y-auto">
+                      <NavLink to="report/dgft-online/advance-amendment" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - Amendment</NavLink>
+                      <NavLink to="report/dgft-online/advance-cos-invalidation" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - COS / Invalidation</NavLink>
+                      <NavLink to="report/dgft-online/advance-surrender" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - Surrender</NavLink>
+                      <NavLink to="report/dgft-online/advance-fresh" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - Fresh</NavLink>
+                      <NavLink to="report/dgft-online/dfia-script-generate" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>DFIA - Script Generate</NavLink>
+                      <NavLink to="report/dgft-online/dfia-file-no-generation" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>DFIA - File No. Generation</NavLink>
+                      <NavLink to="report/dgft-online/epcg-amendment" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG - Amendment</NavLink>
+                      <NavLink to="report/dgft-online/epcg-installation" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG - Installation</NavLink>
+                      <NavLink to="report/dgft-online/epcg-invalidation" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG - Invalidation</NavLink>
+                      <NavLink to="report/dgft-online/epcg-invalidation-surrender" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG - Invalidation Surrender</NavLink>
+                      <NavLink to="report/dgft-online/epcg-surrender" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG - Surrender</NavLink>
+                      <NavLink to="report/dgft-online/epcg-fresh" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>EPCG - Fresh</NavLink>
+                      <NavLink to="report/dgft-online/free-sale-certificate" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Free Sale Certificate</NavLink>
+                      <NavLink to="report/dgft-online/nfmims" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>NFMIMS</NavLink>
+                      <NavLink to="report/dgft-online/pims" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>PIMS</NavLink>
+                      <NavLink to="report/dgft-online/sims" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>SIMS</NavLink>
+                      <NavLink to="report/dgft-online/advance-norms-fixation" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advance - Norms Fixation</NavLink>
+                    </div>
+                  </div>
+
+                  {/* DGFT Other subsection */}
+                  <div className="relative group/dgft-other py-2 px-4 hover:bg-gray-50 flex justify-between items-center">
+                    <span className="font-medium">DGFT - Other</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <div className="absolute hidden group-hover/dgft-other:block left-full top-0 w-80 bg-white text-gray-700 rounded-lg shadow-xl max-h-96 overflow-y-auto">
+                      <NavLink to="report/dgft-other/advisory-import-export" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Advisory on Import & Export</NavLink>
+                      <NavLink to="report/dgft-other/aeo" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>AEO</NavLink>
+                      <NavLink to="report/dgft-other/custom-bg-release" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Custom - BG Release</NavLink>
+                      <NavLink to="report/dgft-other/export-house-status-holder" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Export House (Status Holder)</NavLink>
+                      <NavLink to="report/dgft-other/igcr-return" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>IGCR - Return</NavLink>
+                      <NavLink to="report/dgft-other/moowr-application" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>MOOWR - Application</NavLink>
+                      <NavLink to="report/dgft-other/moowr-return" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>MOOWR - Return</NavLink>
+                      <NavLink to="report/dgft-other/moowr-compliance" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>MOOWR - Compliance</NavLink>
+                      <NavLink to="report/dgft-other/restricted-license" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Restricted License</NavLink>
+                      <NavLink to="report/dgft-other/trq" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>TRQ</NavLink>
+                      <NavLink to="report/dgft-other/igcr-application" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>IGCR - Application</NavLink>
+                      <NavLink to="report/dgft-other/igcr-bond-bg-closure" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>IGCR - Bond/BG Closure</NavLink>
+                      <NavLink to="report/dgft-other/dgft-other-notice" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>DGFT - Other Notice</NavLink>
+                      <NavLink to="report/dgft-other/annual-rodtep-return" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Annual Rodtep - Return (ARR)</NavLink>
+                      <NavLink to="report/dgft-other/del-removal" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>DEL Removal</NavLink>
+                      <NavLink to="report/dgft-other/moowr-offline-to-online" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>MOOWR Offline to Online</NavLink>
+                      <NavLink to="report/dgft-other/prc-application" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>PRC Application</NavLink>
+                    </div>
+                  </div>
+
                 </div>
               </div>
               
