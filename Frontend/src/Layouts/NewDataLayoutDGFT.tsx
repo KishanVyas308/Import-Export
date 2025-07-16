@@ -159,6 +159,8 @@ const NewDataLayout = () => {
                     <div className="absolute hidden group-hover/form:block left-full top-0 w-80 bg-white text-gray-700 rounded-lg shadow-xl">
                       <NavLink to="report/form-file/direct-export" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Direct Export - ANF 5B</NavLink>
                       <NavLink to="report/form-file/indirect-export" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>Indirect Export - ANF 5B</NavLink>
+                      <NavLink to="report/form-file/einvoice" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E-Invoice</NavLink>
+                      <NavLink to="report/form-file/ewaybill" className={({ isActive }) => `block px-4 py-3 hover:bg-gray-50 rounded-md ${isActive ? 'text-green-600 font-medium' : ''}`}>E-Way Bill</NavLink>
                     </div>
                   </div>
 

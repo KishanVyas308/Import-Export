@@ -12,7 +12,8 @@ import HomePage from "./pages/Home/HomPage";
 import Signin from "./pages/auth/SIgnin";
 import ProtectedRoute from "./pages/components/ProtectedRoute";
 import Register from "./pages/auth/Register";
-import DataManagementPage from "./pages/Home/DGFT/DataManagement/DataManagementPage";
+import DataManagementPageDGFT from "./pages/Home/DGFT/DataManagement/DataManagementPageDGFT";
+import DataManagementPageGST from "./pages/Home/GST/DataManagement/DataManagementPageGST"; 
 import DownloadDataPage from "./pages/Home/DGFT/DataManagement/DownloadData/DownloadDataPage";
 
 import Admin from "./pages/Home/DGFT/ProcessMonatring/Admin";
@@ -30,7 +31,8 @@ import EBRCPage from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/EBRC
 import AdvanceLicensePage from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/AdvanceLicense/AdvanceLicensePage";
 import EInvoicePage from "./pages/Home/DGFT/DataManagement/newdata/DocumentList/EInvoice/EInvoicePage";
 import ShippingBillLayout from "./Layouts/ShippingBillLayout";
-import NewDataLayout from "./Layouts/NewDataLayout";
+import NewDataLayoutDGFT from "./Layouts/NewDataLayoutDGFT";
+import NewDataLayoutGst from "./Layouts/NewDataLayoutGst";
 import EpcgLicenseSummary from "./pages/Home/DGFT/DataManagement/newdata/Report/summary/EpcgLicenseSummary";
 import EpcgAnalytics from "./pages/Home/DGFT/DataManagement/newdata/Report/summary/EPCGLicenceSummary/EpcgAnalytics";
 import DGFTHomePage from "./pages/Home/DGFT/DgftHomePage";
@@ -39,7 +41,11 @@ import DgftHomePage from "./pages/Home/DGFT/DgftHomePage";
 
 import DirectExportReport from "./pages/Home/DGFT/DataManagement/newdata/Report/form-file/DirectExportReport";
 import IndirectExportReport from "./pages/Home/DGFT/DataManagement/newdata/Report/form-file/IndirectExportReport";
+import EInvoiceReport from "./pages/Home/DGFT/DataManagement/newdata/Report/form-file/EInvoiceReport";
+
 import EPCGLicenseReport from "./pages/Home/DGFT/DataManagement/newdata/Report/documents/EPCGLicenseReport";
+import GstHomePage from "./pages/Home/GST/GstHomePage";
+import EWayBillReport from "./pages/Home/DGFT/DataManagement/newdata/Report/form-file/EWayBillReport";
 
 
 function App() {
@@ -61,7 +67,11 @@ function App() {
 
         <Route
           path="/gst"
-          element={<ProtectedRoute element={<UnderDevelopment />} />}
+          element={<ProtectedRoute element={<GstHomePage />} />}
+        />
+         <Route
+          path="/gst/datamanagement"
+          element={<ProtectedRoute element={<DataManagementPageGST />} />}
         />
         <Route
           path="/dgft"
@@ -70,11 +80,116 @@ function App() {
 
         <Route
           path="/dgft/datamanagement"
-          element={<ProtectedRoute element={<DataManagementPage />} />}
+          element={<ProtectedRoute element={<DataManagementPageDGFT />} />}
         />
         <Route
           path="/DGFT/datamanagement/newdata"
-          element={<ProtectedRoute element={<NewDataLayout />} />}
+          element={<ProtectedRoute element={<NewDataLayoutDGFT />} />}
+        >
+          <Route path="data">
+            <Route path="client-master" />
+            <Route path="other-details" />
+          </Route>
+          <Route path="form">
+            <Route path="shipping-bill" />
+            <Route path="invoice" />
+            <Route path="e-invoice" />
+            <Route path="e-brc" />
+            <Route path="e-way-bill" />
+            <Route path="epcg-lic" />
+            <Route path="advance-lic" />
+            <Route
+              path="direct-export"
+              element={<ProtectedRoute element={<DirectExport />} />}
+            />
+            <Route
+              path="indirect-export"
+              element={<ProtectedRoute element={<IndirectExport />} />}
+            />
+          </Route>
+          <Route path="documents">
+            <Route
+              path="epcg-lic"
+              element={<ProtectedRoute element={<EPCGLicensePage />} />}
+            />
+            <Route
+              path="advance-lic"
+              element={<ProtectedRoute element={<AdvanceLicensePage />} />}
+            />
+            <Route
+              path="shipping-bill"
+              element={<ProtectedRoute element={<ShippingBillLayout />} />}
+            >
+              <Route
+                path="part1"
+                element={<ProtectedRoute element={<Part1 />} />}
+              />
+              <Route
+                path="part2"
+                element={<ProtectedRoute element={<Part2 />} />}
+              />
+              <Route
+                path="part3"
+                element={<ProtectedRoute element={<Part3 />} />}
+              />
+              <Route
+                path="part4"
+                element={<ProtectedRoute element={<Part4 />} />}
+              />
+              <Route
+                path="part5"
+                element={<ProtectedRoute element={<Part5 />} />}
+              />
+            </Route>
+            <Route
+              path="invoice"
+              element={<ProtectedRoute element={<Invoice />} />}
+            />
+            <Route
+              path="e-invoice"
+              element={<ProtectedRoute element={<EInvoicePage />} />}
+            />
+            <Route
+              path="e-brc"
+              element={<ProtectedRoute element={<EBRCPage />} />}
+            />
+            <Route
+              path="e-way-bill"
+              element={<ProtectedRoute element={<EWayBillDetails />} />}
+            />
+            <Route path="subsidy" />
+          </Route>
+          <Route path="report">
+            <Route path="summary">
+              <Route
+                path="epcg-lic-summary"
+                element={<ProtectedRoute element={<EpcgLicenseSummary />} />}
+              />
+              <Route
+                path="epcg-analytics"
+                element={<ProtectedRoute element={<EpcgAnalytics />} />}
+              />
+              <Route path="advance-lic-summary" />
+              <Route path="party-wise-epcg-lic-summary" />
+              <Route path="party-wise-advance-lic-summary" />
+            </Route>
+            <Route path="form-file">
+              <Route path="direct-export" element={<ProtectedRoute element={<DirectExportReport />} />} />
+              <Route path="indirect-export" element={<ProtectedRoute element={<IndirectExportReport />} />} />
+              <Route path="einvoice" element={<ProtectedRoute element={<EInvoiceReport />} />} />
+              <Route path="ewaybill" element={<ProtectedRoute element={<EWayBillReport />} />} />
+            </Route>
+            <Route path="documents">
+              <Route path="epcg-lic" element={<ProtectedRoute element={<EPCGLicenseReport />} />} />
+            </Route>
+          </Route>
+
+        </Route>
+
+
+        <Route
+          path="/gst/datamanagement/newdata"
+          element={<ProtectedRoute element={<NewDataLayoutGst />} />}
         >
           <Route path="data">
             <Route path="client-master" />
