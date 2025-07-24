@@ -56,7 +56,7 @@ const DgftHomePage: React.FC = () => {
 
               <div className="flex flex-wrap justify-between items-center p-6">
                 <div className="flex items-center space-x-2">
-                  <h1 className="text-3xl font-bold text-white">GST Dashboard</h1>
+                  <h1 className="text-3xl font-bold text-white">DGFT Dashboard</h1>
                   <div className="h-8 w-1 bg-white/20 rounded-full mx-4"></div>
                   <span className="text-white/90 text-xl">{greeting}, <span className="font-semibold">{user.user.name.split(" ")[0]}</span></span>
                 </div>
