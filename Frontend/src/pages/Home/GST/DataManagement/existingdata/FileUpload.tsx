@@ -121,14 +121,15 @@ const FileUpload = () => {
       formData.append("companyName", sheetData[0]["A"]); // Assuming company name is in the first cell
 
       try {
-        const response = await axios.post(`${BACKEND_URL}/ex/upload`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "Authorization": cookies.token,
-          },
-        });
+        // const response = await axios.post(`${BACKEND_URL}/ex/upload`, formData, {
+        //   headers: {
+        //     "Content-Type": "multipart/form-data",
+        //     "Authorization": cookies.token,
+        //   },
+        // });
         setLoading(false);
-        alert(response.data.message);
+        // alert(response.data.message);
+        alert("CRUD for Not Avaliable");
         
       } catch (error) {
         setLoading(false);

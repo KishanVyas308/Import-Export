@@ -100,8 +100,8 @@ const Signin: React.FC = () => {
         <div className="mb-8 relative">
           <div className="absolute inset-0 bg-green-200 filter blur-md rounded-full opacity-30"></div>
           <img
-            src="https://prikriti.in/images/logo.png"
-            alt="Prikriti GROUP"
+            src="/images/logo.png"
+            alt="Prikriti Group"
             className="w-52 h-52 object-contain relative z-10"
           />
         </div>
@@ -110,10 +110,7 @@ const Signin: React.FC = () => {
           Welcome!!
         </h1>
         
-        <p className="text-gray-700 text-center max-w-md mb-8 leading-relaxed">
-          Innovating sustainable solutions for a greener tomorrow with Prikriti GROUP. 
-          Our eco-conscious approaches help businesses thrive while preserving our natural environment.
-        </p>
+     
     
       </div>
 
@@ -201,7 +198,7 @@ const Signin: React.FC = () => {
         </div>
 
         <footer className="mt-12 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} Prikriti GROUP LLP. All rights reserved.
+          © {new Date().getFullYear()} Prikriti Group LLP. All rights reserved.
         </footer>
         
         {/* Animated accent element */}

@@ -39,7 +39,7 @@ const DataManagementPage: React.FC = () => {
         <Header />
 
         <div className="mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-xl shadow-lg overflow-hidden mb-10">
+          <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl shadow-lg overflow-hidden mb-10">
             <div className="relative">
               {/* Decorative pattern */}
               <div className="absolute inset-0 opacity-10">
