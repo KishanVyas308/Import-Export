@@ -8,8 +8,6 @@ import {
   faDownload
 } from '@fortawesome/free-solid-svg-icons';
 import { useCookies } from 'react-cookie';
-import axios from 'axios';
-import { BACKEND_URL } from '../../../../../../../Globle';
 
 // Define interfaces for the real data structure
 interface EWayBillDetails {
@@ -72,14 +70,16 @@ const EWayBillReport = () => {
   const fetchAllEwayBills = async () => {
     setLoading(true);
     try {
-       const response = await axios.get(`${BACKEND_URL}/forms/ewaybill`, {
+      const response = await fetch('http://localhost:8000/api/form/eway-bill-data', {
+        method: 'GET',
         headers: {
-          Authorization: cookies.token,
-        },
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${cookies.token}`
+        }
       });
 
-      if (response.status === 200) {
-        const data = response.data;
+      if (response.ok) {
+        const data = await response.json();
         setEwayBills(data);
       } else {
         console.error('Failed to fetch E-Way Bill data');
