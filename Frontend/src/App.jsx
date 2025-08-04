@@ -46,6 +46,7 @@ import EInvoiceReport from "./pages/Home/DGFT/DataManagement/newdata/Report/form
 import EPCGLicenseReport from "./pages/Home/DGFT/DataManagement/newdata/Report/documents/EPCGLicenseReport";
 import GstHomePage from "./pages/Home/GST/GstHomePage";
 import EWayBillReport from "./pages/Home/DGFT/DataManagement/newdata/Report/form-file/EWayBillReport";
+import CommingSoon from "./pages/CommingSoon";
 
 
 function App() {
@@ -55,35 +56,36 @@ function App() {
         {/* <Route path="/">
             <Home />
             </Route> */}
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<CommingSoon/>} />
+        <Route path="/import-export/signin" element={<Signin />} />
+        <Route path="/import-export/register" element={<Register />} />
 
-        <Route path="/" element={<ProtectedRoute element={<HomePage />} />} />
+        <Route path="/import-export" element={<ProtectedRoute element={<HomePage />} />} />
 
         <Route
-          path="/manage-client"
+          path="/import-export/manage-client"
           element={<ProtectedRoute element={<ManageClient />} />}
         />
 
         <Route
-          path="/gst"
+          path="/import-export/gst"
           element={<ProtectedRoute element={<GstHomePage />} />}
         />
          <Route
-          path="/gst/datamanagement"
+          path="/import-export/gst/datamanagement"
           element={<ProtectedRoute element={<DataManagementPageGST />} />}
         />
         <Route
-          path="/dgft"
+          path="/import-export/dgft"
           element={<ProtectedRoute element={<DgftHomePage />} />}
         />
 
         <Route
-          path="/dgft/datamanagement"
+          path="/import-export/dgft/datamanagement"
           element={<ProtectedRoute element={<DataManagementPageDGFT />} />}
         />
         <Route
-          path="/DGFT/datamanagement/newdata"
+          path="/import-export/dgft/datamanagement/newdata"
           element={<ProtectedRoute element={<NewDataLayoutDGFT />} />}
         >
           <Route path="data">
@@ -188,7 +190,7 @@ function App() {
 
 
         <Route
-          path="/gst/datamanagement/newdata"
+          path="/import-export/gst/datamanagement/newdata"
           element={<ProtectedRoute element={<NewDataLayoutGst />} />}
         >
           <Route path="data">
@@ -307,7 +309,7 @@ function App() {
           element={<ProtectedRoute element={<AdvanceLicensePage />} />}
         /> */}
         <Route
-          path="/dgft/datamanagement/existingdata"
+          path="/import-export/dgft/datamanagement/existingdata"
           element={<ProtectedRoute element={<FileUpload />} />}
         />
 
@@ -335,13 +337,13 @@ function App() {
         {/* //? data management section */}
 
         <Route
-          path="/dgft/datamanagement/downloaddata"
+          path="/import-export/dgft/datamanagement/downloaddata"
           element={<ProtectedRoute element={<DownloadDataPage />} />}
         />
 
         {/* //? process monitoring section */}
         <Route
-          path="/dgft/admin"
+          path="/import-export/dgft/admin"
           element={<ProtectedRoute element={<Admin />} />}
         />
         {/* <Route path="/datamanagement/*" element={<UnderDevelopment />} /> */}

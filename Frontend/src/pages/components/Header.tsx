@@ -22,7 +22,7 @@ const Header = () => {
             
             </div>
             <img
-              src="../src/images/mani_header_logo_2.png"
+              src="../../src/images/mani_header_logo_2.png"
               className="h-20 object-contain"
               alt="Manufacturing Logo"
             />

@@ -73,7 +73,7 @@ const GstHomePage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
             <DetailCard
-              link="/gst/admin"
+              link="/import-export/gst/admin"
               title="Monitoring"
               color="from-amber-400 to-orange-500"
               description="Track, measure and monitor entire process, purchase to dispatch and from production to management level."
@@ -82,7 +82,7 @@ const GstHomePage: React.FC = () => {
             />
 
             <DetailCard
-              link="/gst/datamanagement"
+              link="/import-export/gst/datamanagement"
               title="Data Management"
               color="from-orange-400 to-red-500"
               description="Connect, and manage the data collected from systems, sensors, machines and people like never before."
