@@ -52,10 +52,10 @@ const Signin: React.FC = () => {
           user: user,
         });
         setCookie("token", res.data.token, { 
-          path: "/",
+          path: "/import-export/",
           maxAge: rememberMe ? 30 * 24 * 60 * 60 : undefined // 30 days if remember me is checked
         });
-        navigate("/");
+        navigate("/import-export/");
       } else {
         alert(res.data.message);
       }
@@ -73,7 +73,7 @@ const Signin: React.FC = () => {
         isAuthenticated: true,
         user: user,
       });
-      navigate("/");
+      navigate("/import-export/");
     }
   }, []);
 

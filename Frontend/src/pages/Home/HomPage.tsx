@@ -111,7 +111,7 @@ const HomePage: React.FC = () => {
             
 
             <DetailCard
-              link="/dgft"
+              link="/import-export/dgft"
               title="DGFT Management"
               color="from-emerald-500 to-green-600"
               description="Streamline foreign trade operations with digital export-import documentation, licensing, and compliance management for seamless international business."
@@ -120,7 +120,7 @@ const HomePage: React.FC = () => {
             />
 
             <DetailCard
-              link="/gst"
+              link="/import-export/gst"
               title="GST Portal"
               color="from-indigo-500 to-blue-600"
               description="Simplify tax compliance with automated GST filing, invoice management, return processing, and real-time tax calculation for your business."

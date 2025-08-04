@@ -57,7 +57,7 @@ const DataManagementPageGST: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <h1 className="text-3xl font-bold text-white">Data Management</h1>
                   <div className="h-8 w-1 bg-white/20 rounded-full mx-4"></div>
-                  <Link to="/" className="flex items-center space-x-2 text-white/90 hover:text-white z-40 transition-colors cursor-pointer">
+                  <Link to="/import-export/" className="flex items-center space-x-2 text-white/90 hover:text-white z-40 transition-colors cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
@@ -77,20 +77,20 @@ const DataManagementPageGST: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
             <DetailCard
-              link="/gst/datamanagement/newdata"
+              link="/import-export/gst/datamanagement/newdata"
               title="New Data"
               color="from-amber-400 to-orange-500"
               description="Add and upload new data to the system. Integrate new data sources and manage incoming information streams."
-              imageSrc="../src/images/new_data.png"
+              imageSrc="../../src/images/new_data.png"
               icon="upload"
             />
 
             <DetailCard
-              link="/gst/datamanagement/existingdata"
+              link="/import-export/gst/datamanagement/existingdata"
               title="Existing Data"
               color="from-orange-400 to-red-500"
               description="View, edit and manage your existing data. Analyze historical data and generate insights from your database."
-              imageSrc="../src/images/data_management.png"
+              imageSrc="../../src/images/data_management.png"
               icon="database"
             />
           </div>

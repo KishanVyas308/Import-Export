@@ -67,7 +67,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
     };
   }, [auth.isAuthenticated]);
 
-  return auth.isAuthenticated ? element : <Navigate to="/signin" />;
+  return auth.isAuthenticated ? element : <Navigate to="/import-export/signin" />;
 };
 
 export default ProtectedRoute;
