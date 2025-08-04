@@ -77,7 +77,7 @@ const HomePage: React.FC = () => {
                 <div className="flex items-center space-x-6">
                   <button
                     onClick={() => {
-                      user.user.role === Role.ADMIN ? navigate("/manage-client") : alert("You are not authorized")
+                      user.user.role === Role.ADMIN ? navigate("/import-export/manage-client") : alert("You are not authorized")
                     }}
                     className="flex items-center space-x-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 z-50 rounded-lg  transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
                   >
