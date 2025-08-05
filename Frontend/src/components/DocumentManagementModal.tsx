@@ -208,7 +208,8 @@ const DocumentManagementModal: React.FC<DocumentModalProps> = ({
 
   const getDocumentUrl = (documentUrl: string) => {
     // Remove /api/v1 from BACKEND_URL for document access since document URLs already include /api/uploads
-    const baseUrl = BACKEND_URL.replace('/api/v1', '');
+    const baseUrl1 = BACKEND_URL.replace('/api/v1', '');
+    const baseUrl = baseUrl1.replace('/v1', '');
     return `${baseUrl}${documentUrl}`;
   };
 
