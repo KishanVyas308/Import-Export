@@ -483,13 +483,22 @@ const DocumentManagementModal: React.FC<DocumentModalProps> = ({
 
                     {/* Action Buttons */}
                     <div className="grid grid-cols-2 gap-2">
-                      <button
-                        onClick={() => openDocument(doc)}
-                        className="flex items-center justify-center gap-1.5 bg-blue-500 text-white px-3 py-2 rounded-lg text-xs font-semibold hover:bg-blue-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                      >
-                        <FontAwesomeIcon icon={faEye} />
-                        View
-                      </button>
+                    <button
+                      onClick={() => openDocument(doc)}
+                      className="flex items-center justify-center gap-1.5 bg-blue-500 text-white px-3 py-2 rounded-lg text-xs font-semibold hover:bg-blue-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                    >
+                      <FontAwesomeIcon icon={faEye} />
+                      View
+                    </button>
+                    <a
+                      href={`${getDocumentUrl(doc.url)}?token=${encodeURIComponent(token)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-1.5 bg-blue-500 text-white px-3 py-2 rounded-lg text-xs font-semibold hover:bg-blue-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                    >
+                      <FontAwesomeIcon icon={faEye} />
+                      View in New Tab
+                    </a>
                       <a
                         href={`${getDocumentUrl(doc.url)}?token=${encodeURIComponent(token)}`}
                         download={doc.originalName}
@@ -616,11 +625,11 @@ const DocumentManagementModal: React.FC<DocumentModalProps> = ({
                 </div>
 
                 {/* Document Content with Modern Styling */}
-                <div className="flex-1 overflow-hidden bg-gray-50">
+                <div className="flex-1 overflow-hidden  bg-gray-50">
                   {viewingDocument.mimeType.includes('pdf') ? (
                     <iframe
                       src={`${getDocumentUrl(viewingDocument.url)}?token=${encodeURIComponent(token)}`}
-                      className="w-full h-full border-0"
+                      className="w-full h-full border-0 min-h-[70vh]"
                       title={viewingDocument.originalName}
                     />
                   ) : viewingDocument.mimeType.includes('image') ? (
