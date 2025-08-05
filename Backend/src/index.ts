@@ -34,6 +34,18 @@ app.use(
 
 export const prisma = new PrismaClient();
 
+// Helper function to get upload directory based on environment
+const getUploadDirectory = (): string => {
+  if (process.env.NODE_ENV === 'production') {
+    // In production, use environment variable or default outside project
+    const prodUploadPath = process.env.UPLOAD_DIR || path.join('..', '..', 'uploads');
+    return path.resolve(prodUploadPath);
+  } else {
+    // In development, use uploads folder in the project
+    return path.join(__dirname, '../uploads');
+  }
+};
+
 app.use(express.json());
 
 // Serve static files (uploaded documents) with proper headers and range support
@@ -60,7 +72,7 @@ app.use('/api/uploads', (req, res, next) => {
     // Token is valid, proceed to serve the file
     next();
   });
-}, express.static(path.join(__dirname, '../uploads'), {
+}, express.static(getUploadDirectory(), {
   // Enable range requests for better streaming
   acceptRanges: true,
   // Set cache headers
@@ -243,5 +255,7 @@ wss.on("connection", async (ws: any, req: any) => {
 
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`📂 Upload directory: ${getUploadDirectory()}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });

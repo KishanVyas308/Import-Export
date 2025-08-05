@@ -22,7 +22,18 @@ export class LocalFileService {
   private uploadsDir: string;
 
   private constructor() {
-    this.uploadsDir = path.join(process.cwd(), 'uploads');
+    // Configure uploads directory based on environment
+    if (process.env.NODE_ENV === 'production') {
+      // In production, store files outside the project directory
+      // This could be a shared volume, separate disk, or cloud storage mount
+      const prodUploadPath = process.env.UPLOAD_DIR || path.join('..', '..', 'uploads');
+      this.uploadsDir = path.resolve(prodUploadPath);
+    } else {
+      // In development, store files in the project's uploads folder
+      this.uploadsDir = path.join(process.cwd(), 'uploads');
+    }
+    
+    console.log(`Upload directory configured: ${this.uploadsDir}`);
     this.ensureUploadsDirectory();
   }
 
@@ -34,8 +45,22 @@ export class LocalFileService {
   }
 
   private ensureUploadsDirectory(): void {
-    if (!fs.existsSync(this.uploadsDir)) {
-      fs.mkdirSync(this.uploadsDir, { recursive: true });
+    try {
+      if (!fs.existsSync(this.uploadsDir)) {
+        fs.mkdirSync(this.uploadsDir, { recursive: true });
+        console.log(`✅ Created uploads directory: ${this.uploadsDir}`);
+      } else {
+        console.log(`✅ Uploads directory exists: ${this.uploadsDir}`);
+      }
+      
+      // Test write permissions
+      const testFile = path.join(this.uploadsDir, '.test');
+      fs.writeFileSync(testFile, 'test');
+      fs.unlinkSync(testFile);
+      console.log(`✅ Write permissions verified for: ${this.uploadsDir}`);
+    } catch (error) {
+      console.error(`❌ Failed to setup uploads directory: ${this.uploadsDir}`, error);
+      throw new Error(`Upload directory setup failed: ${error}`);
     }
   }
 

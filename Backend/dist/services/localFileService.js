@@ -22,7 +22,18 @@ const readdir = (0, util_1.promisify)(fs_1.default.readdir);
 const stat = (0, util_1.promisify)(fs_1.default.stat);
 class LocalFileService {
     constructor() {
-        this.uploadsDir = path_1.default.join(process.cwd(), 'uploads');
+        // Configure uploads directory based on environment
+        if (process.env.NODE_ENV === 'production') {
+            // In production, store files outside the project directory
+            // This could be a shared volume, separate disk, or cloud storage mount
+            const prodUploadPath = process.env.UPLOAD_DIR || path_1.default.join('..', '..', 'uploads');
+            this.uploadsDir = path_1.default.resolve(prodUploadPath);
+        }
+        else {
+            // In development, store files in the project's uploads folder
+            this.uploadsDir = path_1.default.join(process.cwd(), 'uploads');
+        }
+        console.log(`Upload directory configured: ${this.uploadsDir}`);
         this.ensureUploadsDirectory();
     }
     static getInstance() {
@@ -32,8 +43,23 @@ class LocalFileService {
         return LocalFileService.instance;
     }
     ensureUploadsDirectory() {
-        if (!fs_1.default.existsSync(this.uploadsDir)) {
-            fs_1.default.mkdirSync(this.uploadsDir, { recursive: true });
+        try {
+            if (!fs_1.default.existsSync(this.uploadsDir)) {
+                fs_1.default.mkdirSync(this.uploadsDir, { recursive: true });
+                console.log(`✅ Created uploads directory: ${this.uploadsDir}`);
+            }
+            else {
+                console.log(`✅ Uploads directory exists: ${this.uploadsDir}`);
+            }
+            // Test write permissions
+            const testFile = path_1.default.join(this.uploadsDir, '.test');
+            fs_1.default.writeFileSync(testFile, 'test');
+            fs_1.default.unlinkSync(testFile);
+            console.log(`✅ Write permissions verified for: ${this.uploadsDir}`);
+        }
+        catch (error) {
+            console.error(`❌ Failed to setup uploads directory: ${this.uploadsDir}`, error);
+            throw new Error(`Upload directory setup failed: ${error}`);
         }
     }
     uploadFile(buffer, fileName, originalName, mimeType) {
