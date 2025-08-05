@@ -104,7 +104,6 @@ export const login = async (req: any, res: any) => {
   }
 };
 
-
 export const myData = async (req: any, res: any) => {
   const htmlResponse = `
   <!DOCTYPE html>
