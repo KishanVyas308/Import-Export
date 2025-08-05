@@ -802,12 +802,21 @@ model Client {
   ReferanceClient    Boolean @default(false)
   ReferanceClientId  String? 
 
+  // Document fields
+  firmPanDocumentId            String? @default("")
+  iecCertificateDocumentId     String? @default("")
+  rcmcCertificateDocumentId    String? @default("")
+  udyamCertificateDocumentId   String? @default("")
+  gstCertificateDocumentId     String? @default("")
+  partnershipDeedDocumentId    String? @default("")
+
   user          user     @relation(fields: [addedByUserId], references: [id])
   addedByUserId String
   uploadedDate  DateTime @default(now())
   
-  // Add relation to ClientTurnover
+  // Add relation to ClientTurnover and ClientDocument
   turnover ClientTurnover[]
+  documents ClientDocument[]
 
   @@index([addedByUserId], name: "userId")
 }
@@ -829,6 +838,31 @@ model ClientTurnover {
   uploadedDate DateTime @default(now())
   
   @@index([clientId], name: "clientId")
+}
+
+model ClientDocument {
+  id String @id @default(cuid())
+  
+  // Document type enum values: "FIRM_PAN", "IEC_CERTIFICATE", "RCMC_CERTIFICATE", "UDYAM_CERTIFICATE", "GST_CERTIFICATE", "PARTNERSHIP_DEED"
+  documentType String
+  
+  // File information
+  fileName String
+  originalName String
+  filePath String
+  fileSize Int
+  mimeType String
+  
+  // Document metadata
+  description String? @default("")
+  uploadedDate DateTime @default(now())
+  
+  // Relation to Client
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId String
+  
+  @@index([clientId], name: "clientId")
+  @@index([documentType], name: "documentType")
 }
 
 
