@@ -6,8 +6,9 @@ import axios from "axios";
 import { BACKEND_URL } from "../../Globle";
 import Loading from "../components/Loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBuilding, faEnvelope, faPhone, faUser, faIndustry, faCogs, faMapMarkerAlt, faTag, faUsers, faPercent, faEdit, faTrash, faTimes, faPlus, faList, faSearch, faEye, faChevronDown, faIndianRupeeSign, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { faBuilding, faEnvelope, faPhone, faUser, faIndustry, faCogs, faMapMarkerAlt, faTag, faUsers, faPercent, faEdit, faTrash, faTimes, faPlus, faList, faSearch, faEye, faChevronDown, faIndianRupeeSign, faCalendarAlt, faFileAlt, faUpload, faDownload, faFilePdf, faFileWord, faFileImage } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import DocumentManagementModal from "../../components/DocumentManagementModal";
 
 interface TurnoverData {
     id: string | null;
@@ -16,6 +17,20 @@ interface TurnoverData {
     domesticTurnover: string;
     directExportTurnover: string;
     merchantExportTurnover: string;
+}
+
+interface ClientDocument {
+    id: string;
+    documentType: string;
+    fileName: string;
+    originalName: string;
+    filePath: string;
+    fileSize: number;
+    mimeType: string;
+    description?: string;
+    uploadedDate: string;
+    url: string;
+    documentTypeName: string;
 }
 
 interface Client {
@@ -46,6 +61,7 @@ interface Client {
     ReferanceClient: boolean;
     ReferanceClientId?: string;
     turnover?: TurnoverData[];
+    documents?: ClientDocument[];
 }
 
 
@@ -202,6 +218,10 @@ const ManageClient = () => {
     const [clientToDelete, setClientToDelete] = useState<Client | null>(null);
     const [showTurnoverSection, setShowTurnoverSection] = useState(false);
 
+    // Document modal state
+    const [documentModalOpen, setDocumentModalOpen] = useState(false);
+    const [selectedClientForDocuments, setSelectedClientForDocuments] = useState<Client | null>(null);
+
     const [cookies, setCookie] = useCookies(["token"]);
     const user = useRecoilValue(authAtom);
 
@@ -335,9 +355,31 @@ const ManageClient = () => {
             });
             console.log("API Response:", res.data); // Debug log
             // Handle both array response and object with clients property
-            const clientsData = Array.isArray(res.data) ? res.data : (res.data.clients || []);
-            setClients(clientsData);
-            console.log("Clients set:", clientsData); // Debug log
+            let clientsData = Array.isArray(res.data) ? res.data : (res.data.clients || []);
+            
+            // Fetch document counts for each client
+            const clientsWithDocuments = await Promise.all(
+                clientsData.map(async (client) => {
+                    try {
+                        const docRes = await axios.get(`${BACKEND_URL}/documents/client/${client.id}`, {
+                            headers: { Authorization: cookies.token }
+                        });
+                        return {
+                            ...client,
+                            documents: docRes.data.documents || []
+                        };
+                    } catch (error) {
+                        console.warn(`Failed to fetch documents for client ${client.id}:`, error);
+                        return {
+                            ...client,
+                            documents: []
+                        };
+                    }
+                })
+            );
+            
+            setClients(clientsWithDocuments);
+            console.log("Clients set:", clientsWithDocuments); // Debug log
         } catch (error) {
             console.error("Failed to fetch clients:", error);
             alert("Failed to fetch clients");
@@ -1261,6 +1303,9 @@ const ManageClient = () => {
                                                     <th className="w-28 px-3 py-3 text-left text-xs font-bold text-gray-700 border-r border-gray-300">
                                                         Reference Client
                                                     </th>
+                                                    <th className="w-24 px-3 py-3 text-center text-xs font-bold text-gray-700 border-r border-gray-300">
+                                                        Documents
+                                                    </th>
                                                     <th className="w-20 px-3 py-3 text-center text-xs font-bold text-gray-700">
                                                         Actions
                                                     </th>
@@ -1294,7 +1339,15 @@ const ManageClient = () => {
                                                             {/* Customer Name */}
                                                             <td className="px-3 py-2 text-xs text-gray-900 border-r border-gray-200 font-medium">
                                                                 <div className="truncate" title={client.customerName}>
-                                                                    {client.customerName || "-"}
+                                                                    <button
+                                                                        onClick={() => {
+                                                                            setSelectedClientForDocuments(client);
+                                                                            setDocumentModalOpen(true);
+                                                                        }}
+                                                                        className="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                                                                    >
+                                                                        {client.customerName || "-"}
+                                                                    </button>
                                                                 </div>
                                                             </td>
                                                             
@@ -1491,6 +1544,21 @@ const ManageClient = () => {
                                                                 )}
                                                             </td>
                                                             
+                                                            {/* Documents */}
+                                                            <td className="px-3 py-2 text-xs text-gray-700 border-r border-gray-200 text-center">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setSelectedClientForDocuments(client);
+                                                                        setDocumentModalOpen(true);
+                                                                    }}
+                                                                    className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors"
+                                                                    title="View Documents"
+                                                                >
+                                                                    <FontAwesomeIcon icon={faFileAlt} />
+                                                                    {client.documents?.length || 0}
+                                                                </button>
+                                                            </td>
+                                                            
                                                             {/* Actions */}
                                                             <td className="px-3 py-2 text-center border-r border-gray-200">
                                                                 <div className="flex justify-center space-x-1">
@@ -1590,6 +1658,21 @@ const ManageClient = () => {
                             </div>
                         </div>
                     </div>
+                )}
+
+                {/* Document Management Modal */}
+                {documentModalOpen && selectedClientForDocuments && (
+                    <DocumentManagementModal
+                        isOpen={documentModalOpen}
+                        onClose={() => {
+                            setDocumentModalOpen(false);
+                            setSelectedClientForDocuments(null);
+                        }}
+                        clientId={selectedClientForDocuments.id}
+                        clientName={selectedClientForDocuments.customerName}
+                        token={cookies.token}
+                        onDocumentUpdate={fetchClients}
+                    />
                 )}
             </div>
         </div>
